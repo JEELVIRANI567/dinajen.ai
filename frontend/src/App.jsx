@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './index.css';
+import logo from './assets/logo1.png';
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -33,7 +34,9 @@ function App() {
     <>
       <nav className={scrolled ? 'scrolled' : ''}>
         <div className="container nav-content">
-          <a href="#" className="logo text-gradient">JD.</a>
+          <a href="#" className="logo">
+            <img src={logo} alt="Logo" className="nav-logo" />
+          </a>
           <div className="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
