@@ -1,18 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigateToApp } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 
 export function LandingPage() {
   const { setAuthModalOpen } = useAuth();
-  const [selectedPrompt, setSelectedPrompt] = useState('Cyberpunk Neon Music Festival Poster 8K');
   const [activeCategory, setActiveCategory] = useState('all');
 
-  const SAMPLE_PROMPTS = [
-    { label: '🖼️ Cyberpunk Poster', text: 'Futuristic neon cyberpunk poster for electric music festival, vibrant purple and cyan, 8k render' },
-    { label: '🏷️ Minimalist Logo', text: 'Modern geometric 3D emblem logo for AI startup, gold & deep obsidian gradient, luxury vector' },
-    { label: '📄 Event Flyer', text: 'Luxury yacht summer party flyer with tropical gradient typography and gold accent overlays' },
-    { label: '🎬 Cinematic Video', text: 'Ultra slow-motion camera orbit around glowing bioluminescent jellyfish in dark deep ocean' }
+  // Ghost prompt typewriter settings
+  const GHOST_PROMPTS = [
+    "A tiny astronaut standing on a glowing bioluminescent planet under a cosmic aurora",
+    "A futuristic neon cyberpunk city in midnight rain with flying vehicles, 8K hyperrealistic",
+    "A luxury modern villa with infinity pool overlooking a tropical ocean sunset",
+    "An ultra slow-motion cinematic close-up of a mythical crystal dragon hatching",
+    "A majestic golden eagle soaring through misty snow-capped mountain peaks"
   ];
+
+  const [ghostPromptIndex, setGhostPromptIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isTypingForward, setIsTypingForward] = useState(true);
+  const [userPrompt, setUserPrompt] = useState('');
+  const [isInteracted, setIsInteracted] = useState(false);
+
+  // Character-by-character ghost typing effect
+  useEffect(() => {
+    if (isInteracted) return;
+
+    const currentFullPrompt = GHOST_PROMPTS[ghostPromptIndex];
+    let timer;
+
+    if (isTypingForward) {
+      if (charIndex < currentFullPrompt.length) {
+        timer = setTimeout(() => {
+          setCharIndex((prev) => prev + 1);
+        }, 45);
+      } else {
+        // Pause at full sentence before backspacing
+        timer = setTimeout(() => {
+          setIsTypingForward(false);
+        }, 2800);
+      }
+    } else {
+      if (charIndex > 0) {
+        timer = setTimeout(() => {
+          setCharIndex((prev) => prev - 1);
+        }, 20);
+      } else {
+        setIsTypingForward(true);
+        setGhostPromptIndex((prev) => (prev + 1) % GHOST_PROMPTS.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isTypingForward, ghostPromptIndex, isInteracted]);
+
+  // When user clicks/focuses the prompt box, complete the active sentence instantly
+  const handleBoxInteraction = () => {
+    if (!isInteracted) {
+      setIsInteracted(true);
+      setUserPrompt(GHOST_PROMPTS[ghostPromptIndex]);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const finalPrompt = isInteracted ? userPrompt : GHOST_PROMPTS[ghostPromptIndex];
+    navigateToApp('create');
+  };
+
+  const DUMMY_VIDEO_URL = "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-40544-large.mp4";
 
   const SHOWCASE_ITEMS = [
     {
@@ -52,68 +107,53 @@ export function LandingPage() {
       <div className="glow-sphere sphere-1"></div>
       <div className="glow-sphere sphere-2"></div>
 
-      {/* Hero Section */}
+      {/* Hero Section with Looping Background Video */}
       <section className="hero-section">
+        <video
+          className="hero-video-bg"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={DUMMY_VIDEO_URL} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="hero-video-overlay"></div>
+
         <div className="container hero-content">
-          <div className="badge badge-cyan animate-fade-in">
-            <span>✨ Introducing DiziPix AI v2.5 Suite</span>
-          </div>
+          <span className="hero-brand-tag">DiziPix AI</span>
 
-          <h1 className="hero-title">
-            Generate & Edit <span className="text-gradient">Posters, Logos, Flyers & AI Videos</span>
-          </h1>
+          <h1 className="hero-main-title">
+            Where Your Imagination Becomes Reality          </h1>
 
-          <p className="hero-subtitle">
-            The next-generation visual AI studio. Create studio-grade marketing assets, vector brand logos, and 4K cinematic video clips with simple text prompts.
-          </p>
+          <p className="hero-main-subtitle">
+            Create breathtaking AI images and cinematic videos in seconds—no limits, just your creativity.          </p>
 
-          <div className="hero-cta-group">
-            <button className="btn btn-primary btn-lg" onClick={() => navigateToApp('create')}>
-              🚀 Start Creating Free (50 Credits)
+          <form
+            className="hero-prompt-bar"
+            onSubmit={handleFormSubmit}
+            onClick={handleBoxInteraction}
+          >
+            <input
+              type="text"
+              className={`hero-prompt-input ${!isInteracted ? 'ghost-active' : ''}`}
+              value={
+                isInteracted
+                  ? userPrompt
+                  : GHOST_PROMPTS[ghostPromptIndex].substring(0, charIndex)
+              }
+              onChange={(e) => {
+                setIsInteracted(true);
+                setUserPrompt(e.target.value);
+              }}
+              onFocus={handleBoxInteraction}
+              placeholder="Type your prompt..."
+            />
+            <button type="submit" className="hero-create-btn">
+              Create &rarr;
             </button>
-            <button className="btn btn-secondary btn-lg" onClick={() => setAuthModalOpen(true)}>
-              🔑 Sign In / Register
-            </button>
-          </div>
-
-          <div className="subdomain-badge-bar">
-            <span>⚡ Main App Domain: <strong>app.dizipix.ai</strong></span>
-          </div>
-
-          {/* Interactive Prompt Playground */}
-          <div className="prompt-sandbox glass-panel">
-            <div className="sandbox-header">
-              <span className="sandbox-title">⚡ Interactive AI Prompt Sandbox</span>
-              <span className="sandbox-hint">Click a sample prompt to try:</span>
-            </div>
-
-            <div className="sample-tags">
-              {SAMPLE_PROMPTS.map((p, idx) => (
-                <button
-                  key={idx}
-                  className={`prompt-chip ${selectedPrompt === p.text ? 'active' : ''}`}
-                  onClick={() => setSelectedPrompt(p.text)}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="prompt-input-wrapper">
-              <input
-                type="text"
-                value={selectedPrompt}
-                onChange={(e) => setSelectedPrompt(e.target.value)}
-                className="sandbox-input"
-              />
-              <button
-                className="btn btn-primary sandbox-submit"
-                onClick={() => navigateToApp('create')}
-              >
-                Generate on App ↗
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </section>
 
@@ -435,127 +475,134 @@ export function LandingPage() {
         }
 
         .hero-section {
-          padding: 4rem 0 6rem;
-          text-align: center;
           position: relative;
-          z-index: 1;
-        }
-
-        .hero-title {
-          font-size: 3.8rem;
-          line-height: 1.1;
-          margin: 1.5rem 0 1.2rem;
-          max-width: 900px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        .hero-subtitle {
-          font-size: 1.25rem;
-          color: var(--text-secondary);
-          max-width: 720px;
-          margin: 0 auto 2.5rem;
-        }
-
-        .hero-cta-group {
+          min-height: 85vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 1.2rem;
+          padding: 6rem 1rem 5rem;
+          text-align: center;
+          overflow: hidden;
+        }
+
+        .hero-video-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .hero-video-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(180deg, rgba(5, 7, 15, 0.45) 0%, rgba(5, 7, 15, 0.75) 60%, rgba(5, 7, 15, 1) 100%);
+          z-index: 1;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 960px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .hero-brand-tag {
+          font-size: 0.85rem;
+          font-weight: 600;
+          letter-spacing: 4px;
+          text-transform: uppercase;
+          color: rgba(255, 255, 255, 0.7);
           margin-bottom: 1.5rem;
         }
 
-        .btn-lg {
-          padding: 1rem 2.2rem;
-          font-size: 1.05rem;
+        .hero-main-title {
+          font-size: clamp(2.4rem, 5vw, 4.2rem);
+          font-weight: 800;
+          color: #ffffff;
+          line-height: 1.15;
+          margin: 0 auto 1.5rem;
+          max-width: 920px;
+          letter-spacing: -0.02em;
+          text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
         }
 
-        .subdomain-badge-bar {
-          font-size: 0.85rem;
-          color: var(--text-muted);
-          margin-bottom: 3rem;
+        .hero-main-subtitle {
+          font-size: clamp(1rem, 1.8vw, 1.25rem);
+          color: rgba(255, 255, 255, 0.75);
+          max-width: 720px;
+          line-height: 1.6;
+          margin: 0 auto 3rem;
+          font-weight: 300;
         }
 
-        .subdomain-badge-bar strong {
-          color: var(--accent-cyan);
-        }
-
-        /* Prompt Sandbox */
-        .prompt-sandbox {
-          max-width: 840px;
-          margin: 0 auto;
-          padding: 2rem;
-          text-align: left;
-          border-color: rgba(139, 92, 246, 0.3);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .sandbox-header {
+        .hero-prompt-bar {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;
+          width: 100%;
+          max-width: 620px;
+          background: rgba(12, 14, 24, 0.6);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 9999px;
+          padding: 6px 8px 6px 22px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .sandbox-title {
-          font-weight: 700;
-          font-size: 0.95rem;
-          color: var(--text-primary);
+        .hero-prompt-bar:focus-within {
+          border-color: rgba(255, 255, 255, 0.4);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 78, 136, 0.2);
         }
 
-        .sandbox-hint {
-          font-size: 0.8rem;
-          color: var(--text-muted);
-        }
-
-        .sample-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.6rem;
-          margin-bottom: 1.2rem;
-        }
-
-        .prompt-chip {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-glass);
-          color: var(--text-secondary);
-          padding: 0.4rem 0.9rem;
-          border-radius: var(--radius-full);
-          font-size: 0.8rem;
-          cursor: pointer;
-          transition: var(--transition-fast);
-        }
-
-        .prompt-chip:hover, .prompt-chip.active {
-          background: rgba(139, 92, 246, 0.2);
-          border-color: var(--accent-purple);
-          color: #fff;
-        }
-
-        .prompt-input-wrapper {
-          display: flex;
-          gap: 0.8rem;
-          position: relative;
-        }
-
-        .sandbox-input {
+        .hero-prompt-input {
           flex: 1;
-          background: rgba(0, 0, 0, 0.5);
-          border: 1px solid var(--border-glass);
-          border-radius: var(--radius-md);
-          padding: 0.9rem 1.2rem;
-          color: #fff;
-          font-size: 0.95rem;
+          background: transparent;
+          border: none;
           outline: none;
+          color: #ffffff;
+          font-size: 1rem;
+          padding: 0.6rem 0.5rem;
+          font-family: inherit;
         }
 
-        .sandbox-input:focus {
-          border-color: var(--accent-cyan);
+        .hero-prompt-input.ghost-active {
+          color: rgba(255, 255, 255, 0.78);
+          font-style: italic;
         }
 
-        .sandbox-submit {
+        .hero-prompt-input::placeholder {
+          color: rgba(255, 255, 255, 0.45);
+        }
+
+        .hero-create-btn {
+          background: linear-gradient(135deg, #ff4e88 0%, #a855f7 100%);
+          color: #ffffff;
+          border: none;
+          border-radius: 9999px;
+          padding: 0.75rem 1.8rem;
+          font-size: 0.98rem;
+          font-weight: 700;
+          cursor: pointer;
           white-space: nowrap;
-          border-radius: var(--radius-md);
+          transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+          box-shadow: 0 4px 18px rgba(255, 78, 136, 0.4);
+        }
+
+        .hero-create-btn:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.1);
+          box-shadow: 0 6px 24px rgba(255, 78, 136, 0.55);
         }
 
         /* Section Commons */
