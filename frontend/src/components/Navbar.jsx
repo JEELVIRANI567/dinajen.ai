@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { navigateToApp, navigateToLanding } from '../utils/subdomainRouter';
+import logo from '../assets/logo1.png';
 
 export function Navbar({ isAppView, activeTab, setActiveTab }) {
   const { user, credits, setAuthModalOpen, logout } = useAuth();
@@ -10,7 +11,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
       <div className="container nav-wrapper">
         {/* Brand Logo */}
         <div className="brand-logo" onClick={navigateToLanding} style={{ cursor: 'pointer' }}>
-          <div className="logo-sparkle">✦</div>
+          <img src={logo} alt="DiziPix Logo" className="logo-img" />
           <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
           <span className="domain-pill">{isAppView ? 'app.dizipix.ai' : 'dizipix.ai'}</span>
         </div>
@@ -124,18 +125,16 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
           user-select: none;
         }
 
-        .logo-sparkle {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          background: var(--gradient-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          font-weight: bold;
-          font-size: 1.2rem;
-          box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        .logo-img {
+          height: 38px;
+          width: auto;
+          object-fit: contain;
+          filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+          transition: transform 0.25s ease;
+        }
+
+        .brand-logo:hover .logo-img {
+          transform: scale(1.06);
         }
 
         .logo-text {

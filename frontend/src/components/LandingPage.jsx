@@ -245,7 +245,7 @@ export function LandingPage() {
             <div className="brand-logo">
               <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
             </div>
-            <p>Created by Dhruvil Nakrani & Jeel Virani. The ultimate AI visual & video generator suite.</p>
+            <p>The ultimate AI visual & video generator suite.</p>
           </div>
 
           <div className="footer-links">
