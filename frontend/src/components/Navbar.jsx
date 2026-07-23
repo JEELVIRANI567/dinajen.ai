@@ -347,12 +347,13 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
         }
 
         .highlight-nav-item {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 33%, #06b6d4 66%, #8b5cf6 100%);
+          background: linear-gradient(135deg, #a855f7 0%, #ff007f 25%, #06b6d4 50%, #f59e0b 75%, #a855f7 100%);
           background-size: 300% 300%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          font-weight: 700 !important;
-          animation: gradientTextFlow 3s ease infinite;
+          font-weight: 800 !important;
+          animation: gradientTextFlow 1.2s linear infinite;
+          filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.6));
         }
 
         @keyframes gradientTextFlow {
