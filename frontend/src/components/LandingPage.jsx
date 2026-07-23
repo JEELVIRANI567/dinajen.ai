@@ -1,18 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { navigateToApp } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 
 export function LandingPage() {
   const { setAuthModalOpen } = useAuth();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [isMuted, setIsMuted] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const videoRef = useRef(null);
+
+  // Play/pause video based on scroll visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (videoRef.current) {
+            if (entry.isIntersecting) {
+              videoRef.current.play().catch(e => console.log('Autoplay blocked:', e));
+            } else {
+              videoRef.current.pause();
+            }
+          }
+        });
+      },
+      { threshold: 0.1 } // Play when at least 10% visible
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    };
+  }, []);
 
   // Ghost prompt typewriter settings
   const GHOST_PROMPTS = [
-    "A tiny astronaut standing on a glowing bioluminescent planet under a cosmic aurora",
-    "A futuristic neon cyberpunk city in midnight rain with flying vehicles, 8K hyperrealistic",
-    "A luxury modern villa with infinity pool overlooking a tropical ocean sunset",
-    "An ultra slow-motion cinematic close-up of a mythical crystal dragon hatching",
-    "A majestic golden eagle soaring through misty snow-capped mountain peaks"
+    "Glowing bioluminescent alien planet",
+    "Neon cyberpunk city rain",
+    "Luxury modern infinity pool",
+    "Mythical crystal dragon hatching",
+    "Majestic golden eagle soaring"
   ];
 
   const [ghostPromptIndex, setGhostPromptIndex] = useState(0);
@@ -20,6 +51,16 @@ export function LandingPage() {
   const [isTypingForward, setIsTypingForward] = useState(true);
   const [userPrompt, setUserPrompt] = useState('');
   const [isInteracted, setIsInteracted] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+
+  // Blinking cursor effect
+  useEffect(() => {
+    if (isInteracted) return;
+    const interval = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 500);
+    return () => clearInterval(interval);
+  }, [isInteracted]);
 
   // Character-by-character ghost typing effect
   useEffect(() => {
@@ -63,11 +104,16 @@ export function LandingPage() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const finalPrompt = isInteracted ? userPrompt : GHOST_PROMPTS[ghostPromptIndex];
-    navigateToApp('create');
+    setIsTransitioning(true);
+
+    // Allow the wide-screen popup animation to finish before navigating
+    setTimeout(() => {
+      navigateToApp('create');
+    }, 700);
   };
 
-  const DUMMY_VIDEO_URL = "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-40544-large.mp4";
+  // Using the local video placed in the public directory
+  const DUMMY_VIDEO_URL = "/0723_gwr_video_mvp.mp4";
 
   const SHOWCASE_ITEMS = [
     {
@@ -110,16 +156,40 @@ export function LandingPage() {
       {/* Hero Section with Looping Background Video */}
       <section className="hero-section">
         <video
+          ref={videoRef}
           className="hero-video-bg"
           autoPlay
           loop
-          muted
+          muted={isMuted}
           playsInline
         >
           <source src={DUMMY_VIDEO_URL} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="hero-video-overlay"></div>
+
+        {/* Audio Toggle Button */}
+        <button
+          className="video-audio-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMuted(!isMuted);
+          }}
+          title={isMuted ? "Unmute Video" : "Mute Video"}
+        >
+          {isMuted ? (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          )}
+        </button>
 
         <div className="container hero-content">
           <span className="hero-brand-tag">DiziPix AI</span>
@@ -141,17 +211,19 @@ export function LandingPage() {
               value={
                 isInteracted
                   ? userPrompt
-                  : GHOST_PROMPTS[ghostPromptIndex].substring(0, charIndex)
+                  : GHOST_PROMPTS[ghostPromptIndex].substring(0, charIndex) + (showCursor ? '|' : '')
               }
               onChange={(e) => {
                 setIsInteracted(true);
-                setUserPrompt(e.target.value);
+                // Strip the pipe cursor if it somehow gets caught in the value
+                setUserPrompt(e.target.value.replace(/\|$/, ''));
               }}
               onFocus={handleBoxInteraction}
               placeholder="Type your prompt..."
             />
-            <button type="submit" className="hero-create-btn">
+            <button type="submit" className={`hero-create-btn ${isTransitioning ? 'animate-click' : ''}`}>
               Create &rarr;
+              <div className={`page-transition-cover ${isTransitioning ? 'active' : ''}`}></div>
             </button>
           </form>
         </div>
@@ -446,7 +518,6 @@ export function LandingPage() {
         .landing-container {
           position: relative;
           overflow: hidden;
-          padding-top: 2rem;
         }
 
         .glow-sphere {
@@ -502,8 +573,32 @@ export function LandingPage() {
           left: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(180deg, rgba(5, 7, 15, 0.45) 0%, rgba(5, 7, 15, 0.75) 60%, rgba(5, 7, 15, 1) 100%);
+          background: linear-gradient(180deg, rgba(8, 9, 13, 0.4) 0%, rgba(8, 9, 13, 0.9) 100%);
           z-index: 1;
+        }
+
+        .video-audio-toggle {
+          position: absolute;
+          bottom: 30px;
+          right: 30px;
+          z-index: 10;
+          background: rgba(15, 17, 26, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: white;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+        }
+
+        .video-audio-toggle:hover {
+          background: rgba(139, 92, 246, 0.4);
+          transform: scale(1.1);
         }
 
         .hero-content {
@@ -520,7 +615,7 @@ export function LandingPage() {
           font-size: 0.85rem;
           font-weight: 600;
           letter-spacing: 4px;
-          text-transform: uppercase;
+          // text-transform: uppercase;
           color: rgba(255, 255, 255, 0.7);
           margin-bottom: 1.5rem;
         }
@@ -586,6 +681,7 @@ export function LandingPage() {
         }
 
         .hero-create-btn {
+          position: relative;
           background: linear-gradient(135deg, #ff4e88 0%, #a855f7 100%);
           color: #ffffff;
           border: none;
@@ -597,12 +693,42 @@ export function LandingPage() {
           white-space: nowrap;
           transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
           box-shadow: 0 4px 18px rgba(255, 78, 136, 0.4);
+          overflow: visible;
         }
 
         .hero-create-btn:hover {
           transform: translateY(-1px);
           filter: brightness(1.1);
           box-shadow: 0 6px 24px rgba(255, 78, 136, 0.55);
+        }
+
+        .hero-create-btn:active {
+          transform: scale(0.95);
+        }
+
+        .hero-create-btn.animate-click {
+          transform: scale(0.9);
+          transition: transform 0.1s;
+        }
+
+        .page-transition-cover {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle, #ff4e88 0%, #a855f7 70%, #6366f1 100%);
+          border-radius: 50%;
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0;
+          pointer-events: none;
+          z-index: 9999;
+          transition: transform 0.7s cubic-bezier(0.8, 0, 0.2, 1), opacity 0.4s ease-out;
+        }
+
+        .page-transition-cover.active {
+          transform: translate(-50%, -50%) scale(50);
+          opacity: 1;
         }
 
         /* Section Commons */
