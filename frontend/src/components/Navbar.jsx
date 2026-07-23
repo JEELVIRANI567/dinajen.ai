@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { navigateToApp, navigateToLanding } from '../utils/subdomainRouter';
+import logo from '../assets/logo1.png';
 
 export function Navbar({ isAppView, activeTab, setActiveTab }) {
   const { user, credits, setAuthModalOpen, logout } = useAuth();
@@ -12,8 +13,8 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
     <header className="navbar-header">
       <div className="container nav-wrapper">
         {/* Brand Logo */}
-        <div className="brand-logo" onClick={() => { closeMenu(); navigateToLanding(); }} style={{ cursor: 'pointer' }}>
-          <div className="logo-sparkle">✦</div>
+        <div className="brand-logo" onClick={navigateToLanding} style={{ cursor: 'pointer' }}>
+          <img src={logo} alt="DiziPix Logo" className="logo-img" />
           <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
           <span className="domain-pill">{isAppView ? 'app.dizipix.ai' : 'dizipix.ai'}</span>
         </div>
@@ -58,9 +59,9 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
         {/* Action Controls - Desktop */}
         <div className="nav-actions desktop-only">
           {/* Credit Badge */}
-          <div 
-            className="credits-badge" 
-            title="Click to get more credits" 
+          <div
+            className="credits-badge"
+            title="Click to get more credits"
             onClick={() => {
               if (isAppView) setActiveTab('credits');
               else navigateToApp('credits');
@@ -101,8 +102,8 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
         {/* Mobile Action Controls & Hamburger Toggle */}
         <div className="mobile-actions">
-          <div 
-            className="credits-badge mobile-credits" 
+          <div
+            className="credits-badge mobile-credits"
             onClick={() => {
               if (isAppView) setActiveTab('credits');
               else navigateToApp('credits');
@@ -112,7 +113,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
             <span className="credit-amount">{credits}</span>
           </div>
 
-          <button 
+          <button
             className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle navigation menu"
@@ -167,7 +168,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
             )}
 
             <div className="mobile-drawer-footer">
-              <div 
+              <div
                 className="credits-badge mobile-drawer-credits"
                 onClick={() => {
                   closeMenu();
@@ -188,8 +189,8 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
                   </div>
                 </div>
               ) : (
-                <button 
-                  className="btn btn-ghost btn-block" 
+                <button
+                  className="btn btn-ghost btn-block"
                   onClick={() => { closeMenu(); setAuthModalOpen(true); }}
                 >
                   Sign In
@@ -197,16 +198,16 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
               )}
 
               {!isAppView ? (
-                <button 
-                  className="btn btn-primary btn-block" 
+                <button
+                  className="btn btn-primary btn-block"
                   onClick={() => { closeMenu(); navigateToApp('create'); }}
                 >
                   <span>Launch Studio</span>
                   <span className="subdomain-tag">app.dizipix.ai ↗</span>
                 </button>
               ) : (
-                <button 
-                  className="btn btn-secondary btn-block" 
+                <button
+                  className="btn btn-secondary btn-block"
                   onClick={() => { closeMenu(); navigateToLanding(); }}
                 >
                   Main Site ↗
@@ -244,18 +245,16 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
           user-select: none;
         }
 
-        .logo-sparkle {
-          width: 32px;
-          height: 32px;
-          border-radius: 8px;
-          background: var(--gradient-primary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          font-weight: bold;
-          font-size: 1.2rem;
-          box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        .logo-img {
+          height: 38px;
+          width: auto;
+          object-fit: contain;
+          filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+          transition: transform 0.25s ease;
+        }
+
+        .brand-logo:hover .logo-img {
+          transform: scale(1.06);
         }
 
         .logo-text {
