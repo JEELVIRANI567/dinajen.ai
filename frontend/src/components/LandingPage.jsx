@@ -689,12 +689,94 @@ export function LandingPage() {
           font-size: 0.85rem;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
           .hero-title {
-            font-size: 2.5rem;
+            font-size: 3rem;
+          }
+          .prompt-sandbox {
+            padding: 1.5rem;
+          }
+          .pricing-grid {
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .landing-container {
+            padding-top: 1rem;
+          }
+          .hero-section {
+            padding: 2.5rem 0 4rem;
+          }
+          .hero-title {
+            font-size: 2.1rem;
+            line-height: 1.2;
+          }
+          .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.8rem;
           }
           .hero-cta-group {
             flex-direction: column;
+            width: 100%;
+            gap: 0.8rem;
+          }
+          .hero-cta-group .btn {
+            width: 100%;
+          }
+          .subdomain-badge-bar {
+            margin-bottom: 2rem;
+            font-size: 0.8rem;
+          }
+          .prompt-sandbox {
+            padding: 1.25rem;
+          }
+          .sandbox-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.3rem;
+          }
+          .prompt-input-wrapper {
+            flex-direction: column;
+            gap: 0.6rem;
+          }
+          .sandbox-submit {
+            width: 100%;
+            padding: 0.85rem;
+          }
+          .section {
+            padding: 3.5rem 0;
+          }
+          .section-header {
+            margin-bottom: 2rem;
+          }
+          .section-header h2 {
+            font-size: 1.8rem;
+          }
+          .section-header p {
+            font-size: 0.95rem;
+          }
+          .features-grid, .showcase-grid, .pricing-grid {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+          }
+          .feature-card, .pricing-card {
+            padding: 1.5rem;
+          }
+          .price-tag {
+            font-size: 2.4rem;
+          }
+          .footer-section {
+            padding: 3rem 0 1.5rem;
+            margin-top: 2rem;
+          }
+          .footer-content {
+            flex-direction: column;
+            gap: 2rem;
+          }
+          .footer-links {
+            flex-direction: column;
+            gap: 1.5rem;
           }
         }
       `}</style>

@@ -90,11 +90,22 @@ export function AuthModal() {
           background: #0f111a;
           border: 1px solid var(--border-glass-hover);
           border-radius: var(--radius-lg);
-          padding: 2.5rem;
+          padding: 2.2rem;
           width: 100%;
           max-width: 440px;
+          max-height: 90vh;
+          overflow-y: auto;
           position: relative;
           box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        @media (max-width: 480px) {
+          .modal-card {
+            padding: 1.5rem 1.25rem;
+          }
+          .modal-header h2 {
+            font-size: 1.3rem;
+          }
         }
 
         .close-btn {

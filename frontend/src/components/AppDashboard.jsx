@@ -471,9 +471,19 @@ export function AppDashboard({ activeTab, setActiveTab }) {
         .filter-chips {
           display: flex;
           gap: 0.5rem;
+          max-width: 100%;
+          overflow-x: auto;
+          padding-bottom: 4px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+
+        .filter-chips::-webkit-scrollbar {
+          display: none;
         }
 
         .filter-btn {
+          white-space: nowrap;
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid var(--border-glass);
           color: var(--text-secondary);
@@ -756,6 +766,12 @@ export function AppDashboard({ activeTab, setActiveTab }) {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 1rem;
+        }
+
+        .output-actions {
+          display: flex;
+          gap: 0.8rem;
         }
 
         .empty-assets {
@@ -771,6 +787,47 @@ export function AppDashboard({ activeTab, setActiveTab }) {
         @media (max-width: 900px) {
           .studio-layout {
             grid-template-columns: 1fr;
+            min-height: auto;
+          }
+          .studio-canvas {
+            padding: 1.5rem;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .dashboard-container {
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+          }
+          .tab-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+          }
+          .tab-header h2 {
+            font-size: 1.5rem;
+          }
+          .feed-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          .studio-sidebar {
+            padding: 1.25rem;
+          }
+          .output-controls {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .output-actions {
+            flex-direction: column;
+            width: 100%;
+          }
+          .output-actions .btn {
+            width: 100%;
+          }
+          .output-media-frame {
+            min-height: 260px;
           }
         }
       `}</style>
