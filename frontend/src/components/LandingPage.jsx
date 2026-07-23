@@ -1038,59 +1038,56 @@ export function LandingPage() {
         }
 
         @media (max-width: 900px) {
-          .hero-title {
-            font-size: 3rem;
+          .hero-main-title {
+            font-size: clamp(2.2rem, 6vw, 3rem);
           }
-          .prompt-sandbox {
-            padding: 1.5rem;
+          .hero-prompt-bar {
+            max-width: 90%;
           }
-          .pricing-grid {
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          .features-grid, .showcase-grid, .pricing-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           }
         }
 
         @media (max-width: 640px) {
           .landing-container {
-            padding-top: 1rem;
+            padding-top: 0;
           }
           .hero-section {
-            padding: 2.5rem 0 4rem;
+            padding: 4rem 1rem 3rem;
+            min-height: 80vh;
           }
-          .hero-title {
-            font-size: 2.1rem;
+          .hero-main-title {
+            font-size: clamp(1.8rem, 8vw, 2.2rem);
             line-height: 1.2;
+            margin-bottom: 1rem;
           }
-          .hero-subtitle {
+          .hero-main-subtitle {
             font-size: 1rem;
-            margin-bottom: 1.8rem;
-          }
-          .hero-cta-group {
-            flex-direction: column;
-            width: 100%;
-            gap: 0.8rem;
-          }
-          .hero-cta-group .btn {
-            width: 100%;
-          }
-          .subdomain-badge-bar {
             margin-bottom: 2rem;
-            font-size: 0.8rem;
+            padding: 0 0.5rem;
           }
-          .prompt-sandbox {
-            padding: 1.25rem;
-          }
-          .sandbox-header {
+          .hero-prompt-bar {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.3rem;
-          }
-          .prompt-input-wrapper {
-            flex-direction: column;
-            gap: 0.6rem;
-          }
-          .sandbox-submit {
+            border-radius: var(--radius-lg);
+            padding: 1rem;
             width: 100%;
-            padding: 0.85rem;
+            max-width: 100%;
+          }
+          .hero-prompt-input {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 0.8rem;
+          }
+          .hero-create-btn {
+            width: 100%;
+            padding: 0.8rem;
+          }
+          .video-audio-toggle {
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
           }
           .section {
             padding: 3.5rem 0;
