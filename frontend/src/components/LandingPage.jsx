@@ -117,7 +117,42 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features & Tools Grid */}
+      {/* Research Section */}
+      <section id="research" className="section container">
+        <div className="section-header">
+          <span className="badge badge-purple">AI Research & Innovation</span>
+          <h2>Next-Gen Neural Generation Engine</h2>
+          <p>Our proprietary deep-learning research powering ultra-fast visual & video synthesis</p>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature-card glass-card">
+            <div className="card-icon">🧬</div>
+            <h3>Dizi-Diffusion 2.5</h3>
+            <p>Custom latent diffusion model fine-tuned for high-fidelity typography, sharp poster contrast, and zero artifact rendering.</p>
+          </div>
+
+          <div className="feature-card glass-card">
+            <div className="card-icon">⚡</div>
+            <h3>Sub-Second Inference</h3>
+            <p>Hardware-accelerated GPU clusters delivering real-time preview renders under 800ms per generation.</p>
+          </div>
+
+          <div className="feature-card glass-card">
+            <div className="card-icon">🎬</div>
+            <h3>Temporal Video Motion</h3>
+            <p>Motion-aware frame interpolation ensuring smooth, jitter-free 60fps cinematic video clips from text prompts.</p>
+          </div>
+
+          <div className="feature-card glass-card">
+            <div className="card-icon">📐</div>
+            <h3>Vector Mesh Synthesis</h3>
+            <p>Direct vector curve output allowing infinite SVG scaling for brand logos and corporate emblems.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Tools Grid */}
       <section id="tools" className="section container">
         <div className="section-header">
           <span className="badge badge-pink">All-In-One Studio</span>
@@ -156,11 +191,44 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Blog & Articles Section */}
+      <section id="blog" className="section container">
+        <div className="section-header">
+          <span className="badge badge-cyan">Insights & Guides</span>
+          <h2>Latest AI Design Articles</h2>
+          <p>Tutorials, engineering deep-dives, and prompt design strategies from our team</p>
+        </div>
+
+        <div className="features-grid">
+          <div className="feature-card glass-card">
+            <div className="card-icon">📖</div>
+            <h3>Mastering AI Poster Design in 2026</h3>
+            <p>Learn how to write effective lighting, composition, and color palette prompts to generate professional movie-grade posters.</p>
+            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+          </div>
+
+          <div className="feature-card glass-card">
+            <div className="card-icon">🎨</div>
+            <h3>Vector Logos vs Pixel AI Marks</h3>
+            <p>Why scalable SVG vectors matter for modern corporate brand identity and how DiziPix generates crisp 3D emblems.</p>
+            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+          </div>
+
+          <div className="feature-card glass-card">
+            <div className="card-icon">🎥</div>
+            <h3>The Architecture Behind 60fps AI Video</h3>
+            <p>An inside look at our temporal attention mechanism and frame consistency algorithms for motion generation.</p>
+            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+          </div>
+        </div>
+      </section>
+
       {/* Community Showcase Gallery */}
-      <section id="showcase" className="section container">
+      <section id="community" className="section container">
         <div className="section-header">
           <span className="badge badge-cyan">Made with DiziPix</span>
           <h2>Created by Our Global Community</h2>
+          <p>Explore stunning creations generated daily by creators worldwide</p>
         </div>
 
         <div className="showcase-grid">
@@ -177,6 +245,35 @@ export function LandingPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="section container">
+        <div className="section-header">
+          <span className="badge badge-pink">Get in Touch</span>
+          <h2>Contact Us & Sales Inquiry</h2>
+          <p>Have questions, custom enterprise needs, or feedback? Send us a message below.</p>
+        </div>
+
+        <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: '2.5rem' }}>
+          <form onSubmit={(e) => { e.preventDefault(); alert('Thank you for reaching out! Our team will contact you shortly.'); }} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Your Name</label>
+              <input type="text" placeholder="e.g. Alex Rivera" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Email Address</label>
+              <input type="email" placeholder="alex@company.com" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Message / Inquiry</label>
+              <textarea rows="4" placeholder="How can we help you?" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem', resize: 'vertical' }}></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary btn-block" style={{ padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem' }}>
+              ✉️ Send Message
+            </button>
+          </form>
         </div>
       </section>
 
@@ -250,9 +347,12 @@ export function LandingPage() {
 
           <div className="footer-links">
             <div className="link-col">
-              <h5>App Domain</h5>
-              <a href="#" onClick={(e) => { e.preventDefault(); navigateToApp('feed'); }}>app.dizipix.ai/?tab=feed</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); navigateToApp('create'); }}>app.dizipix.ai/?tab=create</a>
+              <h5>Navigation</h5>
+              <a href="#research">Research</a>
+              <a href="#tools">Tools</a>
+              <a href="#blog">Blog</a>
+              <a href="#community">Community</a>
+              <a href="#contact">Contact</a>
             </div>
 
             <div className="link-col">

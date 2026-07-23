@@ -6,6 +6,7 @@ import logo from '../assets/logo1.png';
 export function Navbar({ isAppView, activeTab, setActiveTab }) {
   const { user, credits, setAuthModalOpen, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeNav, setActiveNav] = useState('');
 
   const closeMenu = () => setIsMobileMenuOpen(false);
 
@@ -16,16 +17,46 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
         <div className="brand-logo" onClick={navigateToLanding} style={{ cursor: 'pointer' }}>
           <img src={logo} alt="DiziPix Logo" className="logo-img" />
           <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
-          <span className="domain-pill">{isAppView ? 'app.dizipix.ai' : 'dizipix.ai'}</span>
         </div>
 
         {/* Desktop Navigation Links */}
         {!isAppView ? (
           <nav className="nav-links desktop-only">
-            <a href="#features" className="nav-item">Features</a>
-            <a href="#showcase" className="nav-item">Showcase</a>
-            <a href="#tools" className="nav-item">AI Tools</a>
-            <a href="#pricing" className="nav-item">Pricing</a>
+            <a
+              href="#research"
+              className={`nav-item ${activeNav === 'research' ? 'active' : ''}`}
+              onClick={() => setActiveNav('research')}
+            >
+              Research
+            </a>
+            <a
+              href="#tools"
+              className={`nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
+              onClick={() => setActiveNav('tools')}
+            >
+              AI Tools
+            </a>
+            <a
+              href="#blog"
+              className={`nav-item ${activeNav === 'blog' ? 'active' : ''}`}
+              onClick={() => setActiveNav('blog')}
+            >
+              Blog
+            </a>
+            <a
+              href="#community"
+              className={`nav-item ${activeNav === 'community' ? 'active' : ''}`}
+              onClick={() => setActiveNav('community')}
+            >
+              Community
+            </a>
+            <a
+              href="#contact"
+              className={`nav-item ${activeNav === 'contact' ? 'active' : ''}`}
+              onClick={() => setActiveNav('contact')}
+            >
+              Contact
+            </a>
           </nav>
         ) : (
           <nav className="nav-links app-tabs desktop-only">
@@ -58,19 +89,6 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
         {/* Action Controls - Desktop */}
         <div className="nav-actions desktop-only">
-          {/* Credit Badge */}
-          <div
-            className="credits-badge"
-            title="Click to get more credits"
-            onClick={() => {
-              if (isAppView) setActiveTab('credits');
-              else navigateToApp('credits');
-            }}
-          >
-            <span className="credit-icon">⚡</span>
-            <span className="credit-amount">{credits}</span>
-            <span className="credit-label">Credits</span>
-          </div>
 
           {user ? (
             <div className="user-profile-menu">
@@ -90,8 +108,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
           {!isAppView ? (
             <button className="btn btn-primary" onClick={() => navigateToApp('create')}>
-              <span>Launch Studio</span>
-              <span className="subdomain-tag">app.dizipix.ai ↗</span>
+              Try Dizipix.ai
             </button>
           ) : (
             <button className="btn btn-secondary btn-sm" onClick={navigateToLanding}>
@@ -102,16 +119,6 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
         {/* Mobile Action Controls & Hamburger Toggle */}
         <div className="mobile-actions">
-          <div
-            className="credits-badge mobile-credits"
-            onClick={() => {
-              if (isAppView) setActiveTab('credits');
-              else navigateToApp('credits');
-            }}
-          >
-            <span className="credit-icon">⚡</span>
-            <span className="credit-amount">{credits}</span>
-          </div>
 
           <button
             className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`}
@@ -160,25 +167,45 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
             {!isAppView && (
               <nav className="mobile-nav-links">
-                <a href="#features" className="mobile-nav-item" onClick={closeMenu}>Features</a>
-                <a href="#showcase" className="mobile-nav-item" onClick={closeMenu}>Showcase</a>
-                <a href="#tools" className="mobile-nav-item" onClick={closeMenu}>AI Tools</a>
-                <a href="#pricing" className="mobile-nav-item" onClick={closeMenu}>Pricing</a>
+                <a
+                  href="#research"
+                  className={`mobile-nav-item ${activeNav === 'research' ? 'active' : ''}`}
+                  onClick={() => { setActiveNav('research'); closeMenu(); }}
+                >
+                  Research
+                </a>
+                <a
+                  href="#tools"
+                  className={`mobile-nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
+                  onClick={() => { setActiveNav('tools'); closeMenu(); }}
+                >
+                  AI Tools
+                </a>
+                <a
+                  href="#blog"
+                  className={`mobile-nav-item ${activeNav === 'blog' ? 'active' : ''}`}
+                  onClick={() => { setActiveNav('blog'); closeMenu(); }}
+                >
+                  Blog
+                </a>
+                <a
+                  href="#community"
+                  className={`mobile-nav-item ${activeNav === 'community' ? 'active' : ''}`}
+                  onClick={() => { setActiveNav('community'); closeMenu(); }}
+                >
+                  Community
+                </a>
+                <a
+                  href="#contact"
+                  className={`mobile-nav-item ${activeNav === 'contact' ? 'active' : ''}`}
+                  onClick={() => { setActiveNav('contact'); closeMenu(); }}
+                >
+                  Contact
+                </a>
               </nav>
             )}
 
             <div className="mobile-drawer-footer">
-              <div
-                className="credits-badge mobile-drawer-credits"
-                onClick={() => {
-                  closeMenu();
-                  if (isAppView) setActiveTab('credits');
-                  else navigateToApp('credits');
-                }}
-              >
-                <span className="credit-icon">⚡</span>
-                <span className="credit-amount">{credits} Credits Available</span>
-              </div>
 
               {user ? (
                 <div className="mobile-user-card">
@@ -202,8 +229,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
                   className="btn btn-primary btn-block"
                   onClick={() => { closeMenu(); navigateToApp('create'); }}
                 >
-                  <span>Launch Studio</span>
-                  <span className="subdomain-tag">app.dizipix.ai ↗</span>
+                  Try Dizipix.ai
                 </button>
               ) : (
                 <button
@@ -292,11 +318,53 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
           text-decoration: none;
           font-size: 0.95rem;
           font-weight: 500;
-          transition: var(--transition-fast);
+          position: relative;
+          padding: 0.4rem 0;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .nav-item:hover {
-          color: var(--text-primary);
+        .nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: var(--gradient-primary);
+          border-radius: var(--radius-full);
+          transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+          font-weight: 700 !important;
+          color: #ffffff;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+          width: 100%;
+        }
+
+        .highlight-nav-item {
+          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 33%, #06b6d4 66%, #8b5cf6 100%);
+          background-size: 300% 300%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700 !important;
+          animation: gradientTextFlow 3s ease infinite;
+        }
+
+        @keyframes gradientTextFlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
 
         .app-tabs {
@@ -497,12 +565,38 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
         }
 
         .mobile-nav-item {
-          color: var(--text-primary);
+          color: var(--text-secondary);
           text-decoration: none;
           font-size: 1.1rem;
-          font-weight: 600;
+          font-weight: 500;
           padding: 0.5rem 0;
+          position: relative;
+          display: inline-block;
           border-bottom: 1px solid var(--border-glass);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-nav-item::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 0;
+          height: 3px;
+          background: var(--gradient-primary);
+          border-radius: var(--radius-full);
+          transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-nav-item:hover,
+        .mobile-nav-item.active {
+          font-weight: 700 !important;
+          color: #ffffff;
+        }
+
+        .mobile-nav-item:hover::after,
+        .mobile-nav-item.active::after {
+          width: 100%;
         }
 
         .mobile-tabs-grid {
