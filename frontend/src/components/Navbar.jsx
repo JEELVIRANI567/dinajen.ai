@@ -108,7 +108,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
 
           {!isAppView ? (
             <button className="btn btn-primary" onClick={() => navigateToApp('create')}>
-              Try Dizipix.ai
+              Try DiziPix
             </button>
           ) : (
             <button className="btn btn-secondary btn-sm" onClick={navigateToLanding}>
@@ -229,7 +229,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
                   className="btn btn-primary btn-block"
                   onClick={() => { closeMenu(); navigateToApp('create'); }}
                 >
-                  Try Dizipix.ai
+                  Try DiziPix
                 </button>
               ) : (
                 <button
