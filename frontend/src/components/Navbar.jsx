@@ -34,7 +34,11 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
               className={`nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
               onClick={() => setActiveNav('tools')}
             >
-              AI Tools
+              <span className="vfx-sparkle sparkle-left">✦</span>
+              <span className="vfx-sparkle sparkle-top">✨</span>
+              <span className="vfx-sparkle sparkle-right">✧</span>
+              <span className="ai-text-vfx">AI Tools</span>
+              <span className="ai-scan-glow"></span>
             </a>
             <a
               href="#blog"
@@ -179,7 +183,11 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
                   className={`mobile-nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
                   onClick={() => { setActiveNav('tools'); closeMenu(); }}
                 >
-                  AI Tools
+                  <span className="vfx-sparkle sparkle-left">✦</span>
+                  <span className="vfx-sparkle sparkle-top">✨</span>
+                  <span className="vfx-sparkle sparkle-right">✧</span>
+                  <span className="ai-text-vfx">AI Tools</span>
+                  <span className="ai-scan-glow"></span>
                 </a>
                 <a
                   href="#blog"
@@ -347,24 +355,115 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
         }
 
         .highlight-nav-item {
-          background: linear-gradient(135deg, #a855f7 0%, #ff007f 25%, #06b6d4 50%, #f59e0b 75%, #a855f7 100%);
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          padding: 0.4rem 0 !important;
+          background: transparent;
+          border: none;
+          box-shadow: none;
+          overflow: visible;
+          transition: all 0.3s ease;
+        }
+
+        .highlight-nav-item:hover {
+          background: transparent;
+          border: none;
+          box-shadow: none;
+          transform: translateY(-1px) scale(1.04);
+        }
+
+        .ai-text-vfx {
+          background: linear-gradient(135deg, #a855f7 0%, #ff007f 30%, #06b6d4 65%, #f59e0b 85%, #a855f7 100%);
           background-size: 300% 300%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           font-weight: 800 !important;
-          animation: gradientTextFlow 1.2s linear infinite;
-          filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.6));
+          font-size: 0.95rem;
+          animation: gradientTextFlow 1.2s linear infinite, aiTextWave 2.5s ease-in-out infinite;
+          letter-spacing: 0.03em;
         }
 
-        @keyframes gradientTextFlow {
-          0% {
-            background-position: 0% 50%;
+        .vfx-sparkle {
+          position: absolute;
+          font-size: 0.65rem;
+          pointer-events: none;
+          z-index: 2;
+          -webkit-text-fill-color: initial;
+        }
+
+        .sparkle-left {
+          top: -2px;
+          left: 4px;
+          color: #ec4899;
+          animation: floatSparkle1 2s infinite ease-in-out;
+        }
+
+        .sparkle-top {
+          top: -4px;
+          right: 12px;
+          font-size: 0.55rem;
+          color: #06b6d4;
+          animation: floatSparkle2 1.6s infinite ease-in-out;
+        }
+
+        .sparkle-right {
+          bottom: -2px;
+          right: 2px;
+          color: #f59e0b;
+          animation: floatSparkle3 2.2s infinite ease-in-out;
+        }
+
+
+        @keyframes aiTextWave {
+          0%, 100% {
+            transform: translateY(0px);
           }
           50% {
-            background-position: 100% 50%;
+            transform: translateY(-1.5px);
           }
-          100% {
-            background-position: 0% 50%;
+        }
+
+        @keyframes floatSparkle1 {
+          0%, 100% {
+            transform: translateY(0) scale(0.8) rotate(0deg);
+            opacity: 0.4;
+          }
+          50% {
+            transform: translateY(-5px) scale(1.3) rotate(45deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes floatSparkle2 {
+          0%, 100% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.9;
+          }
+          50% {
+            transform: translateY(4px) scale(0.7) rotate(-30deg);
+            opacity: 0.3;
+          }
+        }
+
+        @keyframes floatSparkle3 {
+          0%, 100% {
+            transform: translateX(0) scale(0.7);
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateX(-4px) translateY(-3px) scale(1.2);
+            opacity: 1;
+          }
+        }
+
+        @keyframes aiScanlineSweep {
+          0% {
+            left: -100%;
+          }
+          35%, 100% {
+            left: 200%;
           }
         }
 
