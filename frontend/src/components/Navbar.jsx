@@ -3,18 +3,30 @@ import { useAuth } from '../context/AuthContext';
 import { navigateToApp, navigateToLanding } from '../utils/subdomainRouter';
 import logo from '../assets/logo1.png';
 
-export function Navbar({ isAppView, activeTab, setActiveTab }) {
+export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'home', setLandingPageNav }) {
   const { user, credits, setAuthModalOpen, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState('');
 
   const closeMenu = () => setIsMobileMenuOpen(false);
+
+  const handleNavClick = (navKey) => {
+    if (setLandingPageNav) {
+      setLandingPageNav(navKey);
+    }
+  };
 
   return (
     <header className="navbar-header">
       <div className="container nav-wrapper">
         {/* Brand Logo */}
-        <div className="brand-logo" onClick={navigateToLanding} style={{ cursor: 'pointer' }}>
+        <div
+          className="brand-logo"
+          onClick={() => {
+            handleNavClick('home');
+            navigateToLanding();
+          }}
+          style={{ cursor: 'pointer' }}
+        >
           <img src={logo} alt="DiziPix Logo" className="logo-img" />
           <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
         </div>
@@ -24,15 +36,15 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
           <nav className="nav-links desktop-only">
             <a
               href="#research"
-              className={`nav-item ${activeNav === 'research' ? 'active' : ''}`}
-              onClick={() => setActiveNav('research')}
+              className={`nav-item ${landingPageNav === 'research' ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick('research'); }}
             >
               Research
             </a>
             <a
               href="#tools"
-              className={`nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
-              onClick={() => setActiveNav('tools')}
+              className={`nav-item highlight-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick('tools'); }}
             >
               <span className="vfx-sparkle sparkle-left">✦</span>
               <span className="vfx-sparkle sparkle-top">✨</span>
@@ -42,22 +54,22 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
             </a>
             <a
               href="#blog"
-              className={`nav-item ${activeNav === 'blog' ? 'active' : ''}`}
-              onClick={() => setActiveNav('blog')}
+              className={`nav-item ${landingPageNav === 'blog' ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick('blog'); }}
             >
               Blog
             </a>
             <a
               href="#community"
-              className={`nav-item ${activeNav === 'community' ? 'active' : ''}`}
-              onClick={() => setActiveNav('community')}
+              className={`nav-item ${landingPageNav === 'community' ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick('community'); }}
             >
               Community
             </a>
             <a
               href="#contact"
-              className={`nav-item ${activeNav === 'contact' ? 'active' : ''}`}
-              onClick={() => setActiveNav('contact')}
+              className={`nav-item ${landingPageNav === 'contact' ? 'active' : ''}`}
+              onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
             >
               Contact
             </a>
@@ -173,15 +185,15 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
               <nav className="mobile-nav-links">
                 <a
                   href="#research"
-                  className={`mobile-nav-item ${activeNav === 'research' ? 'active' : ''}`}
-                  onClick={() => { setActiveNav('research'); closeMenu(); }}
+                  className={`mobile-nav-item ${landingPageNav === 'research' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('research'); closeMenu(); }}
                 >
                   Research
                 </a>
                 <a
                   href="#tools"
-                  className={`mobile-nav-item highlight-nav-item ${activeNav === 'tools' ? 'active' : ''}`}
-                  onClick={() => { setActiveNav('tools'); closeMenu(); }}
+                  className={`mobile-nav-item highlight-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('tools'); closeMenu(); }}
                 >
                   <span className="vfx-sparkle sparkle-left">✦</span>
                   <span className="vfx-sparkle sparkle-top">✨</span>
@@ -191,22 +203,22 @@ export function Navbar({ isAppView, activeTab, setActiveTab }) {
                 </a>
                 <a
                   href="#blog"
-                  className={`mobile-nav-item ${activeNav === 'blog' ? 'active' : ''}`}
-                  onClick={() => { setActiveNav('blog'); closeMenu(); }}
+                  className={`mobile-nav-item ${landingPageNav === 'blog' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('blog'); closeMenu(); }}
                 >
                   Blog
                 </a>
                 <a
                   href="#community"
-                  className={`mobile-nav-item ${activeNav === 'community' ? 'active' : ''}`}
-                  onClick={() => { setActiveNav('community'); closeMenu(); }}
+                  className={`mobile-nav-item ${landingPageNav === 'community' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('community'); closeMenu(); }}
                 >
                   Community
                 </a>
                 <a
                   href="#contact"
-                  className={`mobile-nav-item ${activeNav === 'contact' ? 'active' : ''}`}
-                  onClick={() => { setActiveNav('contact'); closeMenu(); }}
+                  className={`mobile-nav-item ${landingPageNav === 'contact' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('contact'); closeMenu(); }}
                 >
                   Contact
                 </a>

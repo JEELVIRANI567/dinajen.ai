@@ -2,12 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { navigateToApp } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 
-export function LandingPage() {
+export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const { setAuthModalOpen } = useAuth();
   const [activeCategory, setActiveCategory] = useState('all');
   const [isMuted, setIsMuted] = useState(true);
+  const [isResearchMuted, setIsResearchMuted] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const videoRef = useRef(null);
+  const researchVideoRef = useRef(null);
+
+  // Play video on navigation change
+  useEffect(() => {
+    if (landingPageNav === 'research' && researchVideoRef.current) {
+      researchVideoRef.current.play().catch(e => console.log('Research video autoplay blocked:', e));
+    }
+  }, [landingPageNav]);
 
   // Play/pause video based on scroll visibility
   useEffect(() => {
@@ -153,305 +162,360 @@ export function LandingPage() {
       <div className="glow-sphere sphere-1"></div>
       <div className="glow-sphere sphere-2"></div>
 
-      {/* Hero Section with Looping Background Video */}
-      <section className="hero-section">
-        <video
-          ref={videoRef}
-          className="hero-video-bg"
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-        >
-          <source src={DUMMY_VIDEO_URL} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className="hero-video-overlay"></div>
-
-        {/* Audio Toggle Button */}
-        <button
-          className="video-audio-toggle"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsMuted(!isMuted);
-          }}
-          title={isMuted ? "Unmute Video" : "Mute Video"}
-        >
-          {isMuted ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <line x1="23" y1="9" x2="17" y2="15"></line>
-              <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-          )}
-        </button>
-
-        <div className="container hero-content">
-          <span className="hero-brand-tag">DiziPix AI</span>
-
-          <h1 className="hero-main-title">
-            Where Your Imagination Becomes Reality          </h1>
-
-          <p className="hero-main-subtitle">
-            Create breathtaking AI images and cinematic videos in seconds—no limits, just your creativity.          </p>
-
-          <form
-            className="hero-prompt-bar"
-            onSubmit={handleFormSubmit}
-            onClick={handleBoxInteraction}
+      {/* Home / Hero Page View */}
+      {(landingPageNav === 'home' || !landingPageNav) && (
+        <section className="hero-section">
+          <video
+            ref={videoRef}
+            className="hero-video-bg"
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
           >
-            <input
-              type="text"
-              className={`hero-prompt-input ${!isInteracted ? 'ghost-active' : ''}`}
-              value={
-                isInteracted
-                  ? userPrompt
-                  : GHOST_PROMPTS[ghostPromptIndex].substring(0, charIndex) + (showCursor ? '|' : '')
-              }
-              onChange={(e) => {
-                setIsInteracted(true);
-                // Strip the pipe cursor if it somehow gets caught in the value
-                setUserPrompt(e.target.value.replace(/\|$/, ''));
+            <source src={DUMMY_VIDEO_URL} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="hero-video-overlay"></div>
+
+          {/* Audio Toggle Button */}
+          <button
+            className="video-audio-toggle"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMuted(!isMuted);
+            }}
+            title={isMuted ? "Unmute Video" : "Mute Video"}
+          >
+            {isMuted ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+            )}
+          </button>
+
+          <div className="container hero-content">
+            <span className="hero-brand-tag">DiziPix AI</span>
+
+            <h1 className="hero-main-title">
+              Where Your Imagination Becomes Reality
+            </h1>
+
+            <p className="hero-main-subtitle">
+              Create breathtaking AI images and cinematic videos in seconds—no limits, just your creativity.
+            </p>
+
+            <form
+              className="hero-prompt-bar"
+              onSubmit={handleFormSubmit}
+              onClick={handleBoxInteraction}
+            >
+              <input
+                type="text"
+                className={`hero-prompt-input ${!isInteracted ? 'ghost-active' : ''}`}
+                value={
+                  isInteracted
+                    ? userPrompt
+                    : GHOST_PROMPTS[ghostPromptIndex].substring(0, charIndex) + (showCursor ? '|' : '')
+                }
+                onChange={(e) => {
+                  setIsInteracted(true);
+                  setUserPrompt(e.target.value.replace(/\|$/, ''));
+                }}
+                onFocus={handleBoxInteraction}
+                placeholder="Type your prompt..."
+              />
+              <button type="submit" className={`hero-create-btn ${isTransitioning ? 'animate-click' : ''}`}>
+                Create &rarr;
+                <div className={`page-transition-cover ${isTransitioning ? 'active' : ''}`}></div>
+              </button>
+            </form>
+          </div>
+        </section>
+      )}
+
+      {/* PixVerse Style Research Page View with Site-Related Background Video */}
+      {landingPageNav === 'research' && (
+        <div className="research-page-wrapper">
+          <div className="research-hero-banner">
+            <video
+              ref={researchVideoRef}
+              className="research-video-bg"
+              autoPlay
+              loop
+              muted={isResearchMuted}
+              playsInline
+              poster="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80"
+            >
+              <source src="https://assets.mixkit.co/videos/preview/mixkit-neural-network-nodes-in-abstract-space-42829-large.mp4" type="video/mp4" />
+              <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-lines-and-dots-42999-large.mp4" type="video/mp4" />
+              <source src="https://cdn.pixabay.com/video/2021/04/12/70918-536485078_large.mp4" type="video/mp4" />
+            </video>
+            <div className="research-video-overlay"></div>
+
+            {/* Audio Toggle Button */}
+            <button
+              className="video-audio-toggle"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsResearchMuted(!isResearchMuted);
               }}
-              onFocus={handleBoxInteraction}
-              placeholder="Type your prompt..."
-            />
-            <button type="submit" className={`hero-create-btn ${isTransitioning ? 'animate-click' : ''}`}>
-              Create &rarr;
-              <div className={`page-transition-cover ${isTransitioning ? 'active' : ''}`}></div>
+              title={isResearchMuted ? "Unmute Video" : "Mute Video"}
+              style={{ zIndex: 10 }}
+            >
+              {isResearchMuted ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+              )}
             </button>
-          </form>
+
+            <div className="container research-hero-content">
+              <span className="research-eyebrow">DiziPix Research</span>
+              <h2>Imagine. Build. Express. Play.</h2>
+              <p>
+                DiziPix's in-house AI video & visual research built to help every creative idea find its form.
+                We develop real-time world models, continuous interactive video streams, and high-fidelity latent diffusion engines.
+              </p>
+            </div>
+          </div>
+
+          <section id="research" className="section container research-section">
+            <div className="research-articles-header">
+              <h3>Latest Research</h3>
+            </div>
+
+            <div className="research-articles-list">
+              <a
+                href="https://pixverse.ai/en/blog/pixverse-game-engine-deep-dive"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="research-article-card"
+              >
+                <div className="research-article-content">
+                  <h4>DiziPix Game Engine Deep Dive: Real-Time Interactive Gaming</h4>
+                  <p>
+                    Explore DiziPix Game Engine, an architecture combining real-time generative video, AI agent orchestration, and abstract game mechanics for interactive entertainment.
+                  </p>
+                  <div className="research-article-meta">
+                    <span className="research-tag">DiziPix Research</span>
+                    <span>📅 Jul 13, 2026</span>
+                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Read Deep Dive ↗</span>
+                  </div>
+                </div>
+                <div className="research-article-image">
+                  <img
+                    src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80"
+                    alt="DiziPix Game Engine Deep Dive"
+                  />
+                </div>
+              </a>
+
+              <a
+                href="https://pixverse.ai/en/blog/pixverse-r1-next-generation-real-time-world-model"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="research-article-card"
+              >
+                <div className="research-article-content">
+                  <h4>DiziPix R1 Explained: Real-Time AI Video World Model</h4>
+                  <p>
+                    Learn what DiziPix R1 is, how the real-time AI video world model works, how it differs from traditional AI video generators, and when to use real-time streaming.
+                  </p>
+                  <div className="research-article-meta">
+                    <span className="research-tag">DiziPix Research</span>
+                    <span>📅 Jun 28, 2026</span>
+                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Read Deep Dive ↗</span>
+                  </div>
+                </div>
+                <div className="research-article-image">
+                  <img
+                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+                    alt="DiziPix R1 Real-Time World Model"
+                  />
+                </div>
+              </a>
+
+              <a
+                href="#create"
+                onClick={(e) => { e.preventDefault(); navigateToApp('create'); }}
+                className="research-article-card"
+              >
+                <div className="research-article-content">
+                  <h4>Dizi-Diffusion 2.5: Zero-Artifact Latent Synthesis & Vector Mesh</h4>
+                  <p>
+                    Our proprietary latent diffusion model fine-tuned for high-fidelity typography, sharp poster contrast, and direct vector curve output allowing infinite SVG scaling.
+                  </p>
+                  <div className="research-article-meta">
+                    <span className="research-tag">DiziPix Research</span>
+                    <span>📅 May 18, 2026</span>
+                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Explore Model ↗</span>
+                  </div>
+                </div>
+                <div className="research-article-image">
+                  <img
+                    src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80"
+                    alt="Dizi-Diffusion 2.5 Model"
+                  />
+                </div>
+              </a>
+            </div>
+          </section>
         </div>
-      </section>
+      )}
 
-      {/* Research Section */}
-      <section id="research" className="section container">
-        <div className="section-header">
-          <span className="badge badge-purple">AI Research & Innovation</span>
-          <h2>Next-Gen Neural Generation Engine</h2>
-          <p>Our proprietary deep-learning research powering ultra-fast visual & video synthesis</p>
-        </div>
-
-        <div className="features-grid">
-          <div className="feature-card glass-card">
-            <div className="card-icon">🧬</div>
-            <h3>Dizi-Diffusion 2.5</h3>
-            <p>Custom latent diffusion model fine-tuned for high-fidelity typography, sharp poster contrast, and zero artifact rendering.</p>
+      {/* AI Tools View */}
+      {landingPageNav === 'tools' && (
+        <section id="tools" className="section container">
+          <div className="section-header">
+            <span className="badge badge-pink">All-In-One Studio</span>
+            <h2>Four Powerful AI Tools in One Platform</h2>
+            <p>Everything you need to produce stunning brand visuals, logos, flyers, and video content</p>
           </div>
 
-          <div className="feature-card glass-card">
-            <div className="card-icon">⚡</div>
-            <h3>Sub-Second Inference</h3>
-            <p>Hardware-accelerated GPU clusters delivering real-time preview renders under 800ms per generation.</p>
+          <div className="features-grid">
+            <div className="feature-card glass-card">
+              <div className="card-icon">🖼️</div>
+              <h3>AI Poster Generator</h3>
+              <p>Design high-resolution event posters, movie graphics, and social promo art with custom lighting, typography, and theme controls.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Poster AI &rarr;</div>
+            </div>
+
+            <div className="feature-card glass-card">
+              <div className="card-icon">🏷️</div>
+              <h3>AI Logo & Brand Creator</h3>
+              <p>Generate unique 3D emblems, minimal vector logos, and corporate brand marks with instant color palette variations.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Logo AI &rarr;</div>
+            </div>
+
+            <div className="feature-card glass-card">
+              <div className="card-icon">📄</div>
+              <h3>AI Flyer Builder</h3>
+              <p>Create print-ready business flyers, party invitations, and promotional banners with customizable grid layouts.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Flyer AI &rarr;</div>
+            </div>
+
+            <div className="feature-card glass-card">
+              <div className="card-icon">🎬</div>
+              <h3>AI Video Generator</h3>
+              <p>Transform text prompts or static posters into fluid 60fps cinematic video scenes with camera trajectory and motion controls.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Video AI &rarr;</div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Blog View */}
+      {landingPageNav === 'blog' && (
+        <section id="blog" className="section container">
+          <div className="section-header">
+            <span className="badge badge-cyan">Insights & Guides</span>
+            <h2>Latest AI Design Articles</h2>
+            <p>Tutorials, engineering deep-dives, and prompt design strategies from our team</p>
           </div>
 
-          <div className="feature-card glass-card">
-            <div className="card-icon">🎬</div>
-            <h3>Temporal Video Motion</h3>
-            <p>Motion-aware frame interpolation ensuring smooth, jitter-free 60fps cinematic video clips from text prompts.</p>
+          <div className="features-grid">
+            <div className="feature-card glass-card">
+              <div className="card-icon">📖</div>
+              <h3>Mastering AI Poster Design in 2026</h3>
+              <p>Learn how to write effective lighting, composition, and color palette prompts to generate professional movie-grade posters.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+            </div>
+
+            <div className="feature-card glass-card">
+              <div className="card-icon">🎨</div>
+              <h3>Vector Logos vs Pixel AI Marks</h3>
+              <p>Why scalable SVG vectors matter for modern corporate brand identity and how DiziPix generates crisp 3D emblems.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+            </div>
+
+            <div className="feature-card glass-card">
+              <div className="card-icon">🎥</div>
+              <h3>The Architecture Behind 60fps AI Video</h3>
+              <p>An inside look at our temporal attention mechanism and frame consistency algorithms for motion generation.</p>
+              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Community View */}
+      {landingPageNav === 'community' && (
+        <section id="community" className="section container">
+          <div className="section-header">
+            <span className="badge badge-cyan">Made with DiziPix</span>
+            <h2>Created by Our Global Community</h2>
+            <p>Explore stunning creations generated daily by creators worldwide</p>
           </div>
 
-          <div className="feature-card glass-card">
-            <div className="card-icon">📐</div>
-            <h3>Vector Mesh Synthesis</h3>
-            <p>Direct vector curve output allowing infinite SVG scaling for brand logos and corporate emblems.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Tools Grid */}
-      <section id="tools" className="section container">
-        <div className="section-header">
-          <span className="badge badge-pink">All-In-One Studio</span>
-          <h2>Four Powerful AI Tools in One Platform</h2>
-          <p>Everything you need to produce stunning brand visuals and video content</p>
-        </div>
-
-        <div className="features-grid">
-          <div className="feature-card glass-card">
-            <div className="card-icon">🖼️</div>
-            <h3>AI Poster Generator</h3>
-            <p>Design high-resolution event posters, movie graphics, and social promo art with custom lighting, typography, and theme controls.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Poster AI &rarr;</div>
-          </div>
-
-          <div className="feature-card glass-card">
-            <div className="card-icon">🏷️</div>
-            <h3>AI Logo & Brand Creator</h3>
-            <p>Generate unique 3D emblems, minimal vector logos, and corporate brand marks with instant color palette variations.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Logo AI &rarr;</div>
-          </div>
-
-          <div className="feature-card glass-card">
-            <div className="card-icon">📄</div>
-            <h3>AI Flyer Builder</h3>
-            <p>Create print-ready business flyers, party invitations, and promotional banners with customizable grid layouts.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Flyer AI &rarr;</div>
-          </div>
-
-          <div className="feature-card glass-card">
-            <div className="card-icon">🎬</div>
-            <h3>AI Video Generator</h3>
-            <p>Transform text prompts or static posters into fluid 60fps cinematic video scenes with camera trajectory and motion controls.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Video AI &rarr;</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Blog & Articles Section */}
-      <section id="blog" className="section container">
-        <div className="section-header">
-          <span className="badge badge-cyan">Insights & Guides</span>
-          <h2>Latest AI Design Articles</h2>
-          <p>Tutorials, engineering deep-dives, and prompt design strategies from our team</p>
-        </div>
-
-        <div className="features-grid">
-          <div className="feature-card glass-card">
-            <div className="card-icon">📖</div>
-            <h3>Mastering AI Poster Design in 2026</h3>
-            <p>Learn how to write effective lighting, composition, and color palette prompts to generate professional movie-grade posters.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
-          </div>
-
-          <div className="feature-card glass-card">
-            <div className="card-icon">🎨</div>
-            <h3>Vector Logos vs Pixel AI Marks</h3>
-            <p>Why scalable SVG vectors matter for modern corporate brand identity and how DiziPix generates crisp 3D emblems.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
-          </div>
-
-          <div className="feature-card glass-card">
-            <div className="card-icon">🎥</div>
-            <h3>The Architecture Behind 60fps AI Video</h3>
-            <p>An inside look at our temporal attention mechanism and frame consistency algorithms for motion generation.</p>
-            <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Community Showcase Gallery */}
-      <section id="community" className="section container">
-        <div className="section-header">
-          <span className="badge badge-cyan">Made with DiziPix</span>
-          <h2>Created by Our Global Community</h2>
-          <p>Explore stunning creations generated daily by creators worldwide</p>
-        </div>
-
-        <div className="showcase-grid">
-          {SHOWCASE_ITEMS.map((item, idx) => (
-            <div key={idx} className="showcase-item glass-card">
-              <div className="media-container">
-                <img src={item.img} alt={item.title} />
-                {item.isVideo && <span className="play-badge">▶ 4K Video</span>}
-                <span className="type-badge">{item.tag}</span>
+          <div className="showcase-grid">
+            {SHOWCASE_ITEMS.map((item, idx) => (
+              <div key={idx} className="showcase-item glass-card">
+                <div className="media-container">
+                  <img src={item.img} alt={item.title} />
+                  {item.isVideo && <span className="play-badge">▶ 4K Video</span>}
+                  <span className="type-badge">{item.tag}</span>
+                </div>
+                <div className="showcase-info">
+                  <h4>{item.title}</h4>
+                  <p>by {item.author}</p>
+                </div>
               </div>
-              <div className="showcase-info">
-                <h4>{item.title}</h4>
-                <p>by {item.author}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Contact View */}
+      {landingPageNav === 'contact' && (
+        <section id="contact" className="section container">
+          <div className="section-header">
+            <span className="badge badge-pink">Get in Touch</span>
+            <h2>Contact Us & Sales Inquiry</h2>
+            <p>Have questions, custom enterprise needs, or feedback? Send us a message below.</p>
+          </div>
+
+          <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: '2.5rem' }}>
+            <form onSubmit={(e) => { e.preventDefault(); alert('Thank you for reaching out! Our team will contact you shortly.'); }} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Your Name</label>
+                <input type="text" placeholder="e.g. Alex Rivera" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="section container">
-        <div className="section-header">
-          <span className="badge badge-pink">Get in Touch</span>
-          <h2>Contact Us & Sales Inquiry</h2>
-          <p>Have questions, custom enterprise needs, or feedback? Send us a message below.</p>
-        </div>
-
-        <div className="glass-panel" style={{ maxWidth: '680px', margin: '0 auto', padding: '2.5rem' }}>
-          <form onSubmit={(e) => { e.preventDefault(); alert('Thank you for reaching out! Our team will contact you shortly.'); }} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Your Name</label>
-              <input type="text" placeholder="e.g. Alex Rivera" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Email Address</label>
-              <input type="email" placeholder="alex@company.com" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Message / Inquiry</label>
-              <textarea rows="4" placeholder="How can we help you?" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem', resize: 'vertical' }}></textarea>
-            </div>
-            <button type="submit" className="btn btn-primary btn-block" style={{ padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem' }}>
-              ✉️ Send Message
-            </button>
-          </form>
-        </div>
-      </section>
-
-      {/* Pricing & Credit Tiers */}
-      <section id="pricing" className="section container">
-        <div className="section-header">
-          <span className="badge badge-pink">Flexible Pricing</span>
-          <h2>Simple Credit-Based Plans</h2>
-          <p>Get started free, top up anytime, or subscribe for unlimited creation</p>
-        </div>
-
-        <div className="pricing-grid">
-          <div className="pricing-card glass-card">
-            <h3>Starter Free</h3>
-            <div className="price-tag">0<span> / month</span></div>
-            <p className="plan-desc">Perfect for testing the power of DiziPix AI</p>
-            <ul className="plan-features">
-              <li>⚡ <strong>50 Free Credits</strong> on signup</li>
-              <li>🖼️ Access Poster, Logo & Flyer Generators</li>
-              <li>🎬 Standard resolution AI Video rendering</li>
-              <li>📁 Community asset storage</li>
-            </ul>
-            <button className="btn btn-secondary btn-block" onClick={() => navigateToApp('create')}>
-              Claim 50 Free Credits
-            </button>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Email Address</label>
+                <input type="email" placeholder="alex@company.com" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Message / Inquiry</label>
+                <textarea rows="4" placeholder="How can we help you?" required style={{ width: '100%', padding: '0.8rem 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', fontSize: '1rem', resize: 'vertical' }}></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary btn-block" style={{ padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem' }}>
+                ✉️ Send Message
+              </button>
+            </form>
           </div>
-
-          <div className="pricing-card glass-card featured">
-            <div className="popular-badge">MOST POPULAR</div>
-            <h3>Creator Pro</h3>
-            <div className="price-tag">$19<span> / month</span></div>
-            <p className="plan-desc">For designers, marketers, and content creators</p>
-            <ul className="plan-features">
-              <li>⚡ <strong>500 Credits</strong> per month</li>
-              <li>🚀 Priority generation speed</li>
-              <li>🎬 4K High-Frame Rate Video Generation</li>
-              <li>Commercial license rights</li>
-              <li>Remove DiziPix watermark</li>
-            </ul>
-            <button className="btn btn-primary btn-block" onClick={() => navigateToApp('credits')}>
-              Upgrade to Pro
-            </button>
-          </div>
-
-          <div className="pricing-card glass-card">
-            <h3>Enterprise</h3>
-            <div className="price-tag">$49<span> / month</span></div>
-            <p className="plan-desc">For agencies and heavy production teams</p>
-            <ul className="plan-features">
-              <li>⚡ <strong>2000 Credits</strong> per month</li>
-              <li>⚡ Unlimited fast-lane render queue</li>
-              <li>API Access & Custom Brand Kits</li>
-              <li>Dedicated 24/7 Support</li>
-            </ul>
-            <button className="btn btn-secondary btn-block" onClick={() => navigateToApp('credits')}>
-              Contact Sales
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer CTA */}
       <footer className="footer-section">
         <div className="container footer-content">
           <div className="footer-brand">
-            <div className="brand-logo">
+            <div className="brand-logo" onClick={() => setLandingPageNav && setLandingPageNav('home')} style={{ cursor: 'pointer' }}>
               <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
             </div>
             <p>The ultimate AI visual & video generator suite.</p>
@@ -482,11 +546,11 @@ export function LandingPage() {
           <div className="footer-links">
             <div className="link-col">
               <h5>Navigation</h5>
-              <a href="#research">Research</a>
-              <a href="#tools">Tools</a>
-              <a href="#blog">Blog</a>
-              <a href="#community">Community</a>
-              <a href="#contact">Contact</a>
+              <a href="#research" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('research'); }}>Research</a>
+              <a href="#tools" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('tools'); }}>Tools</a>
+              <a href="#blog" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('blog'); }}>Blog</a>
+              <a href="#community" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('community'); }}>Community</a>
+              <a href="#contact" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('contact'); }}>Contact</a>
             </div>
 
             <div className="link-col">
@@ -1122,6 +1186,227 @@ export function LandingPage() {
           .footer-links {
             flex-direction: column;
             gap: 1.5rem;
+          }
+        }
+
+        /* PixVerse Style Research Page Styles */
+        .research-page-wrapper {
+          position: relative;
+        }
+
+        .research-hero-banner {
+          position: relative;
+          min-height: 480px;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          padding: 6rem 0 4rem;
+          margin-bottom: 2rem;
+        }
+
+        .research-video-bg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: 0;
+          filter: brightness(0.65) contrast(1.1);
+        }
+
+        .research-video-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(180deg, rgba(8, 9, 13, 0.45) 0%, rgba(8, 9, 13, 0.88) 75%, #08090d 100%),
+                      radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.25) 0%, transparent 60%);
+          z-index: 1;
+        }
+
+        .research-hero-content {
+          position: relative;
+          z-index: 2;
+          max-width: 820px;
+        }
+
+        .research-hero-content .research-eyebrow {
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #c084fc;
+          background: rgba(139, 92, 246, 0.25);
+          border: 1px solid rgba(168, 85, 247, 0.4);
+          padding: 0.35rem 1rem;
+          border-radius: 9999px;
+          display: inline-block;
+          margin-bottom: 1.2rem;
+          backdrop-filter: blur(8px);
+        }
+
+        .research-hero-content h2 {
+          font-size: 3.8rem;
+          line-height: 1.08;
+          font-weight: 800;
+          margin-bottom: 1.2rem;
+          color: #ffffff;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .research-hero-content p {
+          font-size: 1.25rem;
+          color: rgba(248, 250, 252, 0.88);
+          line-height: 1.7;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .research-section {
+          padding: 2rem 0 5rem;
+          position: relative;
+        }
+
+        .research-hero-box {
+          margin-bottom: 4rem;
+          text-align: left;
+          max-width: 800px;
+        }
+
+        .research-hero-box .research-eyebrow {
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--accent-purple);
+          margin-bottom: 0.8rem;
+          display: inline-block;
+        }
+
+        .research-hero-box h2 {
+          font-size: 3.5rem;
+          line-height: 1.1;
+          font-weight: 800;
+          margin-bottom: 1.2rem;
+          background: linear-gradient(135deg, #ffffff 0%, #a855f7 50%, #6366f1 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .research-hero-box p {
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          line-height: 1.7;
+        }
+
+        .research-articles-header {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          padding-top: 2.5rem;
+          margin-bottom: 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .research-articles-header h3 {
+          font-size: 2rem;
+          font-weight: 700;
+        }
+
+        .research-articles-list {
+          display: flex;
+          flex-direction: column;
+          gap: 2rem;
+        }
+
+        .research-article-card {
+          display: grid;
+          grid-template-columns: 1fr 340px;
+          gap: 2.5rem;
+          align-items: center;
+          padding: 2.2rem;
+          background: rgba(18, 20, 29, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .research-article-card:hover {
+          background: rgba(28, 31, 46, 0.8);
+          border-color: rgba(168, 85, 247, 0.4);
+          transform: translateY(-4px);
+          box-shadow: 0 12px 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .research-article-content h4 {
+          font-size: 1.8rem;
+          line-height: 1.3;
+          margin-bottom: 1rem;
+          color: #ffffff;
+          transition: color 0.2s ease;
+        }
+
+        .research-article-card:hover .research-article-content h4 {
+          color: #c084fc;
+        }
+
+        .research-article-content p {
+          font-size: 1.05rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .research-article-meta {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          font-size: 0.85rem;
+          color: var(--text-muted);
+        }
+
+        .research-tag {
+          background: rgba(139, 92, 246, 0.15);
+          color: #c084fc;
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          padding: 0.25rem 0.75rem;
+          border-radius: 6px;
+          font-weight: 600;
+        }
+
+        .research-article-image {
+          height: 200px;
+          width: 100%;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .research-article-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .research-article-card:hover .research-article-image img {
+          transform: scale(1.06);
+        }
+
+        @media (max-width: 900px) {
+          .research-article-card {
+            grid-template-columns: 1fr;
+          }
+          .research-article-image {
+            height: 220px;
+            order: -1;
+          }
+          .research-hero-box h2 {
+            font-size: 2.5rem;
           }
         }
       `}</style>
