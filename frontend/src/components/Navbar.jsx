@@ -16,139 +16,139 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
   };
 
   return (
-    <header className="navbar-header">
-      <div className="container nav-wrapper">
-        {/* Brand Logo */}
-        <div
-          className="brand-logo"
-          onClick={() => {
-            handleNavClick('home');
-            navigateToLanding();
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          <img src={logo} alt="DiziPix Logo" className="logo-img" />
-          <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
-        </div>
-
-        {/* Desktop Navigation Links */}
-        {!isAppView ? (
-          <nav className="nav-links desktop-only">
-            <a
-              href="#research"
-              className={`nav-item ${landingPageNav === 'research' ? 'active' : ''}`}
-              onClick={(e) => { e.preventDefault(); handleNavClick('research'); }}
-            >
-              Research
-            </a>
-            <a
-              href="#tools"
-              className={`nav-item highlight-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
-              onClick={(e) => { e.preventDefault(); handleNavClick('tools'); }}
-            >
-              <span className="vfx-sparkle sparkle-left">✦</span>
-              <span className="vfx-sparkle sparkle-top">✨</span>
-              <span className="vfx-sparkle sparkle-right">✧</span>
-              <span className="ai-text-vfx">AI Tools</span>
-              <span className="ai-scan-glow"></span>
-            </a>
-            <a
-              href="#blog"
-              className={`nav-item ${landingPageNav === 'blog' ? 'active' : ''}`}
-              onClick={(e) => { e.preventDefault(); handleNavClick('blog'); }}
-            >
-              Blog
-            </a>
-            <a
-              href="#community"
-              className={`nav-item ${landingPageNav === 'community' ? 'active' : ''}`}
-              onClick={(e) => { e.preventDefault(); handleNavClick('community'); }}
-            >
-              Community
-            </a>
-            <a
-              href="#contact"
-              className={`nav-item ${landingPageNav === 'contact' ? 'active' : ''}`}
-              onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
-            >
-              Contact
-            </a>
-          </nav>
-        ) : (
-          <nav className="nav-links app-tabs desktop-only">
-            <button
-              className={`app-tab-btn ${activeTab === 'feed' ? 'active' : ''}`}
-              onClick={() => setActiveTab('feed')}
-            >
-              📰 Feed
-            </button>
-            <button
-              className={`app-tab-btn ${activeTab === 'create' ? 'active' : ''}`}
-              onClick={() => setActiveTab('create')}
-            >
-              ✨ AI Studio
-            </button>
-            <button
-              className={`app-tab-btn ${activeTab === 'assets' ? 'active' : ''}`}
-              onClick={() => setActiveTab('assets')}
-            >
-              📁 My Assets
-            </button>
-            <button
-              className={`app-tab-btn ${activeTab === 'credits' ? 'active' : ''}`}
-              onClick={() => setActiveTab('credits')}
-            >
-              ⚡ Buy Credits
-            </button>
-          </nav>
-        )}
-
-        {/* Action Controls - Desktop */}
-        <div className="nav-actions desktop-only">
-
-          {user ? (
-            <div className="user-profile-menu">
-              <div className="avatar-circle">
-                {user.name.charAt(0)}
-              </div>
-              <div className="user-details">
-                <span className="user-name">{user.name}</span>
-                <button className="logout-link" onClick={logout}>Sign Out</button>
-              </div>
-            </div>
-          ) : (
-            <button className="btn btn-ghost" onClick={() => setAuthModalOpen(true)}>
-              Sign In
-            </button>
-          )}
-
-          {!isAppView ? (
-            <button className="btn btn-primary" onClick={() => navigateToApp('create')}>
-              Try DiziPix
-            </button>
-          ) : (
-            <button className="btn btn-secondary btn-sm" onClick={navigateToLanding}>
-              Main Site ↗
-            </button>
-          )}
-        </div>
-
-        {/* Mobile Action Controls & Hamburger Toggle */}
-        <div className="mobile-actions">
-
-          <button
-            className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle navigation menu"
+    <>
+      <header className="navbar-header">
+        <div className="container nav-wrapper">
+          {/* Brand Logo */}
+          <div
+            className="brand-logo"
+            onClick={() => {
+              handleNavClick('home');
+              navigateToLanding();
+            }}
+            style={{ cursor: 'pointer' }}
           >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </div>
+            <img src={logo} alt="DiziPix Logo" className="logo-img" />
+            <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
+          </div>
 
-      {/* Mobile Drawer Overlay */}
+          {/* Desktop Navigation Links */}
+          {!isAppView ? (
+            <nav className="nav-links desktop-only">
+              <a
+                href="#research"
+                className={`nav-item ${landingPageNav === 'research' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('research'); }}
+              >
+                Research
+              </a>
+              <a
+                href="#tools"
+                className={`nav-item highlight-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('tools'); }}
+              >
+                <span className="vfx-sparkle sparkle-left">✦</span>
+                <span className="vfx-sparkle sparkle-top">✨</span>
+                <span className="vfx-sparkle sparkle-right">✧</span>
+                <span className="ai-text-vfx">AI Tools</span>
+                <span className="ai-scan-glow"></span>
+              </a>
+              <a
+                href="#blog"
+                className={`nav-item ${landingPageNav === 'blog' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('blog'); }}
+              >
+                Blog
+              </a>
+              <a
+                href="#community"
+                className={`nav-item ${landingPageNav === 'community' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('community'); }}
+              >
+                Community
+              </a>
+              <a
+                href="#contact"
+                className={`nav-item ${landingPageNav === 'contact' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
+              >
+                Contact
+              </a>
+            </nav>
+          ) : (
+            <nav className="nav-links app-tabs desktop-only">
+              <button
+                className={`app-tab-btn ${activeTab === 'feed' ? 'active' : ''}`}
+                onClick={() => setActiveTab('feed')}
+              >
+                📰 Feed
+              </button>
+              <button
+                className={`app-tab-btn ${activeTab === 'create' ? 'active' : ''}`}
+                onClick={() => setActiveTab('create')}
+              >
+                ✨ AI Studio
+              </button>
+              <button
+                className={`app-tab-btn ${activeTab === 'assets' ? 'active' : ''}`}
+                onClick={() => setActiveTab('assets')}
+              >
+                📁 My Assets
+              </button>
+              <button
+                className={`app-tab-btn ${activeTab === 'credits' ? 'active' : ''}`}
+                onClick={() => setActiveTab('credits')}
+              >
+                ⚡ Buy Credits
+              </button>
+            </nav>
+          )}
+
+          {/* Action Controls - Desktop */}
+          <div className="nav-actions desktop-only">
+            {user ? (
+              <div className="user-profile-menu">
+                <div className="avatar-circle">
+                  {user.name.charAt(0)}
+                </div>
+                <div className="user-details">
+                  <span className="user-name">{user.name}</span>
+                  <button className="logout-link" onClick={logout}>Sign Out</button>
+                </div>
+              </div>
+            ) : (
+              <button className="btn btn-ghost" onClick={() => setAuthModalOpen(true)}>
+                Sign In
+              </button>
+            )}
+
+            {!isAppView ? (
+              <button className="btn btn-primary" onClick={() => navigateToApp('create')}>
+                Try DiziPix
+              </button>
+            ) : (
+              <button className="btn btn-secondary btn-sm" onClick={navigateToLanding}>
+                Main Site ↗
+              </button>
+            )}
+          </div>
+
+          {/* Mobile Action Controls & Hamburger Toggle */}
+          <div className="mobile-actions">
+            <button
+              className={`mobile-menu-toggle ${isMobileMenuOpen ? 'open' : ''}`}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Overlay - Rendered OUTSIDE header */}
       {isMobileMenuOpen && (
         <div className="mobile-drawer-overlay" onClick={closeMenu}>
           <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
@@ -192,14 +192,10 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 </a>
                 <a
                   href="#tools"
-                  className={`mobile-nav-item highlight-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
+                  className={`mobile-nav-item ${landingPageNav === 'tools' ? 'active' : ''}`}
                   onClick={(e) => { e.preventDefault(); handleNavClick('tools'); closeMenu(); }}
                 >
-                  <span className="vfx-sparkle sparkle-left">✦</span>
-                  <span className="vfx-sparkle sparkle-top">✨</span>
-                  <span className="vfx-sparkle sparkle-right">✧</span>
-                  <span className="ai-text-vfx">AI Tools</span>
-                  <span className="ai-scan-glow"></span>
+                  AI Tools
                 </a>
                 <a
                   href="#blog"
@@ -226,7 +222,6 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
             )}
 
             <div className="mobile-drawer-footer">
-
               {user ? (
                 <div className="mobile-user-card">
                   <div className="avatar-circle">{user.name.charAt(0)}</div>
@@ -237,7 +232,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 </div>
               ) : (
                 <button
-                  className="btn btn-ghost btn-block"
+                  className="btn btn-ghost btn-block mobile-footer-btn"
                   onClick={() => { closeMenu(); setAuthModalOpen(true); }}
                 >
                   Sign In
@@ -246,14 +241,14 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
 
               {!isAppView ? (
                 <button
-                  className="btn btn-primary btn-block"
+                  className="btn btn-primary btn-block mobile-footer-btn"
                   onClick={() => { closeMenu(); navigateToApp('create'); }}
                 >
                   Try DiziPix
                 </button>
               ) : (
                 <button
-                  className="btn btn-secondary btn-block"
+                  className="btn btn-secondary btn-block mobile-footer-btn"
                   onClick={() => { closeMenu(); navigateToLanding(); }}
                 >
                   Main Site ↗
@@ -268,9 +263,10 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
         .navbar-header {
           position: sticky;
           top: 0;
-          z-index: 500;
+          z-index: 10000;
           background: rgba(8, 9, 13, 0.85);
           backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           border-bottom: 1px solid var(--border-glass);
           height: 70px;
           display: flex;
@@ -427,56 +423,24 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           animation: floatSparkle3 2.2s infinite ease-in-out;
         }
 
-
         @keyframes aiTextWave {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-1.5px);
-          }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-1.5px); }
         }
 
         @keyframes floatSparkle1 {
-          0%, 100% {
-            transform: translateY(0) scale(0.8) rotate(0deg);
-            opacity: 0.4;
-          }
-          50% {
-            transform: translateY(-5px) scale(1.3) rotate(45deg);
-            opacity: 1;
-          }
+          0%, 100% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.4; }
+          50% { transform: translateY(-5px) scale(1.3) rotate(45deg); opacity: 1; }
         }
 
         @keyframes floatSparkle2 {
-          0%, 100% {
-            transform: translateY(0) scale(1) rotate(0deg);
-            opacity: 0.9;
-          }
-          50% {
-            transform: translateY(4px) scale(0.7) rotate(-30deg);
-            opacity: 0.3;
-          }
+          0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.9; }
+          50% { transform: translateY(4px) scale(0.7) rotate(-30deg); opacity: 0.3; }
         }
 
         @keyframes floatSparkle3 {
-          0%, 100% {
-            transform: translateX(0) scale(0.7);
-            opacity: 0.5;
-          }
-          50% {
-            transform: translateX(-4px) translateY(-3px) scale(1.2);
-            opacity: 1;
-          }
-        }
-
-        @keyframes aiScanlineSweep {
-          0% {
-            left: -100%;
-          }
-          35%, 100% {
-            left: 200%;
-          }
+          0%, 100% { transform: translateX(0) scale(0.7); opacity: 0.5; }
+          50% { transform: translateX(-4px) translateY(-3px) scale(1.2); opacity: 1; }
         }
 
         .app-tabs {
@@ -516,39 +480,6 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           display: flex;
           align-items: center;
           gap: 1rem;
-        }
-
-        .credits-badge {
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
-          background: rgba(234, 179, 8, 0.12);
-          border: 1px solid rgba(234, 179, 8, 0.3);
-          padding: 0.35rem 0.8rem;
-          border-radius: var(--radius-full);
-          cursor: pointer;
-          transition: var(--transition-fast);
-        }
-
-        .credits-badge:hover {
-          background: rgba(234, 179, 8, 0.2);
-          transform: scale(1.03);
-        }
-
-        .credit-icon {
-          color: #eab308;
-          font-size: 0.9rem;
-        }
-
-        .credit-amount {
-          font-weight: 800;
-          color: #fef08a;
-          font-size: 0.9rem;
-        }
-
-        .credit-label {
-          font-size: 0.75rem;
-          color: var(--text-muted);
         }
 
         .user-profile-menu {
@@ -592,22 +523,11 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           padding: 0;
         }
 
-        .subdomain-tag {
-          font-size: 0.7rem;
-          opacity: 0.8;
-          font-weight: 400;
-          margin-left: 0.2rem;
-        }
-
         /* Mobile Controls */
         .mobile-actions {
           display: none;
           align-items: center;
           gap: 0.6rem;
-        }
-
-        .mobile-credits {
-          padding: 0.25rem 0.6rem;
         }
 
         .mobile-menu-toggle {
@@ -620,7 +540,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           height: 24px;
           cursor: pointer;
           padding: 0;
-          z-index: 501;
+          z-index: 10001;
         }
 
         .mobile-menu-toggle span {
@@ -643,16 +563,17 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           transform: translateY(-8px) rotate(-45deg);
         }
 
-        /* Mobile Drawer */
+        /* Mobile Drawer Overlay */
         .mobile-drawer-overlay {
           position: fixed;
           top: 70px;
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(4, 5, 8, 0.8);
-          backdrop-filter: blur(12px);
-          z-index: 499;
+          background: rgba(4, 5, 8, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          z-index: 9999;
           display: flex;
           flex-direction: column;
           animation: fadeIn 0.2s ease-out;
@@ -667,48 +588,51 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           gap: 1.2rem;
           max-height: calc(100vh - 70px);
           overflow-y: auto;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
         .mobile-nav-links {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.75rem;
         }
 
         .mobile-nav-item {
-          color: var(--text-secondary);
+          color: var(--text-primary);
           text-decoration: none;
-          font-size: 1.1rem;
-          font-weight: 500;
-          padding: 0.5rem 0;
-          position: relative;
-          display: inline-block;
-          border-bottom: 1px solid var(--border-glass);
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .mobile-nav-item::after {
-          content: '';
-          position: absolute;
-          bottom: -1px;
-          left: 0;
-          width: 0;
-          height: 3px;
-          background: var(--gradient-primary);
-          border-radius: var(--radius-full);
-          transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          font-size: 1.05rem;
+          font-weight: 600;
+          height: 50px;
+          padding: 0 1.2rem;
+          border-radius: var(--radius-md);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid var(--border-glass);
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          transition: all 0.2s ease;
+          box-sizing: border-box;
+          width: 100%;
         }
 
         .mobile-nav-item:hover,
         .mobile-nav-item.active {
-          font-weight: 700 !important;
+          background: var(--gradient-primary);
           color: #ffffff;
+          border-color: transparent;
         }
 
-        .mobile-nav-item:hover::after,
-        .mobile-nav-item.active::after {
+        .mobile-footer-btn {
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.05rem;
+          font-weight: 600;
+          border-radius: var(--radius-md);
           width: 100%;
+          padding: 0 1.2rem;
+          box-sizing: border-box;
         }
 
         .mobile-tabs-grid {
@@ -721,7 +645,8 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid var(--border-glass);
           color: var(--text-secondary);
-          padding: 0.7rem 0.5rem;
+          height: 50px;
+          padding: 0 0.5rem;
           font-size: 0.9rem;
           font-weight: 600;
           border-radius: var(--radius-md);
@@ -741,14 +666,9 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
         .mobile-drawer-footer {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.75rem;
           padding-top: 1rem;
           border-top: 1px solid var(--border-glass);
-        }
-
-        .mobile-drawer-credits {
-          justify-content: center;
-          padding: 0.6rem 1rem;
         }
 
         .mobile-user-card {
@@ -757,6 +677,8 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           gap: 1rem;
           background: rgba(255, 255, 255, 0.04);
           padding: 0.75rem 1rem;
+          height: 50px;
+          box-sizing: border-box;
           border-radius: var(--radius-md);
           border: 1px solid var(--border-glass);
         }
@@ -773,7 +695,6 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           }
         }
       `}</style>
-    </header>
+    </>
   );
 }
-
