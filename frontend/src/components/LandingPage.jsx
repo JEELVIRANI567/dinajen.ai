@@ -2,9 +2,119 @@ import React, { useState, useEffect, useRef } from 'react';
 import { navigateToApp } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 
+const RESEARCH_ARTICLES = [
+  {
+    id: 'bharat-cinema-engine',
+    title: 'Dizi-Bharat Cinema Engine: AI Video & Scene Synthesis for Indian Filmmakers',
+    date: 'Aug 02, 2026',
+    tag: 'Indian Film & Media AI',
+    readTime: '🔥 4 Min Read',
+    views: '👁️ 28.5K Indian Creators',
+    likes: 2840,
+    trendingBadge: '🇮🇳 #1 Trending in India',
+    ctaText: 'Read Deep Dive ↗',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80',
+    summary: 'Empowering Bollywood, Tollywood, and Indian YouTube creators with real-time AI visual rendering, traditional lighting setups, and automated cinematic color grading.',
+    sections: [
+      {
+        heading: 'Executive Summary',
+        content: 'The Dizi-Bharat Cinema Engine is designed specifically for the Indian visual storytelling ecosystem. From grand period dramas to high-octane action sequences, creators can generate cinematic scene previews and VFX background plates with sub-50ms latency.'
+      },
+      {
+        heading: 'Vernacular Lighting & Heritage Color Grading',
+        content: 'Native rendering support for Indian golden-hour sun flares, traditional brass diya lighting, festive fireworks glow, and vibrant monsoon atmosphere presets tailored for regional cinema visual aesthetics.'
+      },
+      {
+        heading: 'Key Technical Innovations for Indian Studios',
+        bullets: [
+          'Multi-lingual Prompting: Accepts scene prompts in Hindi, Tamil, Telugu, Marathi, and English.',
+          'Zero-Buffer Real-Time Streaming: Live visual preview at 60 FPS for instant on-set storyboarding.',
+          'Custom Preset Library: Includes lighting styles inspired by Indian cinematic classics.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'devanagari-vernacular-ai',
+    title: 'Dizi-Diffusion 2.5: Devanagari & Indian Regional Vernacular Poster AI Engine',
+    date: 'Jul 26, 2026',
+    tag: 'Vernacular Graphic AI',
+    readTime: '⚡ 3 Min Read',
+    views: '👁️ 34.2K Indian Designers',
+    likes: 3190,
+    trendingBadge: '🇮🇳 Festival Special',
+    ctaText: 'Explore Vernacular Model ↗',
+    image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=80',
+    summary: 'The world\'s first AI engine fine-tuned for crisp Devanagari, Tamil, Telugu, and Gujarati typography overlays on festive posters, greeting cards, and Indian brand graphics.',
+    sections: [
+      {
+        heading: 'Zero-Artifact Vernacular Typography',
+        content: 'Dizi-Diffusion 2.5 solves script distortion in AI graphic generation, outputting pristine Devanagari, Gurmukhi, Kannada, and Bengali characters directly on poster visual layouts.'
+      },
+      {
+        heading: 'Festive Poster & Brand Synthesis',
+        content: 'Instant poster creation for major Indian festivals including Diwali, Ganesh Chaturthi, Holi, Eid, Navratri, and Independence Day with automated brand logo integration.'
+      },
+      {
+        heading: 'Direct SVG Vector Curve Export',
+        content: 'Extract scalable vector meshes directly into Adobe Illustrator, Photoshop, or Canva for rapid commercial printing and digital campaign publishing.'
+      }
+    ]
+  },
+  {
+    id: 'cricket-sports-engine',
+    title: 'AI Cricket & Indian Sports Graphics Engine: Real-Time Action Visual Synthesis',
+    date: 'Jul 14, 2026',
+    tag: 'Indian Sports & Culture',
+    readTime: '⏱️ 5 Min Read',
+    views: '👁️ 42.9K Sports Fans',
+    likes: 4520,
+    trendingBadge: '🇮🇳 IPL & Matchday Visuals',
+    ctaText: 'Generate Action Graphics ↗',
+    image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800&auto=format&fit=crop&q=80',
+    summary: 'High-impact real-time action sports poster generator engineered for IPL match promos, cricket fan artwork, and dynamic athlete graphics.',
+    sections: [
+      {
+        heading: 'Cricket Stadium Lighting & Atmosphere',
+        content: 'Generate hyper-realistic floodlight atmospheres, crowd stadium banners, night match glare, and dramatic bowler/batsman action motion blurs in milliseconds.'
+      },
+      {
+        heading: 'Matchday Social Media Automation',
+        content: 'Indian sports media teams and fan pages can create instant match-day graphics, player achievement milestone posters, and live scorecard banners automatically.'
+      }
+    ]
+  },
+  {
+    id: 'ethnic-fashion-visualizer',
+    title: 'Dizi-Ethnic AI Fashion: Real-Time Saree, Sherwani & Indian Apparel Studio',
+    date: 'Jun 30, 2026',
+    tag: 'Indian Fashion & E-Commerce',
+    readTime: '✨ 4 Min Read',
+    views: '👁️ 31.7K Brand Marketers',
+    likes: 3810,
+    trendingBadge: '🇮🇳 Royal Ethnic Fashion',
+    ctaText: 'Try Fashion Studio ↗',
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80',
+    summary: 'AI visual model tailored for Indian fashion brands, wedding designers, and apparel stores to render high-resolution ethnic wear on virtual models instantly.',
+    sections: [
+      {
+        heading: 'Zari & Silk Fabric Precision',
+        content: 'Captures intricate Kanjivaram silk weaves, Banarasi zari gold threads, Chikankari embroidery, and royal wedding sherwani embroidery with macro texture fidelity.'
+      },
+      {
+        heading: 'Virtual Indian Studio Lighting',
+        content: 'Simulate palace heritage backdrops, festive lighting setups, and studio model poses for instant e-commerce catalog visual generation.'
+      }
+    ]
+  }
+];
+
 export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const { setAuthModalOpen } = useAuth();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedResearchArticle, setSelectedResearchArticle] = useState(null);
+  const [likedArticles, setLikedArticles] = useState({});
+  const [bookmarkedArticles, setBookmarkedArticles] = useState({});
   const [isMuted, setIsMuted] = useState(true);
   const [isResearchMuted, setIsResearchMuted] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -300,81 +410,153 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             </div>
 
             <div className="research-articles-list">
-              <a
-                href="https://pixverse.ai/en/blog/pixverse-game-engine-deep-dive"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="research-article-card"
-              >
-                <div className="research-article-content">
-                  <h4>DiziPix Game Engine Deep Dive: Real-Time Interactive Gaming</h4>
-                  <p>
-                    Explore DiziPix Game Engine, an architecture combining real-time generative video, AI agent orchestration, and abstract game mechanics for interactive entertainment.
-                  </p>
-                  <div className="research-article-meta">
-                    <span className="research-tag">DiziPix Research</span>
-                    <span>📅 Jul 13, 2026</span>
-                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Read Deep Dive ↗</span>
-                  </div>
-                </div>
-                <div className="research-article-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80"
-                    alt="DiziPix Game Engine Deep Dive"
-                  />
-                </div>
-              </a>
+              {RESEARCH_ARTICLES.map((article) => {
+                const isLiked = likedArticles[article.id];
+                const isBookmarked = bookmarkedArticles[article.id];
+                const currentLikes = (article.likes || 0) + (isLiked ? 1 : 0);
 
-              <a
-                href="https://pixverse.ai/en/blog/pixverse-r1-next-generation-real-time-world-model"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="research-article-card"
-              >
-                <div className="research-article-content">
-                  <h4>DiziPix R1 Explained: Real-Time AI Video World Model</h4>
-                  <p>
-                    Learn what DiziPix R1 is, how the real-time AI video world model works, how it differs from traditional AI video generators, and when to use real-time streaming.
-                  </p>
-                  <div className="research-article-meta">
-                    <span className="research-tag">DiziPix Research</span>
-                    <span>📅 Jun 28, 2026</span>
-                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Read Deep Dive ↗</span>
-                  </div>
-                </div>
-                <div className="research-article-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
-                    alt="DiziPix R1 Real-Time World Model"
-                  />
-                </div>
-              </a>
+                return (
+                  <div
+                    key={article.id}
+                    className="research-article-card indian-interactive-card"
+                  >
+                    <div
+                      className="research-article-content"
+                      onClick={() => setSelectedResearchArticle(article)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="card-top-badges">
+                        <span className="trending-badge">{article.trendingBadge}</span>
+                        <span className="read-time-badge">{article.readTime}</span>
+                        <span className="views-badge">{article.views}</span>
+                      </div>
 
-              <a
-                href="#create"
-                onClick={(e) => { e.preventDefault(); navigateToApp('create'); }}
-                className="research-article-card"
-              >
-                <div className="research-article-content">
-                  <h4>Dizi-Diffusion 2.5: Zero-Artifact Latent Synthesis & Vector Mesh</h4>
-                  <p>
-                    Our proprietary latent diffusion model fine-tuned for high-fidelity typography, sharp poster contrast, and direct vector curve output allowing infinite SVG scaling.
-                  </p>
-                  <div className="research-article-meta">
-                    <span className="research-tag">DiziPix Research</span>
-                    <span>📅 May 18, 2026</span>
-                    <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>Explore Model ↗</span>
+                      <h4>{article.title}</h4>
+                      <p>{article.summary}</p>
+
+                      <div className="research-article-meta">
+                        <span className="research-tag">{article.tag}</span>
+                        <span>{article.date}</span>
+                        <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>
+                          {article.ctaText}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className="research-article-image"
+                      onClick={() => setSelectedResearchArticle(article)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img src={article.image} alt={article.title} />
+                      <div className="card-image-overlay">
+                        <button
+                          className={`card-action-btn ${isLiked ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setLikedArticles(prev => ({ ...prev, [article.id]: !prev[article.id] }));
+                          }}
+                          title="Like Article"
+                        >
+                          {isLiked ? '❤️' : '🤍'} {currentLikes}
+                        </button>
+                        <button
+                          className={`card-action-btn ${isBookmarked ? 'active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setBookmarkedArticles(prev => ({ ...prev, [article.id]: !prev[article.id] }));
+                          }}
+                          title="Bookmark Article"
+                        >
+                          {isBookmarked ? '🔖 Saved' : '🔖 Save'}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="research-article-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80"
-                    alt="Dizi-Diffusion 2.5 Model"
-                  />
-                </div>
-              </a>
+                );
+              })}
             </div>
           </section>
+
+          {/* Research Article In-Site Modal */}
+          {selectedResearchArticle && (
+            <div className="modal-overlay" onClick={() => setSelectedResearchArticle(null)}>
+              <div
+                className="research-modal-card animate-slide-up"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className="research-modal-close"
+                  onClick={() => setSelectedResearchArticle(null)}
+                  aria-label="Close modal"
+                >
+                  ✕
+                </button>
+
+                <div className="research-modal-header">
+                  <div className="card-top-badges" style={{ marginBottom: '0.8rem' }}>
+                    <span className="trending-badge">{selectedResearchArticle.trendingBadge}</span>
+                    <span className="read-time-badge">{selectedResearchArticle.readTime}</span>
+                    <span className="views-badge">{selectedResearchArticle.views}</span>
+                  </div>
+
+                  <div className="research-modal-meta">
+                    <span className="research-tag">{selectedResearchArticle.tag}</span>
+                    <span className="research-modal-date">{selectedResearchArticle.date}</span>
+                  </div>
+                  <h2>{selectedResearchArticle.title}</h2>
+                </div>
+
+                <div className="research-modal-image-container">
+                  <img src={selectedResearchArticle.image} alt={selectedResearchArticle.title} />
+                </div>
+
+                <div className="research-modal-body">
+                  <p className="research-modal-lead">{selectedResearchArticle.summary}</p>
+
+                  {selectedResearchArticle.sections.map((sec, idx) => (
+                    <div key={idx} className="research-modal-section">
+                      <h3>{sec.heading}</h3>
+                      {sec.content && <p>{sec.content}</p>}
+                      {sec.bullets && (
+                        <ul>
+                          {sec.bullets.map((b, i) => (
+                            <li key={i}>{b}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="research-modal-footer">
+                  <button
+                    className={`btn btn-secondary ${likedArticles[selectedResearchArticle.id] ? 'active' : ''}`}
+                    onClick={() => {
+                      setLikedArticles(prev => ({ ...prev, [selectedResearchArticle.id]: !prev[selectedResearchArticle.id] }));
+                    }}
+                  >
+                    {likedArticles[selectedResearchArticle.id] ? '❤️ Liked' : '🤍 Like'}
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setSelectedResearchArticle(null)}
+                  >
+                    Close Article
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setSelectedResearchArticle(null);
+                      navigateToApp('create');
+                    }}
+                  >
+                    Try in Studio ✨
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1334,11 +1516,87 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           color: inherit;
         }
 
-        .research-article-card:hover {
-          background: rgba(28, 31, 46, 0.8);
-          border-color: rgba(168, 85, 247, 0.4);
-          transform: translateY(-4px);
-          box-shadow: 0 12px 30px rgba(139, 92, 246, 0.15);
+        /* Indian Interactive Research Card Styles */
+        .indian-interactive-card {
+          position: relative;
+          background: linear-gradient(135deg, rgba(20, 23, 36, 0.8) 0%, rgba(12, 14, 22, 0.95) 100%);
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .indian-interactive-card:hover {
+          border-color: rgba(245, 158, 11, 0.6);
+          box-shadow: 0 16px 40px rgba(245, 158, 11, 0.15), 0 0 25px rgba(168, 85, 247, 0.2);
+          transform: translateY(-5px);
+        }
+
+        .card-top-badges {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          margin-bottom: 0.9rem;
+          flex-wrap: wrap;
+        }
+
+        .trending-badge {
+          background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(234, 88, 12, 0.25) 100%);
+          color: #fbbf24;
+          border: 1px solid rgba(245, 158, 11, 0.45);
+          font-size: 0.78rem;
+          font-weight: 700;
+          padding: 0.25rem 0.7rem;
+          border-radius: 9999px;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+        }
+
+        .read-time-badge, .views-badge {
+          background: rgba(255, 255, 255, 0.06);
+          color: #cbd5e1;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          font-size: 0.78rem;
+          font-weight: 600;
+          padding: 0.25rem 0.65rem;
+          border-radius: 9999px;
+        }
+
+        .card-image-overlay {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          display: flex;
+          gap: 0.5rem;
+          z-index: 2;
+        }
+
+        .card-action-btn {
+          background: rgba(15, 17, 26, 0.85);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          color: #f1f5f9;
+          font-size: 0.78rem;
+          font-weight: 600;
+          padding: 0.35rem 0.75rem;
+          border-radius: 9999px;
+          cursor: pointer;
+          backdrop-filter: blur(8px);
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+        }
+
+        .card-action-btn:hover {
+          background: rgba(168, 85, 247, 0.3);
+          border-color: rgba(168, 85, 247, 0.5);
+          transform: scale(1.05);
+        }
+
+        .card-action-btn.active {
+          background: rgba(239, 68, 68, 0.25);
+          border-color: rgba(239, 68, 68, 0.5);
+          color: #fca5a5;
         }
 
         .research-article-content h4 {
@@ -1397,6 +1655,146 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           transform: scale(1.06);
         }
 
+        /* Research Modal Styles */
+        .research-modal-card {
+          background: rgba(15, 17, 26, 0.95);
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.2);
+          border-radius: 20px;
+          width: 100%;
+          max-width: 780px;
+          max-height: 85vh;
+          overflow-y: auto;
+          position: relative;
+          padding: 2.5rem;
+          color: #f1f5f9;
+          backdrop-filter: blur(16px);
+          z-index: 100001;
+          margin: auto;
+        }
+
+        .research-modal-card::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .research-modal-card::-webkit-scrollbar-track {
+          background: transparent;
+          margin: 18px 0;
+        }
+
+        .research-modal-card::-webkit-scrollbar-thumb {
+          background: rgba(168, 85, 247, 0.4);
+          border-radius: 9999px;
+        }
+
+        .research-modal-card::-webkit-scrollbar-thumb:hover {
+          background: rgba(168, 85, 247, 0.8);
+        }
+
+        .research-modal-close {
+          position: absolute;
+          top: 1.25rem;
+          right: 1.25rem;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #94a3b8;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          font-size: 1.1rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+        }
+
+        .research-modal-close:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: rgba(239, 68, 68, 0.4);
+          color: #f87171;
+        }
+
+        .research-modal-header {
+          margin-bottom: 1.5rem;
+          padding-right: 2.5rem;
+        }
+
+        .research-modal-meta {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .research-modal-date {
+          color: #94a3b8;
+          font-size: 0.9rem;
+        }
+
+        .research-modal-header h2 {
+          font-size: 1.8rem;
+          line-height: 1.3;
+          color: #ffffff;
+          font-weight: 800;
+        }
+
+        .research-modal-image-container {
+          width: 100%;
+          height: 260px;
+          border-radius: 14px;
+          overflow: hidden;
+          margin-bottom: 1.8rem;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .research-modal-image-container img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .research-modal-body {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          color: #cbd5e1;
+          line-height: 1.7;
+        }
+
+        .research-modal-lead {
+          font-size: 1.1rem;
+          font-weight: 500;
+          color: #e2e8f0;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .research-modal-section h3 {
+          font-size: 1.25rem;
+          color: #c084fc;
+          font-weight: 700;
+          margin-bottom: 0.6rem;
+        }
+
+        .research-modal-section ul {
+          padding-left: 1.2rem;
+          margin-top: 0.5rem;
+        }
+
+        .research-modal-section li {
+          margin-bottom: 0.4rem;
+        }
+
+        .research-modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+          margin-top: 2rem;
+          padding-top: 1.25rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
         @media (max-width: 900px) {
           .research-article-card {
             grid-template-columns: 1fr;
@@ -1407,6 +1805,9 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           }
           .research-hero-box h2 {
             font-size: 2.5rem;
+          }
+          .research-modal-card {
+            padding: 1.5rem;
           }
         }
       `}</style>

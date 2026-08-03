@@ -189,12 +189,31 @@ h1, h2, h3, h4, h5, h6 {
   inset: 0;
   background: rgba(4, 5, 8, 0.85);
   backdrop-filter: blur(8px);
-  z-index: 1000;
+  z-index: 100000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overflow-y: auto;
   animation: fadeIn 0.2s ease-out;
+}
+
+/* Custom Sleek Scrollbars for Modals */
+.modal-overlay::-webkit-scrollbar,
+.modal-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-overlay::-webkit-scrollbar-track,
+.modal-card::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 18px 0;
+}
+
+.modal-overlay::-webkit-scrollbar-thumb,
+.modal-card::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.4);
+  border-radius: 9999px;
 }
 
 @keyframes fadeIn {
