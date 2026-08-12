@@ -113,6 +113,7 @@ const RESEARCH_ARTICLES = [
 const BLOG_ARTICLES = [
   {
     id: 'mastering-ai-poster-design',
+    isBlog: true,
     title: 'Mastering AI Poster Design: Advanced Composition & Vernacular Lighting Prompts',
     date: 'Aug 10, 2026',
     tag: 'Poster Design & Prompts',
@@ -144,6 +145,7 @@ const BLOG_ARTICLES = [
   },
   {
     id: 'vector-logos-vs-pixel-ai',
+    isBlog: true,
     title: 'Vector SVG Logos vs Pixel AI Marks: Building Clean Scalable Corporate Identities',
     date: 'Aug 05, 2026',
     tag: 'Branding & Vector AI',
@@ -167,6 +169,7 @@ const BLOG_ARTICLES = [
   },
   {
     id: 'architecture-60fps-video',
+    isBlog: true,
     title: 'Inside Dizi-Motion: The Architecture Behind 60fps Real-Time AI Video Synthesis',
     date: 'Jul 29, 2026',
     tag: 'AI Video Engineering',
@@ -192,7 +195,7 @@ const BLOG_ARTICLES = [
 
 export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const { setAuthModalOpen } = useAuth();
-  const { articles, heroConfig } = useContent();
+  const { articles, blogArticles, heroConfig } = useContent();
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedResearchArticle, setSelectedResearchArticle] = useState(null);
   const [likedArticles, setLikedArticles] = useState({});
@@ -687,7 +690,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           </div>
 
           <div className="features-grid">
-            {BLOG_ARTICLES.map((article) => (
+            {(blogArticles || BLOG_ARTICLES).map((article) => (
               <div
                 key={article.id}
                 className="feature-card glass-card indian-interactive-card"
@@ -898,9 +901,11 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
               <h2>{selectedResearchArticle.title}</h2>
             </div>
 
-            <div className="research-modal-image-container">
-              <img src={selectedResearchArticle.image} alt={selectedResearchArticle.title} />
-            </div>
+            {!selectedResearchArticle.isBlog && landingPageNav !== 'blog' && selectedResearchArticle.image && (
+              <div className="research-modal-image-container">
+                <img src={selectedResearchArticle.image} alt={selectedResearchArticle.title} />
+              </div>
+            )}
 
             <div className="research-modal-body">
               <p className="research-modal-lead">{selectedResearchArticle.summary}</p>

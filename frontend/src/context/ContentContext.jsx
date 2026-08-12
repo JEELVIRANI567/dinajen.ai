@@ -107,6 +107,89 @@ export const INITIAL_RESEARCH_ARTICLES = [
   }
 ];
 
+export const INITIAL_BLOG_ARTICLES = [
+  {
+    id: 'mastering-ai-poster-design',
+    isBlog: true,
+    title: 'Mastering AI Poster Design: Advanced Composition & Vernacular Lighting Prompts',
+    date: 'Aug 10, 2026',
+    tag: 'Poster Design & Prompts',
+    readTime: '⚡ 4 Min Read',
+    views: '👁️ 19.4K Designers',
+    likes: 1840,
+    trendingBadge: '🔥 Design Guide 2026',
+    ctaText: 'Read Full Article ↗',
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80',
+    summary: 'A practical engineering guide on structuring multi-layered visual prompts, controlling camera lens focal lengths, and rendering cinematic typography for Indian film and commercial posters.',
+    sections: [
+      {
+        heading: '1. The Rule of Visual Depth in Generative Posters',
+        content: 'To achieve cinematic depth in AI poster generation, prompts should separate background atmosphere from main subject key lighting. Specify volumetric fog, anamorphic lens flare, and rim lighting to elevate 2D artwork into 3D cinema standard.'
+      },
+      {
+        heading: '2. Structuring Multi-Tier Vernacular Prompts',
+        content: 'Combine specific lighting terms like "golden hour diya backlight" or "monsoon street reflections" with character descriptors for crisp visual fidelity.'
+      },
+      {
+        heading: 'Key Poster Prompt Formula',
+        bullets: [
+          'Subject: Hero character in traditional period armor with dramatic side-lighting',
+          'Atmosphere: Golden hour dust motes, volumetric fog, cinema anamorphic bokeh',
+          'Color Palette: Crimson red and warm amber brass highlights'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'vector-logos-vs-pixel-ai',
+    isBlog: true,
+    title: 'Vector SVG Logos vs Pixel AI Marks: Building Clean Scalable Corporate Identities',
+    date: 'Aug 05, 2026',
+    tag: 'Branding & Vector AI',
+    readTime: '⏱️ 3 Min Read',
+    views: '👁️ 24.1K Brand Strategists',
+    likes: 2410,
+    trendingBadge: '✨ Vector Breakthrough',
+    ctaText: 'Explore Vector Strategy ↗',
+    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80',
+    summary: 'Why scalable vector paths matter for commercial printing and brand merchandise, and how DiziPix generates crisp SVG curves directly from text prompts.',
+    sections: [
+      {
+        heading: '1. The Vector SVG Advantage',
+        content: 'Unlike raster PNG pixel outputs, SVG vector paths scale infinitely without pixelation. DiziPix 2.5 extracts parametric Bezier curves directly from neural tensor representations.'
+      },
+      {
+        heading: '2. Seamless Export to Adobe Illustrator & Figma',
+        content: 'Designers can export generated emblems directly into vector edit suites to tweak color swatches, strokes, and typographic alignments instantly.'
+      }
+    ]
+  },
+  {
+    id: 'architecture-60fps-video',
+    isBlog: true,
+    title: 'Inside Dizi-Motion: The Architecture Behind 60fps Real-Time AI Video Synthesis',
+    date: 'Jul 29, 2026',
+    tag: 'AI Video Engineering',
+    readTime: '🔥 5 Min Read',
+    views: '👁️ 38.6K Video Creators',
+    likes: 3720,
+    trendingBadge: '🚀 Video Engine Tech',
+    ctaText: 'Read Video Deep Dive ↗',
+    image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&auto=format&fit=crop&q=80',
+    summary: 'An inside look at our temporal attention mechanisms, motion trajectory keyframes, and zero-flicker frame consistency algorithms powering 60fps video generation.',
+    sections: [
+      {
+        heading: '1. Temporal Attention & Frame Consistency',
+        content: 'Traditional AI video generators suffer from temporal flickering between frames. Dizi-Motion introduces cross-frame attention locks to guarantee character features and background lighting remain continuous.'
+      },
+      {
+        heading: '2. Camera Trajectory & Motion Controls',
+        content: 'Creators can specify dolly zoom, orbital pan, and crane motion controls in plain text, rendering 60fps cinematic scenes in sub-second generation passes.'
+      }
+    ]
+  }
+];
+
 export const INITIAL_HERO_CONFIG = {
   badgeText: '🇮🇳 India\'s Premier Generative AI Visual Platform',
   mainHeadline: 'Create Stunning Indian AI Posters, Visuals & Videos',
@@ -130,6 +213,15 @@ export function ContentProvider({ children }) {
     }
   });
 
+  const [blogArticles, setBlogArticles] = useState(() => {
+    try {
+      const saved = localStorage.getItem(`${STORAGE_KEY}_blogs`);
+      return saved ? JSON.parse(saved) : INITIAL_BLOG_ARTICLES;
+    } catch {
+      return INITIAL_BLOG_ARTICLES;
+    }
+  });
+
   const [heroConfig, setHeroConfig] = useState(() => {
     try {
       const saved = localStorage.getItem(`${STORAGE_KEY}_hero`);
@@ -147,6 +239,14 @@ export function ContentProvider({ children }) {
       console.error('Failed to save articles to localStorage', e);
     }
   }, [articles]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(`${STORAGE_KEY}_blogs`, JSON.stringify(blogArticles));
+    } catch (e) {
+      console.error('Failed to save blog articles to localStorage', e);
+    }
+  }, [blogArticles]);
 
   useEffect(() => {
     try {
@@ -184,15 +284,46 @@ export function ContentProvider({ children }) {
     setArticles(prev => prev.filter(art => art.id !== articleId));
   };
 
+  const updateBlogArticle = (blogId, updatedFields) => {
+    setBlogArticles(prev =>
+      prev.map(art => (art.id === blogId ? { ...art, ...updatedFields } : art))
+    );
+  };
+
+  const addBlogArticle = (newBlog) => {
+    const blogToAdd = {
+      id: `blog-${Date.now()}`,
+      isBlog: true,
+      likes: 0,
+      readTime: newBlog.readTime || '⚡ 4 Min Read',
+      views: '👁️ 1K Readers',
+      ctaText: newBlog.ctaText || 'Read Full Article ↗',
+      sections: [
+        {
+          heading: 'Article Guide',
+          content: newBlog.summary || 'Blog content overview.'
+        }
+      ],
+      ...newBlog
+    };
+    setBlogArticles(prev => [blogToAdd, ...prev]);
+  };
+
+  const deleteBlogArticle = (blogId) => {
+    setBlogArticles(prev => prev.filter(art => art.id !== blogId));
+  };
+
   const updateHeroConfig = (newConfig) => {
     setHeroConfig(prev => ({ ...prev, ...newConfig }));
   };
 
   const resetToDefaults = () => {
     setArticles(INITIAL_RESEARCH_ARTICLES);
+    setBlogArticles(INITIAL_BLOG_ARTICLES);
     setHeroConfig(INITIAL_HERO_CONFIG);
     try {
       localStorage.removeItem(`${STORAGE_KEY}_articles`);
+      localStorage.removeItem(`${STORAGE_KEY}_blogs`);
       localStorage.removeItem(`${STORAGE_KEY}_hero`);
     } catch (e) {
       console.error('Failed to clear localStorage', e);
@@ -203,10 +334,14 @@ export function ContentProvider({ children }) {
     <ContentContext.Provider
       value={{
         articles,
+        blogArticles,
         heroConfig,
         updateArticle,
         addArticle,
         deleteArticle,
+        updateBlogArticle,
+        addBlogArticle,
+        deleteBlogArticle,
         updateHeroConfig,
         resetToDefaults
       }}

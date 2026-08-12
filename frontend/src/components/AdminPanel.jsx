@@ -5,20 +5,26 @@ import { navigateToLanding } from '../utils/subdomainRouter';
 export function AdminPanel() {
   const {
     articles,
+    blogArticles,
     heroConfig,
     updateArticle,
     addArticle,
     deleteArticle,
+    updateBlogArticle,
+    addBlogArticle,
+    deleteBlogArticle,
     updateHeroConfig,
     resetToDefaults
   } = useContent();
 
-  const [activeTab, setActiveTab] = useState('articles'); // 'articles' | 'hero'
+  const [activeTab, setActiveTab] = useState('articles'); // 'articles' | 'blogs' | 'hero'
   const [editingArticleId, setEditingArticleId] = useState(null);
+  const [editingBlogId, setEditingBlogId] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
 
   // Local draft state for editing an article
   const [articleDraft, setArticleDraft] = useState(null);
+  const [blogDraft, setBlogDraft] = useState(null);
 
   // Local state for adding a new article
   const [isAddingArticle, setIsAddingArticle] = useState(false);
@@ -32,6 +38,17 @@ export function AdminPanel() {
     readTime: '🔥 4 Min Read',
     views: '👁️ 10K Creators',
     ctaText: 'Read Deep Dive ↗'
+  });
+
+  // Local state for adding a new blog article
+  const [isAddingBlog, setIsAddingBlog] = useState(false);
+  const [newBlog, setNewBlog] = useState({
+    title: '',
+    tag: 'Poster Design & Prompts',
+    summary: '',
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+    readTime: '⚡ 4 Min Read',
+    ctaText: 'Read Article ↗'
   });
 
   // Local draft state for hero config
@@ -84,6 +101,46 @@ export function AdminPanel() {
     }
   };
 
+  // Blog Article Handlers
+  const handleEditBlogClick = (blog) => {
+    setEditingBlogId(blog.id);
+    setBlogDraft({ ...blog });
+  };
+
+  const handleSaveBlog = () => {
+    if (!blogDraft) return;
+    updateBlogArticle(blogDraft.id, blogDraft);
+    setEditingBlogId(null);
+    setBlogDraft(null);
+    showToast('✨ Blog post updated successfully! Live on main site.');
+  };
+
+  const handleAddNewBlogSubmit = (e) => {
+    e.preventDefault();
+    if (!newBlog.title || !newBlog.summary) {
+      showToast('⚠️ Please enter blog title and summary!');
+      return;
+    }
+    addBlogArticle(newBlog);
+    setIsAddingBlog(false);
+    setNewBlog({
+      title: '',
+      tag: 'Poster Design & Prompts',
+      summary: '',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+      readTime: '⚡ 4 Min Read',
+      ctaText: 'Read Article ↗'
+    });
+    showToast('🚀 New blog post published! Live on #blog section.');
+  };
+
+  const handleDeleteBlogClick = (id, title) => {
+    if (window.confirm(`Are you sure you want to delete blog "${title}"?`)) {
+      deleteBlogArticle(id);
+      showToast('🗑️ Blog post deleted.');
+    }
+  };
+
   const handleSaveHeroConfig = (e) => {
     e.preventDefault();
     updateHeroConfig(heroDraft);
@@ -130,7 +187,7 @@ export function AdminPanel() {
         <div className="admin-header-left">
           <div className="admin-badge">⚡ Real-Time Content Engine</div>
           <h2>DiziPix Site Administration</h2>
-          <p>Make changes here to immediately update content live on the main website</p>
+          <p>Make changes here to immediately update articles, blog posts, and site branding live on the main website</p>
         </div>
       </header>
 
@@ -140,7 +197,13 @@ export function AdminPanel() {
           className={`admin-tab-btn ${activeTab === 'articles' ? 'active' : ''}`}
           onClick={() => setActiveTab('articles')}
         >
-          📰 Research Articles ({articles.length})
+          📰 Research Articles ({articles ? articles.length : 0})
+        </button>
+        <button
+          className={`admin-tab-btn ${activeTab === 'blogs' ? 'active' : ''}`}
+          onClick={() => setActiveTab('blogs')}
+        >
+          ✍️ Blog Posts ({blogArticles ? blogArticles.length : 0})
         </button>
         <button
           className={`admin-tab-btn ${activeTab === 'hero' ? 'active' : ''}`}
@@ -150,7 +213,7 @@ export function AdminPanel() {
         </button>
       </nav>
 
-      {/* Tab Content: Articles */}
+      {/* Tab Content: Research Articles */}
       {activeTab === 'articles' && (
         <div className="admin-section animate-fade-in">
           <div className="admin-section-bar">
@@ -337,6 +400,204 @@ export function AdminPanel() {
         </div>
       )}
 
+      {/* Tab Content: Blog Posts */}
+      {activeTab === 'blogs' && (
+        <div className="admin-section animate-fade-in">
+          <div className="admin-section-bar">
+            <h3>Manage Blog Posts</h3>
+            <button
+              className="admin-btn primary-btn"
+              onClick={() => setIsAddingBlog(!isAddingBlog)}
+            >
+              {isAddingBlog ? '✕ Cancel' : '+ Add New Blog Post'}
+            </button>
+          </div>
+
+          {/* Add Blog Form */}
+          {isAddingBlog && (
+            <form className="admin-card-form glass-card animate-slide-down" onSubmit={handleAddNewBlogSubmit}>
+              <h4>Create New Blog Post</h4>
+              
+              <div className="form-grid">
+                <div className="form-group full-width">
+                  <label>Blog Title *</label>
+                  <input
+                    type="text"
+                    value={newBlog.title}
+                    onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+                    placeholder="e.g. Mastering AI Poster Design in 2026"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Category Tag</label>
+                  <input
+                    type="text"
+                    value={newBlog.tag}
+                    onChange={(e) => setNewBlog({ ...newBlog, tag: e.target.value })}
+                    placeholder="e.g. Poster Design & Prompts"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Date</label>
+                  <input
+                    type="text"
+                    value={newBlog.date}
+                    onChange={(e) => setNewBlog({ ...newBlog, date: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group full-width">
+                  <label>Summary / Excerpt *</label>
+                  <textarea
+                    value={newBlog.summary}
+                    onChange={(e) => setNewBlog({ ...newBlog, summary: e.target.value })}
+                    rows="3"
+                    placeholder="Brief description displayed on the blog card..."
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Read Time</label>
+                  <input
+                    type="text"
+                    value={newBlog.readTime}
+                    onChange={(e) => setNewBlog({ ...newBlog, readTime: e.target.value })}
+                    placeholder="e.g. ⚡ 4 Min Read"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Button Label</label>
+                  <input
+                    type="text"
+                    value={newBlog.ctaText}
+                    onChange={(e) => setNewBlog({ ...newBlog, ctaText: e.target.value })}
+                    placeholder="Read Article ↗"
+                  />
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button type="submit" className="admin-btn primary-btn">
+                  Publish to Blog Section 🚀
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* Blog Posts List */}
+          <div className="admin-articles-grid">
+            {(blogArticles || []).map((blog) => (
+              <div key={blog.id} className="admin-article-item glass-card">
+                {editingBlogId === blog.id ? (
+                  /* Edit Blog Form */
+                  <div className="admin-edit-card">
+                    <h4>Editing Blog: {blog.title}</h4>
+
+                    <div className="form-grid">
+                      <div className="form-group full-width">
+                        <label>Title</label>
+                        <input
+                          type="text"
+                          value={blogDraft.title}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, title: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Tag / Category</label>
+                        <input
+                          type="text"
+                          value={blogDraft.tag}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, tag: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Date</label>
+                        <input
+                          type="text"
+                          value={blogDraft.date}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, date: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group full-width">
+                        <label>Summary / Excerpt</label>
+                        <textarea
+                          value={blogDraft.summary}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, summary: e.target.value })}
+                          rows="3"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Read Time</label>
+                        <input
+                          type="text"
+                          value={blogDraft.readTime}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, readTime: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>CTA Button Text</label>
+                        <input
+                          type="text"
+                          value={blogDraft.ctaText}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, ctaText: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-actions">
+                      <button className="admin-btn primary-btn" onClick={handleSaveBlog}>
+                        Save Blog Post 💾
+                      </button>
+                      <button className="admin-btn secondary-btn" onClick={() => setEditingBlogId(null)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Read Only Blog View */
+                  <div className="admin-article-preview">
+                    <div className="admin-article-info">
+                      <div className="admin-article-badges">
+                        <span className="admin-tag-pill">{blog.tag}</span>
+                        <span className="admin-date-pill">{blog.date}</span>
+                        {blog.readTime && <span className="admin-date-pill">{blog.readTime}</span>}
+                      </div>
+                      <h4>{blog.title}</h4>
+                      <p>{blog.summary}</p>
+                    </div>
+
+                    <div className="admin-article-actions">
+                      <button
+                        className="admin-btn action-btn edit"
+                        onClick={() => handleEditBlogClick(blog)}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        className="admin-btn action-btn delete"
+                        onClick={() => handleDeleteBlogClick(blog.id, blog.title)}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Tab Content: Hero Config */}
       {activeTab === 'hero' && (
         <div className="admin-section animate-fade-in">
@@ -402,3 +663,4 @@ export function AdminPanel() {
     </div>
   );
 }
+
