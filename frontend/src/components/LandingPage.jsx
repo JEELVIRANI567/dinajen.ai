@@ -741,25 +741,100 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           </div>
 
           <div className="features-grid">
-            <div className="feature-card glass-card">
-              <div className="card-icon">📖</div>
+            <div className="feature-card glass-card indian-interactive-card">
+              <div className="card-top-badges">
+                <span className="research-tag-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>
+                  Guide
+                </span>
+                <span className="research-date-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  2026
+                </span>
+              </div>
               <h3>Mastering AI Poster Design in 2026</h3>
               <p>Learn how to write effective lighting, composition, and color palette prompts to generate professional movie-grade posters.</p>
-              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                <button
+                  className="read-deep-dive-highlight-btn"
+                  onClick={() => navigateToApp('create')}
+                  title="Read Article"
+                >
+                  <span>Read Article ↗</span>
+                </button>
+              </div>
             </div>
 
-            <div className="feature-card glass-card">
-              <div className="card-icon">🎨</div>
+            <div className="feature-card glass-card indian-interactive-card">
+              <div className="card-top-badges">
+                <span className="research-tag-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>
+                  Branding
+                </span>
+                <span className="research-date-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  2026
+                </span>
+              </div>
               <h3>Vector Logos vs Pixel AI Marks</h3>
               <p>Why scalable SVG vectors matter for modern corporate brand identity and how DiziPix generates crisp 3D emblems.</p>
-              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                <button
+                  className="read-deep-dive-highlight-btn"
+                  onClick={() => navigateToApp('create')}
+                  title="Read Article"
+                >
+                  <span>Read Article ↗</span>
+                </button>
+              </div>
             </div>
 
-            <div className="feature-card glass-card">
-              <div className="card-icon">🎥</div>
+            <div className="feature-card glass-card indian-interactive-card">
+              <div className="card-top-badges">
+                <span className="research-tag-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>
+                  Architecture
+                </span>
+                <span className="research-date-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  2026
+                </span>
+              </div>
               <h3>The Architecture Behind 60fps AI Video</h3>
               <p>An inside look at our temporal attention mechanism and frame consistency algorithms for motion generation.</p>
-              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Read Article &rarr;</div>
+              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                <button
+                  className="read-deep-dive-highlight-btn"
+                  onClick={() => navigateToApp('create')}
+                  title="Read Article"
+                >
+                  <span>Read Article ↗</span>
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -1185,9 +1260,21 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
         }
 
         .feature-card {
-          padding: 2.2rem;
+          padding: 2rem;
           display: flex;
           flex-direction: column;
+          background: linear-gradient(135deg, rgba(20, 23, 36, 0.85) 0%, rgba(12, 14, 22, 0.95) 100%);
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          border-radius: 18px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          position: relative;
+        }
+
+        .feature-card:hover {
+          border-color: rgba(168, 85, 247, 0.55);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(168, 85, 247, 0.25);
+          transform: translateY(-5px);
         }
 
         .card-icon {
