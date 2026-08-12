@@ -261,10 +261,10 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
     e.preventDefault();
     setIsTransitioning(true);
 
-    // Allow the wide-screen popup animation to finish before navigating
     setTimeout(() => {
       navigateToApp('create');
-    }, 700);
+      setIsTransitioning(false);
+    }, 550);
   };
 
   // Using the local video placed in the public directory
@@ -379,10 +379,25 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                 placeholder="Type your prompt..."
               />
               <button type="submit" className={`hero-create-btn ${isTransitioning ? 'animate-click' : ''}`}>
-                Create &rarr;
-                <div className={`page-transition-cover ${isTransitioning ? 'active' : ''}`}></div>
+                <span>Create</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '6px' }}>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
               </button>
             </form>
+
+            {/* Minimal & Attractive Glass Transition Overlay */}
+            <div className={`page-transition-cover ${isTransitioning ? 'active' : ''}`}>
+              <div className="transition-aura-ring">
+                <div className="transition-aura-inner">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+              </div>
+              <span className="transition-loading-label">Opening Generative AI Studio...</span>
+            </div>
           </div>
         </section>
       )}
@@ -1043,7 +1058,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
 
         .hero-create-btn {
           position: relative;
-          background: linear-gradient(135deg, #ff4e88 0%, #a855f7 100%);
+          background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
           color: #ffffff;
           border: none;
           border-radius: 9999px;
@@ -1052,44 +1067,92 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           font-weight: 700;
           cursor: pointer;
           white-space: nowrap;
-          transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-          box-shadow: 0 4px 18px rgba(255, 78, 136, 0.4);
-          overflow: visible;
+          transition: all 0.25s ease;
+          box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4), 0 0 25px rgba(99, 102, 241, 0.25);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.2rem;
         }
 
         .hero-create-btn:hover {
-          transform: translateY(-1px);
-          filter: brightness(1.1);
-          box-shadow: 0 6px 24px rgba(255, 78, 136, 0.55);
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 6px 28px rgba(236, 72, 153, 0.5), 0 0 35px rgba(168, 85, 247, 0.4);
         }
 
         .hero-create-btn:active {
-          transform: scale(0.95);
+          transform: scale(0.96);
         }
 
         .hero-create-btn.animate-click {
-          transform: scale(0.9);
+          transform: scale(0.92);
           transition: transform 0.1s;
         }
 
         .page-transition-cover {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: 200px;
-          height: 200px;
-          background: radial-gradient(circle, #ff4e88 0%, #a855f7 70%, #6366f1 100%);
-          border-radius: 50%;
-          transform: translate(-50%, -50%) scale(0);
+          position: fixed;
+          inset: 0;
+          width: 100vw;
+          height: 100vh;
+          background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, rgba(99, 102, 241, 0.2) 35%, rgba(15, 17, 26, 0.88) 75%, rgba(15, 17, 26, 0.98) 100%);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           opacity: 0;
+          visibility: hidden;
           pointer-events: none;
-          z-index: 9999;
-          transition: transform 0.7s cubic-bezier(0.8, 0, 0.2, 1), opacity 0.4s ease-out;
+          z-index: 999999;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1.2rem;
+          transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s;
         }
 
         .page-transition-cover.active {
-          transform: translate(-50%, -50%) scale(50);
           opacity: 1;
+          visibility: visible;
+          pointer-events: all;
+        }
+
+        .transition-aura-ring {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          padding: 3px;
+          background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899, #06b6d4);
+          background-size: 200% 200%;
+          animation: auraGlowSpin 1.4s linear infinite;
+          box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .transition-aura-inner {
+          width: 100%;
+          height: 100%;
+          background: #0f111a;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #c084fc;
+        }
+
+        .transition-loading-label {
+          font-size: 0.95rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #e9d5ff 0%, #f472b6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          letter-spacing: 0.03em;
+        }
+
+        @keyframes auraGlowSpin {
+          0% { transform: rotate(0deg); background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { transform: rotate(360deg); background-position: 0% 50%; }
         }
 
         /* Section Commons */
