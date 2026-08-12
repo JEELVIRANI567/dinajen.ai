@@ -2288,11 +2288,32 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           }
           .comment-input {
             width: 100%;
+            min-width: 0;
           }
           .comment-submit-btn {
             width: 100%;
             justify-content: center;
             padding: 0.7rem 1rem;
+          }
+          .research-modal-card {
+            padding: 1.25rem 1rem;
+            max-height: 90vh;
+            border-radius: 16px;
+          }
+          .research-modal-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+          }
+          .research-modal-footer .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.55rem 0.4rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
           }
         }
       `}</style>
