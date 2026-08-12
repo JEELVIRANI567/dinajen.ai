@@ -466,11 +466,34 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                       <p>{article.summary}</p>
 
                       <div className="research-article-meta">
-                        <span className="research-tag">{article.tag}</span>
-                        <span>{article.date}</span>
-                        <span className="read-deep-dive-highlight-btn">
-                          {article.ctaText}
-                        </span>
+                        <div className="research-meta-badges">
+                          <span className="research-tag-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                            {article.tag}
+                          </span>
+                          <span className="research-date-badge">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                              <line x1="16" y1="2" x2="16" y2="6"></line>
+                              <line x1="8" y1="2" x2="8" y2="6"></line>
+                              <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            {article.date}
+                          </span>
+                        </div>
+                        <button
+                          className="read-deep-dive-highlight-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedResearchArticle(article);
+                          }}
+                          title={article.ctaText}
+                        >
+                          <span>{article.ctaText}</span>
+                        </button>
                       </div>
                     </div>
 
@@ -534,8 +557,25 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                 <div className="research-modal-header">
 
                   <div className="research-modal-meta">
-                    <span className="research-tag">{selectedResearchArticle.tag}</span>
-                    <span className="research-modal-date">{selectedResearchArticle.date}</span>
+                    <span className="research-tag-badge">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                      </svg>
+                      {selectedResearchArticle.tag}
+                    </span>
+                    <span className="research-date-badge">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      {selectedResearchArticle.date}
+                    </span>
+                    {selectedResearchArticle.readTime && (
+                      <span className="research-time-badge">{selectedResearchArticle.readTime}</span>
+                    )}
                   </div>
                   <h2>{selectedResearchArticle.title}</h2>
                 </div>
@@ -1692,29 +1732,106 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
         .research-article-meta {
           display: flex;
           align-items: center;
-          gap: 1.2rem;
+          justify-content: space-between;
+          gap: 1rem;
           font-size: 0.85rem;
           color: var(--text-muted);
+          width: 100%;
+          margin-top: auto;
+          flex-wrap: wrap;
+        }
+
+        .research-meta-badges {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          flex-wrap: wrap;
+        }
+
+        .research-tag-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          background: rgba(168, 85, 247, 0.12);
+          color: #c084fc;
+          border: 1px solid rgba(168, 85, 247, 0.28);
+          padding: 0.35rem 0.85rem;
+          border-radius: 9999px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          white-space: nowrap;
+          backdrop-filter: blur(6px);
+          transition: all 0.25s ease;
+          width: fit-content;
+        }
+
+        .research-tag-badge:hover {
+          background: rgba(168, 85, 247, 0.22);
+          border-color: rgba(168, 85, 247, 0.5);
+          color: #e9d5ff;
+          transform: translateY(-1px);
+        }
+
+        .research-date-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          background: rgba(255, 255, 255, 0.05);
+          color: #94a3b8;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          padding: 0.35rem 0.85rem;
+          border-radius: 9999px;
+          font-size: 0.78rem;
+          font-weight: 500;
+          white-space: nowrap;
+          backdrop-filter: blur(6px);
+          transition: all 0.25s ease;
+          width: fit-content;
+        }
+
+        .research-date-badge:hover {
+          background: rgba(255, 255, 255, 0.09);
+          color: #e2e8f0;
+          border-color: rgba(255, 255, 255, 0.25);
+          transform: translateY(-1px);
+        }
+
+        .research-time-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          background: rgba(234, 179, 8, 0.1);
+          color: #fde047;
+          border: 1px solid rgba(234, 179, 8, 0.25);
+          padding: 0.35rem 0.8rem;
+          border-radius: 9999px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          white-space: nowrap;
+          width: fit-content;
         }
 
         .read-deep-dive-highlight-btn {
           margin-left: auto;
-          background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
+          background: linear-gradient(135deg, rgba(168, 85, 247, 0.35) 0%, rgba(236, 72, 153, 0.35) 100%);
           color: #f472b6;
           border: 1px solid rgba(236, 72, 153, 0.5);
           font-size: 0.82rem;
           font-weight: 700;
-          padding: 0.4rem 0.9rem;
+          padding: 0.45rem 1.1rem;
           border-radius: 9999px;
-          box-shadow: 0 4px 14px rgba(236, 72, 153, 0.25);
+          box-shadow: 0 4px 14px rgba(236, 72, 153, 0.22);
           transition: all 0.3s ease;
           display: inline-flex;
           align-items: center;
-          gap: 0.3rem;
+          justify-content: center;
+          gap: 0.4rem;
           white-space: nowrap;
+          cursor: pointer;
+          width: fit-content;
         }
 
-        .research-article-card:hover .read-deep-dive-highlight-btn {
+        .read-deep-dive-highlight-btn:hover {
           background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
           color: #ffffff;
           border-color: transparent;
@@ -1767,6 +1884,15 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           backdrop-filter: blur(16px);
           z-index: 100001;
           margin: auto;
+        }
+
+        .research-modal-meta {
+          display: flex;
+          align-items: center;
+          gap: 0.65rem;
+          flex-wrap: wrap;
+          margin-bottom: 1rem;
+          padding-right: 2.8rem;
         }
 
         .research-modal-card::-webkit-scrollbar {
@@ -1910,9 +2036,15 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             margin-bottom: 1.2rem;
           }
           .research-article-meta {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
             gap: 0.8rem 1rem;
             width: 100%;
+          }
+          .research-meta-badges {
+            gap: 0.5rem;
           }
           .research-hero-box h2 {
             font-size: 2.5rem;
@@ -1945,13 +2077,21 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            gap: 0.65rem;
+            gap: 0.75rem;
+            width: 100%;
+          }
+          .research-meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            width: 100%;
           }
           .read-deep-dive-highlight-btn {
             margin-left: 0;
             width: 100%;
             justify-content: center;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1rem;
             text-align: center;
             margin-top: 0.2rem;
           }
