@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { navigateToApp, navigateToLanding } from '../utils/subdomainRouter';
+import { navigateToApp, navigateToLanding, navigateToAdmin } from '../utils/subdomainRouter';
 import logo from '../assets/logo1.png';
 
 export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'home', setLandingPageNav }) {
@@ -75,6 +75,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 Contact
               </a>
             </nav>
+
           ) : (
             <nav className="nav-links app-tabs desktop-only">
               <button

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { navigateToApp } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
+import { useContent } from '../context/ContentContext';
 
 const RESEARCH_ARTICLES = [
   {
@@ -111,6 +112,7 @@ const RESEARCH_ARTICLES = [
 
 export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const { setAuthModalOpen } = useAuth();
+  const { articles, heroConfig } = useContent();
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedResearchArticle, setSelectedResearchArticle] = useState(null);
   const [likedArticles, setLikedArticles] = useState({});
@@ -410,7 +412,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             </div>
 
             <div className="research-articles-list">
-              {RESEARCH_ARTICLES.map((article) => {
+              {(articles || RESEARCH_ARTICLES).map((article) => {
                 const isLiked = likedArticles[article.id];
                 const isBookmarked = bookmarkedArticles[article.id];
                 const currentLikes = (article.likes || 0) + (isLiked ? 1 : 0);
@@ -425,11 +427,6 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                       onClick={() => setSelectedResearchArticle(article)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <div className="card-top-badges">
-                        <span className="trending-badge">{article.trendingBadge}</span>
-                        <span className="read-time-badge">{article.readTime}</span>
-                        <span className="views-badge">{article.views}</span>
-                      </div>
 
                       <h4>{article.title}</h4>
                       <p>{article.summary}</p>
@@ -494,11 +491,6 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                 </button>
 
                 <div className="research-modal-header">
-                  <div className="card-top-badges" style={{ marginBottom: '0.8rem' }}>
-                    <span className="trending-badge">{selectedResearchArticle.trendingBadge}</span>
-                    <span className="read-time-badge">{selectedResearchArticle.readTime}</span>
-                    <span className="views-badge">{selectedResearchArticle.views}</span>
-                  </div>
 
                   <div className="research-modal-meta">
                     <span className="research-tag">{selectedResearchArticle.tag}</span>

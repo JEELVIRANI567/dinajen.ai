@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { AuthProvider } from './context/AuthContext';
+import { ContentProvider } from './context/ContentContext';
 import { Navbar } from './components/Navbar';
 import { LandingPage } from './components/LandingPage';
 import { AppDashboard } from './components/AppDashboard';
+import { AdminPanel } from './components/AdminPanel';
 import { AuthModal } from './components/AuthModal';
-import { isAppSubdomain } from './utils/subdomainRouter';
+import { isAppSubdomain, isAdminRoute } from './utils/subdomainRouter';
 
 function MainAppContent() {
   const [isAppView, setIsAppView] = useState(() => isAppSubdomain());
+  const [isAdminView, setIsAdminView] = useState(() => isAdminRoute());
   const [landingPageNav, setLandingPageNav] = useState(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.replace('#', '');
-      return ['research', 'tools', 'blog', 'community', 'contact'].includes(hash) ? hash : 'home';
+      return ['research', 'tools', 'blog', 'community', 'contact', 'admin'].includes(hash) ? hash : 'home';
     }
     return 'home';
   });
@@ -27,7 +30,9 @@ function MainAppContent() {
   useEffect(() => {
     const handleUrlChange = () => {
       const appDetected = isAppSubdomain();
+      const adminDetected = isAdminRoute();
       setIsAppView(appDetected);
+      setIsAdminView(adminDetected);
 
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get('tab');
@@ -62,6 +67,14 @@ function MainAppContent() {
     }
   };
 
+  if (isAdminView) {
+    return (
+      <div className="dizipix-app-root admin-standalone-wrapper">
+        <AdminPanel />
+      </div>
+    );
+  }
+
   return (
     <div className="dizipix-app-root">
       <Navbar
@@ -94,7 +107,10 @@ function MainAppContent() {
 export default function App() {
   return (
     <AuthProvider>
-      <MainAppContent />
+      <ContentProvider>
+        <MainAppContent />
+      </ContentProvider>
     </AuthProvider>
   );
 }
+

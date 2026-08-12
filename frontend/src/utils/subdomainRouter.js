@@ -41,6 +41,31 @@ export function navigateToApp(tab = 'feed') {
   }
 }
 
+export function isAdminRoute() {
+  if (typeof window === 'undefined') return false;
+
+  const hostname = window.location.hostname;
+  const pathname = window.location.pathname;
+  const searchParams = new URLSearchParams(window.location.search);
+  const hash = window.location.hash;
+
+  if (hostname.startsWith('admin.')) return true;
+  if (pathname.startsWith('/admin')) return true;
+  if (searchParams.get('mode') === 'admin' || searchParams.has('admin')) return true;
+  if (hash === '#admin') return true;
+
+  return false;
+}
+
+export function navigateToAdmin() {
+  if (typeof window === 'undefined') return;
+
+  const newUrl = new URL(window.location.href);
+  newUrl.pathname = '/admin';
+  window.history.pushState({}, '', newUrl.toString());
+  window.dispatchEvent(new Event('popstate'));
+}
+
 export function navigateToLanding() {
   if (typeof window === 'undefined') return;
 
@@ -53,7 +78,9 @@ export function navigateToLanding() {
     newUrl.pathname = '/';
     newUrl.searchParams.delete('tab');
     newUrl.searchParams.delete('app');
+    newUrl.searchParams.delete('mode');
     window.history.pushState({}, '', newUrl.toString());
     window.dispatchEvent(new Event('popstate'));
   }
 }
+
