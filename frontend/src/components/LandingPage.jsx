@@ -110,6 +110,86 @@ const RESEARCH_ARTICLES = [
   }
 ];
 
+const BLOG_ARTICLES = [
+  {
+    id: 'mastering-ai-poster-design',
+    title: 'Mastering AI Poster Design: Advanced Composition & Vernacular Lighting Prompts',
+    date: 'Aug 10, 2026',
+    tag: 'Poster Design & Prompts',
+    readTime: '⚡ 4 Min Read',
+    views: '👁️ 19.4K Designers',
+    likes: 1840,
+    trendingBadge: '🔥 Design Guide 2026',
+    ctaText: 'Read Full Article ↗',
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80',
+    summary: 'A practical engineering guide on structuring multi-layered visual prompts, controlling camera lens focal lengths, and rendering cinematic typography for Indian film and commercial posters.',
+    sections: [
+      {
+        heading: '1. The Rule of Visual Depth in Generative Posters',
+        content: 'To achieve cinematic depth in AI poster generation, prompts should separate background atmosphere from main subject key lighting. Specify volumetric fog, anamorphic lens flare, and rim lighting to elevate 2D artwork into 3D cinema standard.'
+      },
+      {
+        heading: '2. Structuring Multi-Tier Vernacular Prompts',
+        content: 'Combine specific lighting terms like "golden hour diya backlight" or "monsoon street reflections" with character descriptors for crisp visual fidelity.'
+      },
+      {
+        heading: 'Key Poster Prompt Formula',
+        bullets: [
+          'Subject: Hero character in traditional period armor with dramatic side-lighting',
+          'Atmosphere: Golden hour dust motes, volumetric fog, cinema anamorphic bokeh',
+          'Color Palette: Crimson red and warm amber brass highlights'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'vector-logos-vs-pixel-ai',
+    title: 'Vector SVG Logos vs Pixel AI Marks: Building Clean Scalable Corporate Identities',
+    date: 'Aug 05, 2026',
+    tag: 'Branding & Vector AI',
+    readTime: '⏱️ 3 Min Read',
+    views: '👁️ 24.1K Brand Strategists',
+    likes: 2410,
+    trendingBadge: '✨ Vector Breakthrough',
+    ctaText: 'Explore Vector Strategy ↗',
+    image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80',
+    summary: 'Why scalable vector paths matter for commercial printing and brand merchandise, and how DiziPix generates crisp SVG curves directly from text prompts.',
+    sections: [
+      {
+        heading: '1. The Vector SVG Advantage',
+        content: 'Unlike raster PNG pixel outputs, SVG vector paths scale infinitely without pixelation. DiziPix 2.5 extracts parametric Bezier curves directly from neural tensor representations.'
+      },
+      {
+        heading: '2. Seamless Export to Adobe Illustrator & Figma',
+        content: 'Designers can export generated emblems directly into vector edit suites to tweak color swatches, strokes, and typographic alignments instantly.'
+      }
+    ]
+  },
+  {
+    id: 'architecture-60fps-video',
+    title: 'Inside Dizi-Motion: The Architecture Behind 60fps Real-Time AI Video Synthesis',
+    date: 'Jul 29, 2026',
+    tag: 'AI Video Engineering',
+    readTime: '🔥 5 Min Read',
+    views: '👁️ 38.6K Video Creators',
+    likes: 3720,
+    trendingBadge: '🚀 Video Engine Tech',
+    ctaText: 'Read Video Deep Dive ↗',
+    image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&auto=format&fit=crop&q=80',
+    summary: 'An inside look at our temporal attention mechanisms, motion trajectory keyframes, and zero-flicker frame consistency algorithms powering 60fps video generation.',
+    sections: [
+      {
+        heading: '1. Temporal Attention & Frame Consistency',
+        content: 'Traditional AI video generators suffer from temporal flickering between frames. Dizi-Motion introduces cross-frame attention locks to guarantee character features and background lighting remain continuous.'
+      },
+      {
+        heading: '2. Camera Trajectory & Motion Controls',
+        content: 'Creators can specify dolly zoom, orbital pan, and crane motion controls in plain text, rendering 60fps cinematic scenes in sub-second generation passes.'
+      }
+    ]
+  }
+];
+
 export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const { setAuthModalOpen } = useAuth();
   const { articles, heroConfig } = useContent();
@@ -553,140 +633,6 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
               })}
             </div>
           </section>
-
-          {/* Research Article In-Site Modal */}
-          {selectedResearchArticle && (
-            <div className="modal-overlay" onClick={() => setSelectedResearchArticle(null)}>
-              <div
-                className="research-modal-card animate-slide-up"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  className="research-modal-close"
-                  onClick={() => setSelectedResearchArticle(null)}
-                  aria-label="Close modal"
-                >
-                  ✕
-                </button>
-
-                <div className="research-modal-header">
-
-                  <div className="research-modal-meta">
-                    <span className="research-tag-badge">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                      </svg>
-                      {selectedResearchArticle.tag}
-                    </span>
-                    <span className="research-date-badge">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                      </svg>
-                      {selectedResearchArticle.date}
-                    </span>
-                    {selectedResearchArticle.readTime && (
-                      <span className="research-time-badge">{selectedResearchArticle.readTime}</span>
-                    )}
-                  </div>
-                  <h2>{selectedResearchArticle.title}</h2>
-                </div>
-
-                <div className="research-modal-image-container">
-                  <img src={selectedResearchArticle.image} alt={selectedResearchArticle.title} />
-                </div>
-
-                <div className="research-modal-body">
-                  <p className="research-modal-lead">{selectedResearchArticle.summary}</p>
-
-                  {selectedResearchArticle.sections.map((sec, idx) => (
-                    <div key={idx} className="research-modal-section">
-                      <h3>{sec.heading}</h3>
-                      {sec.content && <p>{sec.content}</p>}
-                      {sec.bullets && (
-                        <ul>
-                          {sec.bullets.map((b, i) => (
-                            <li key={i}>{b}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Interactive Comments Section */}
-                  <div className="research-modal-comments-block">
-                    <div className="comments-block-header">
-                      <h4>💬 Discussion & Comments ({(articleComments[selectedResearchArticle.id] || []).length})</h4>
-                    </div>
-
-                    <form
-                      className="comment-add-form"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleAddComment(selectedResearchArticle.id);
-                      }}
-                    >
-                      <input
-                        type="text"
-                        className="comment-input"
-                        placeholder="Write a comment on this AI model..."
-                        value={newCommentInput}
-                        onChange={(e) => setNewCommentInput(e.target.value)}
-                      />
-                      <button type="submit" className="comment-submit-btn">
-                        <span>Post Comment</span>
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <line x1="22" y1="2" x2="11" y2="13"></line>
-                          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                      </button>
-                    </form>
-
-                    <div className="comments-list">
-                      {(articleComments[selectedResearchArticle.id] || []).map((c) => (
-                        <div key={c.id} className="comment-card-item">
-                          <span className="comment-avatar-bubble">{c.avatar}</span>
-                          <div className="comment-content-body">
-                            <div className="comment-meta-row">
-                              <span className="comment-author-name">{c.author}</span>
-                              <span className="comment-timestamp">{c.time}</span>
-                            </div>
-                            <p className="comment-text-content">{c.text}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="research-modal-footer">
-                  <button
-                    className={`btn btn-secondary ${likedArticles[selectedResearchArticle.id] ? 'active' : ''}`}
-                    onClick={() => {
-                      setLikedArticles(prev => ({ ...prev, [selectedResearchArticle.id]: !prev[selectedResearchArticle.id] }));
-                    }}
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "none"} stroke={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "currentColor"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    {likedArticles[selectedResearchArticle.id] ? 'Liked' : 'Like'}
-                  </button>
-                  <button
-                    className={`btn btn-secondary ${showModalComments ? 'active' : ''}`}
-                    onClick={() => setShowModalComments(!showModalComments)}
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Comments ({(articleComments[selectedResearchArticle.id] || []).length})
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -741,101 +687,47 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           </div>
 
           <div className="features-grid">
-            <div className="feature-card glass-card indian-interactive-card">
-              <div className="card-top-badges">
-                <span className="research-tag-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                  </svg>
-                  Guide
-                </span>
-                <span className="research-date-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  2026
-                </span>
+            {BLOG_ARTICLES.map((article) => (
+              <div
+                key={article.id}
+                className="feature-card glass-card indian-interactive-card"
+                onClick={() => setSelectedResearchArticle(article)}
+                style={{ cursor: 'pointer' }}
+              >
+                <div className="card-top-badges">
+                  <span className="research-tag-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                    {article.tag}
+                  </span>
+                  <span className="research-date-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    {article.date}
+                  </span>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.summary}</p>
+                <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
+                  <button
+                    className="read-deep-dive-highlight-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedResearchArticle(article);
+                    }}
+                    title="Read Article"
+                  >
+                    <span>Read Article ↗</span>
+                  </button>
+                </div>
               </div>
-              <h3>Mastering AI Poster Design in 2026</h3>
-              <p>Learn how to write effective lighting, composition, and color palette prompts to generate professional movie-grade posters.</p>
-              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
-                <button
-                  className="read-deep-dive-highlight-btn"
-                  onClick={() => navigateToApp('create')}
-                  title="Read Article"
-                >
-                  <span>Read Article ↗</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="feature-card glass-card indian-interactive-card">
-              <div className="card-top-badges">
-                <span className="research-tag-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                  </svg>
-                  Branding
-                </span>
-                <span className="research-date-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  2026
-                </span>
-              </div>
-              <h3>Vector Logos vs Pixel AI Marks</h3>
-              <p>Why scalable SVG vectors matter for modern corporate brand identity and how DiziPix generates crisp 3D emblems.</p>
-              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
-                <button
-                  className="read-deep-dive-highlight-btn"
-                  onClick={() => navigateToApp('create')}
-                  title="Read Article"
-                >
-                  <span>Read Article ↗</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="feature-card glass-card indian-interactive-card">
-              <div className="card-top-badges">
-                <span className="research-tag-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                  </svg>
-                  Architecture
-                </span>
-                <span className="research-date-badge">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  2026
-                </span>
-              </div>
-              <h3>The Architecture Behind 60fps AI Video</h3>
-              <p>An inside look at our temporal attention mechanism and frame consistency algorithms for motion generation.</p>
-              <div className="research-article-meta" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
-                <button
-                  className="read-deep-dive-highlight-btn"
-                  onClick={() => navigateToApp('create')}
-                  title="Read Article"
-                >
-                  <span>Read Article ↗</span>
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
       )}
@@ -964,6 +856,140 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           <p>&copy; {new Date().getFullYear()} DiziPix.ai. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Global In-Site Article Modal View */}
+      {selectedResearchArticle && (
+        <div className="modal-overlay" onClick={() => setSelectedResearchArticle(null)}>
+          <div
+            className="research-modal-card animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="research-modal-close"
+              onClick={() => setSelectedResearchArticle(null)}
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+
+            <div className="research-modal-header">
+
+              <div className="research-modal-meta">
+                <span className="research-tag-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>
+                  {selectedResearchArticle.tag}
+                </span>
+                <span className="research-date-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  {selectedResearchArticle.date}
+                </span>
+                {selectedResearchArticle.readTime && (
+                  <span className="research-time-badge">{selectedResearchArticle.readTime}</span>
+                )}
+              </div>
+              <h2>{selectedResearchArticle.title}</h2>
+            </div>
+
+            <div className="research-modal-image-container">
+              <img src={selectedResearchArticle.image} alt={selectedResearchArticle.title} />
+            </div>
+
+            <div className="research-modal-body">
+              <p className="research-modal-lead">{selectedResearchArticle.summary}</p>
+
+              {selectedResearchArticle.sections.map((sec, idx) => (
+                <div key={idx} className="research-modal-section">
+                  <h3>{sec.heading}</h3>
+                  {sec.content && <p>{sec.content}</p>}
+                  {sec.bullets && (
+                    <ul>
+                      {sec.bullets.map((b, i) => (
+                        <li key={i}>{b}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+
+              {/* Interactive Comments Section */}
+              <div className="research-modal-comments-block">
+                <div className="comments-block-header">
+                  <h4>💬 Discussion & Comments ({(articleComments[selectedResearchArticle.id] || []).length})</h4>
+                </div>
+
+                <form
+                  className="comment-add-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddComment(selectedResearchArticle.id);
+                  }}
+                >
+                  <input
+                    type="text"
+                    className="comment-input"
+                    placeholder="Write a comment on this AI model..."
+                    value={newCommentInput}
+                    onChange={(e) => setNewCommentInput(e.target.value)}
+                  />
+                  <button type="submit" className="comment-submit-btn">
+                    <span>Post Comment</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                  </button>
+                </form>
+
+                <div className="comments-list">
+                  {(articleComments[selectedResearchArticle.id] || []).map((c) => (
+                    <div key={c.id} className="comment-card-item">
+                      <span className="comment-avatar-bubble">{c.avatar}</span>
+                      <div className="comment-content-body">
+                        <div className="comment-meta-row">
+                          <span className="comment-author-name">{c.author}</span>
+                          <span className="comment-timestamp">{c.time}</span>
+                        </div>
+                        <p className="comment-text-content">{c.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="research-modal-footer">
+              <button
+                className={`btn btn-secondary ${likedArticles[selectedResearchArticle.id] ? 'active' : ''}`}
+                onClick={() => {
+                  setLikedArticles(prev => ({ ...prev, [selectedResearchArticle.id]: !prev[selectedResearchArticle.id] }));
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "none"} stroke={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "currentColor"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                {likedArticles[selectedResearchArticle.id] ? 'Liked' : 'Like'}
+              </button>
+              <button
+                className={`btn btn-secondary ${showModalComments ? 'active' : ''}`}
+                onClick={() => setShowModalComments(!showModalComments)}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                Comments ({(articleComments[selectedResearchArticle.id] || []).length})
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         .landing-container {
