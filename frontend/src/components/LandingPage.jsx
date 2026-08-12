@@ -2296,24 +2296,32 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             padding: 0.7rem 1rem;
           }
           .research-modal-card {
-            padding: 1.25rem 1rem;
+            padding: 1.4rem 1.1rem;
             max-height: 90vh;
             border-radius: 16px;
+            box-sizing: border-box;
           }
           .research-modal-footer {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.6rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.6rem 0.8rem;
             width: 100%;
             margin-top: 1.5rem;
             padding-top: 1rem;
+            box-sizing: border-box;
           }
           .research-modal-footer .btn {
-            width: 100%;
+            width: fit-content !important;
+            max-width: max-content !important;
             justify-content: center;
-            padding: 0.55rem 0.4rem;
-            font-size: 0.8rem;
-            white-space: nowrap;
+            padding: 0.55rem 1rem !important;
+            font-size: 0.82rem !important;
+            white-space: nowrap !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            box-sizing: border-box !important;
           }
         }
       `}</style>
