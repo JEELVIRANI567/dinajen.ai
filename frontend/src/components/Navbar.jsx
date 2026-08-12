@@ -15,6 +15,16 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
     }
   };
 
+  const handleLogoClick = () => {
+    closeMenu();
+    handleNavClick('home');
+    if (typeof window !== 'undefined') {
+      window.location.hash = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    navigateToLanding();
+  };
+
   return (
     <>
       <header className="navbar-header">
@@ -22,10 +32,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           {/* Brand Logo */}
           <div
             className="brand-logo"
-            onClick={() => {
-              handleNavClick('home');
-              navigateToLanding();
-            }}
+            onClick={handleLogoClick}
             style={{ cursor: 'pointer' }}
           >
             <img src={logo} alt="DiziPix Logo" className="logo-img" />
@@ -153,6 +160,15 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
       {isMobileMenuOpen && (
         <div className="mobile-drawer-overlay" onClick={closeMenu}>
           <div className="mobile-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-drawer-header">
+              <div className="brand-logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+                <img src={logo} alt="DiziPix Logo" className="logo-img" />
+                <span className="logo-text">Dizi<span className="logo-accent">Pix</span>.ai</span>
+              </div>
+              <button className="mobile-drawer-close" onClick={closeMenu} aria-label="Close menu">
+                ✕
+              </button>
+            </div>
             {isAppView && (
               <div className="mobile-tabs-grid">
                 <button
@@ -567,14 +583,14 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
         /* Mobile Drawer Overlay */
         .mobile-drawer-overlay {
           position: fixed;
-          top: 70px;
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
           background: rgba(4, 5, 8, 0.95);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          z-index: 9999;
+          z-index: 99999;
           display: flex;
           flex-direction: column;
           animation: fadeIn 0.2s ease-out;
@@ -587,9 +603,38 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
           display: flex;
           flex-direction: column;
           gap: 1.2rem;
-          max-height: calc(100vh - 70px);
+          max-height: 100vh;
           overflow-y: auto;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .mobile-drawer-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-bottom: 0.8rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          margin-bottom: 0.2rem;
+        }
+
+        .mobile-drawer-close {
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #cbd5e1;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+        }
+
+        .mobile-drawer-close:hover {
+          background: rgba(255, 255, 255, 0.18);
+          color: #ffffff;
         }
 
         .mobile-nav-links {

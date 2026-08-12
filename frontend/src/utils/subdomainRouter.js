@@ -79,6 +79,7 @@ export function navigateToLanding() {
     newUrl.searchParams.delete('tab');
     newUrl.searchParams.delete('app');
     newUrl.searchParams.delete('mode');
+    newUrl.hash = '';
     window.history.pushState({}, '', newUrl.toString());
     window.dispatchEvent(new Event('popstate'));
   }
