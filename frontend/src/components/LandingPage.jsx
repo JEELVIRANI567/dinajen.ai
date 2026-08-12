@@ -117,6 +117,40 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
   const [selectedResearchArticle, setSelectedResearchArticle] = useState(null);
   const [likedArticles, setLikedArticles] = useState({});
   const [bookmarkedArticles, setBookmarkedArticles] = useState({});
+  const [showModalComments, setShowModalComments] = useState(false);
+  const [newCommentInput, setNewCommentInput] = useState('');
+  const [articleComments, setArticleComments] = useState({
+    'bharat-cinema-engine': [
+      { id: 1, author: 'Aarav Mehta', text: 'Sub-50ms latency for Indian cinema scenes is incredible! Instant storyboarding on set.', time: '2h ago', avatar: '👨‍🎨' },
+      { id: 2, author: 'Priya Sharma', text: 'Loved the gold-hour brass diya preset support for regional film aesthetics.', time: '1h ago', avatar: '👩‍💻' }
+    ],
+    'devanagari-vernacular-ai': [
+      { id: 1, author: 'Vikram Joshi', text: 'Devanagari vector SVG export works so cleanly for festival branding.', time: '3h ago', avatar: '🎨' }
+    ],
+    'cricket-sports-engine': [
+      { id: 1, author: 'Rohan Verma', text: 'Matchday promo posters render in seconds during live IPL matches!', time: '4h ago', avatar: '⚡' }
+    ],
+    'ethnic-fashion-visualizer': [
+      { id: 1, author: 'Ananya Roy', text: 'The Kanjivaram silk texture macro detail is mindblowing.', time: '5h ago', avatar: '✨' }
+    ]
+  });
+
+  const handleAddComment = (articleId) => {
+    if (!newCommentInput.trim()) return;
+    const commentObj = {
+      id: Date.now(),
+      author: 'You (Creator)',
+      text: newCommentInput.trim(),
+      time: 'Just now',
+      avatar: '🌟'
+    };
+    setArticleComments(prev => ({
+      ...prev,
+      [articleId]: [...(prev[articleId] || []), commentObj]
+    }));
+    setNewCommentInput('');
+  };
+
   const [isMuted, setIsMuted] = useState(true);
   const [isResearchMuted, setIsResearchMuted] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -434,7 +468,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                       <div className="research-article-meta">
                         <span className="research-tag">{article.tag}</span>
                         <span>{article.date}</span>
-                        <span style={{ marginLeft: 'auto', color: '#c084fc', fontWeight: '700' }}>
+                        <span className="read-deep-dive-highlight-btn">
                           {article.ctaText}
                         </span>
                       </div>
@@ -455,17 +489,24 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                           }}
                           title="Like Article"
                         >
-                          {isLiked ? '❤️' : '🤍'} {currentLikes}
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill={isLiked ? "#ef4444" : "none"} stroke={isLiked ? "#ef4444" : "currentColor"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }}>
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                          </svg>
+                          {currentLikes}
                         </button>
                         <button
-                          className={`card-action-btn ${isBookmarked ? 'active' : ''}`}
+                          className="card-action-btn"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setBookmarkedArticles(prev => ({ ...prev, [article.id]: !prev[article.id] }));
+                            setSelectedResearchArticle(article);
+                            setShowModalComments(true);
                           }}
-                          title="Bookmark Article"
+                          title="View Comments"
                         >
-                          {isBookmarked ? '🔖 Saved' : '🔖 Save'}
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '4px' }}>
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                          </svg>
+                          {(articleComments[article.id] || []).length}
                         </button>
                       </div>
                     </div>
@@ -519,6 +560,47 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                       )}
                     </div>
                   ))}
+
+                  {/* Interactive Comments Section */}
+                  <div className="research-modal-comments-block">
+                    <div className="comments-block-header">
+                      <h4>💬 Discussion & Comments ({(articleComments[selectedResearchArticle.id] || []).length})</h4>
+                    </div>
+
+                    <form
+                      className="comment-add-form"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleAddComment(selectedResearchArticle.id);
+                      }}
+                    >
+                      <input
+                        type="text"
+                        className="comment-input"
+                        placeholder="Write a comment on this AI model..."
+                        value={newCommentInput}
+                        onChange={(e) => setNewCommentInput(e.target.value)}
+                      />
+                      <button type="submit" className="btn btn-primary btn-sm">
+                        Comment 💬
+                      </button>
+                    </form>
+
+                    <div className="comments-list">
+                      {(articleComments[selectedResearchArticle.id] || []).map((c) => (
+                        <div key={c.id} className="comment-card-item">
+                          <span className="comment-avatar-bubble">{c.avatar}</span>
+                          <div className="comment-content-body">
+                            <div className="comment-meta-row">
+                              <span className="comment-author-name">{c.author}</span>
+                              <span className="comment-timestamp">{c.time}</span>
+                            </div>
+                            <p className="comment-text-content">{c.text}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="research-modal-footer">
@@ -528,22 +610,19 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
                       setLikedArticles(prev => ({ ...prev, [selectedResearchArticle.id]: !prev[selectedResearchArticle.id] }));
                     }}
                   >
-                    {likedArticles[selectedResearchArticle.id] ? '❤️ Liked' : '🤍 Like'}
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "none"} stroke={likedArticles[selectedResearchArticle.id] ? "#ef4444" : "currentColor"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    {likedArticles[selectedResearchArticle.id] ? 'Liked' : 'Like'}
                   </button>
                   <button
-                    className="btn btn-secondary"
-                    onClick={() => setSelectedResearchArticle(null)}
+                    className={`btn btn-secondary ${showModalComments ? 'active' : ''}`}
+                    onClick={() => setShowModalComments(!showModalComments)}
                   >
-                    Close Article
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      setSelectedResearchArticle(null);
-                      navigateToApp('create');
-                    }}
-                  >
-                    Try in Studio ✨
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '6px' }}>
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Comments ({(articleComments[selectedResearchArticle.id] || []).length})
                   </button>
                 </div>
               </div>
@@ -1618,6 +1697,31 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
           color: var(--text-muted);
         }
 
+        .read-deep-dive-highlight-btn {
+          margin-left: auto;
+          background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%);
+          color: #f472b6;
+          border: 1px solid rgba(236, 72, 153, 0.5);
+          font-size: 0.82rem;
+          font-weight: 700;
+          padding: 0.4rem 0.9rem;
+          border-radius: 9999px;
+          box-shadow: 0 4px 14px rgba(236, 72, 153, 0.25);
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+          white-space: nowrap;
+        }
+
+        .research-article-card:hover .read-deep-dive-highlight-btn {
+          background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+          color: #ffffff;
+          border-color: transparent;
+          box-shadow: 0 6px 20px rgba(236, 72, 153, 0.45);
+          transform: translateY(-2px);
+        }
+
         .research-tag {
           background: rgba(139, 92, 246, 0.15);
           color: #c084fc;
@@ -1790,16 +1894,66 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
         @media (max-width: 900px) {
           .research-article-card {
             grid-template-columns: 1fr;
+            padding: 1.6rem;
+            gap: 1.5rem;
           }
           .research-article-image {
             height: 220px;
             order: -1;
+          }
+          .research-article-content h4 {
+            font-size: 1.45rem;
+            margin-bottom: 0.75rem;
+          }
+          .research-article-content p {
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+          }
+          .research-article-meta {
+            flex-wrap: wrap;
+            gap: 0.8rem 1rem;
+            width: 100%;
           }
           .research-hero-box h2 {
             font-size: 2.5rem;
           }
           .research-modal-card {
             padding: 1.5rem;
+          }
+        }
+
+        @media (max-width: 580px) {
+          .research-article-card {
+            padding: 1.2rem 1rem;
+            gap: 1.2rem;
+            border-radius: 14px;
+          }
+          .research-article-image {
+            height: 185px;
+          }
+          .research-article-content h4 {
+            font-size: 1.25rem;
+            line-height: 1.35;
+            margin-bottom: 0.6rem;
+          }
+          .research-article-content p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+          }
+          .research-article-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.65rem;
+          }
+          .read-deep-dive-highlight-btn {
+            margin-left: 0;
+            width: 100%;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            margin-top: 0.2rem;
           }
         }
       `}</style>
