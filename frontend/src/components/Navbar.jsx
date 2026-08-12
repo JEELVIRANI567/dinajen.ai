@@ -68,6 +68,13 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 Blog
               </a>
               <a
+                href="#template"
+                className={`nav-item ${landingPageNav === 'template' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('template'); }}
+              >
+                Template Studio
+              </a>
+              <a
                 href="#community"
                 className={`nav-item ${landingPageNav === 'community' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('community'); }}

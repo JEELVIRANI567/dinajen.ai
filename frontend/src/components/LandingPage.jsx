@@ -2302,25 +2302,27 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             box-sizing: border-box;
           }
           .research-modal-footer {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 0.6rem 0.8rem;
-            width: 100%;
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 0.5rem !important;
+            width: 100% !important;
             margin-top: 1.5rem;
             padding-top: 1rem;
-            box-sizing: border-box;
+            box-sizing: border-box !important;
           }
           .research-modal-footer .btn {
             width: fit-content !important;
             max-width: max-content !important;
             justify-content: center;
-            padding: 0.55rem 1rem !important;
-            font-size: 0.82rem !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.8rem !important;
             white-space: nowrap !important;
             display: inline-flex !important;
             align-items: center !important;
+            flex-shrink: 0 !important;
             box-sizing: border-box !important;
           }
         }

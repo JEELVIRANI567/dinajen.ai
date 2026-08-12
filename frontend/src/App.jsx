@@ -6,6 +6,7 @@ import { Navbar } from './components/Navbar';
 import { LandingPage } from './components/LandingPage';
 import { AppDashboard } from './components/AppDashboard';
 import { AdminPanel } from './components/AdminPanel';
+import { TemplateStudioPage } from './components/TemplateStudioPage';
 import { AuthModal } from './components/AuthModal';
 import { isAppSubdomain, isAdminRoute } from './utils/subdomainRouter';
 
@@ -15,7 +16,7 @@ function MainAppContent() {
   const [landingPageNav, setLandingPageNav] = useState(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.replace('#', '');
-      return ['research', 'tools', 'blog', 'community', 'contact', 'admin'].includes(hash) ? hash : 'home';
+      return ['research', 'tools', 'blog', 'community', 'contact', 'admin', 'template'].includes(hash) ? hash : 'home';
     }
     return 'home';
   });
@@ -42,14 +43,18 @@ function MainAppContent() {
 
       if (window.location.hash) {
         const hash = window.location.hash.replace('#', '');
-        if (['research', 'tools', 'blog', 'community', 'contact'].includes(hash)) {
+        if (['research', 'tools', 'blog', 'community', 'contact', 'template'].includes(hash)) {
           setLandingPageNav(hash);
         }
       }
     };
 
     window.addEventListener('popstate', handleUrlChange);
-    return () => window.removeEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
   }, []);
 
   const handleTabChange = (tabKey) => {
@@ -71,6 +76,16 @@ function MainAppContent() {
     return (
       <div className="dizipix-app-root admin-standalone-wrapper">
         <AdminPanel />
+      </div>
+    );
+  }
+
+  // Template Studio View for #template route
+  if (landingPageNav === 'template' || (typeof window !== 'undefined' && window.location.hash === '#template')) {
+    return (
+      <div className="dizipix-app-root">
+        <TemplateStudioPage setLandingPageNav={handleLandingNavChange} />
+        <AuthModal />
       </div>
     );
   }
