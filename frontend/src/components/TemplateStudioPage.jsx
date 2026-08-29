@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { navigateToLanding } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo1.png';
@@ -19,11 +19,38 @@ export function TemplateStudioPage({ setLandingPageNav }) {
   const [multiShotToggle, setMultiShotToggle] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
+  
+  // Workable Search Bar State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchContainerRef = useRef(null);
 
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(''), 3000);
   };
+
+  // Close search popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const TRENDING_SEARCHES = [
+    'Figure Squishy',
+    'Bharat Cyberpunk',
+    'Mythical Dragon',
+    'Cute Pet Cat',
+    'Vogue Portrait',
+    'Neon Dance Party',
+    'Solarpunk City',
+    'Holographic Face'
+  ];
 
   const TEMPLATES_DATA = [
     {
@@ -105,6 +132,46 @@ export function TemplateStudioPage({ setLandingPageNav }) {
       prompt: 'Majestic golden dragon soaring over ancient mountain temple, volumetric clouds, epic movie trailer visual.',
       views: '412.3K',
       likes: '48.6K'
+    },
+    {
+      id: 'face-body-neon-glow',
+      title: 'Holographic Cyber Face',
+      category: 'Face & Body',
+      badge: '✨ Cyber Makeup FX',
+      image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&auto=format&fit=crop&q=80',
+      prompt: 'Avant-garde cyberpunk beauty portrait with glowing iridescent facial neon tattoos and chrome reflections.',
+      views: '168.4K',
+      likes: '21.5K'
+    },
+    {
+      id: 'summer-surf-sunset',
+      title: 'Bioluminescent Surf Oasis',
+      category: 'RUN TO SUMMER',
+      badge: '🏄 Ocean Glow Wave',
+      image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80',
+      prompt: 'Surfer catching a glowing bioluminescent blue night wave during golden sunset, liquid light simulation, 60fps.',
+      views: '295.1K',
+      likes: '34.7K'
+    },
+    {
+      id: 'space-solarpunk-city',
+      title: 'Solarpunk Orbit City',
+      category: 'Parallel Life',
+      badge: '🌱 Solarpunk Metropolis',
+      image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&auto=format&fit=crop&q=80',
+      prompt: 'Lush greenery and floating glass towers in utopian solarpunk space station with waterfall gardens and solar sails.',
+      views: '340.2K',
+      likes: '41.0K'
+    },
+    {
+      id: 'hero-corgi-flyer',
+      title: 'Captain Corgi Galactic Patrol',
+      category: 'Little Heroes',
+      badge: '🚀 Cosmic Hero Corgi',
+      image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&auto=format&fit=crop&q=80',
+      prompt: 'Cute Welsh corgi in astronaut suit floating outside retro spaceship cockpit looking at colorful nebula.',
+      views: '189.7K',
+      likes: '26.8K'
     }
   ];
 
@@ -121,9 +188,20 @@ export function TemplateStudioPage({ setLandingPageNav }) {
     'Story Mode'
   ];
 
-  const filteredTemplates = activeCategory === 'All'
-    ? TEMPLATES_DATA
-    : TEMPLATES_DATA.filter(t => t.category.toLowerCase().includes(activeCategory.replace('⚡ ', '').toLowerCase()));
+  // Workable Search + Category Filtering Logic
+  const filteredTemplates = TEMPLATES_DATA.filter((tmpl) => {
+    const query = searchQuery.trim().toLowerCase();
+    const matchesQuery = !query ||
+      tmpl.title.toLowerCase().includes(query) ||
+      tmpl.category.toLowerCase().includes(query) ||
+      tmpl.badge.toLowerCase().includes(query) ||
+      tmpl.prompt.toLowerCase().includes(query);
+
+    const matchesCategory = activeCategory === 'All' ||
+      tmpl.category.toLowerCase().includes(activeCategory.replace('⚡ ', '').toLowerCase());
+
+    return matchesCategory && matchesQuery;
+  });
 
   const handleUseTemplate = (tmpl) => {
     setSelectedTemplate(tmpl);
@@ -249,12 +327,125 @@ export function TemplateStudioPage({ setLandingPageNav }) {
       <main className="studio-main">
         {/* Top Header Bar */}
         <header className="studio-top-header">
-          <div className="header-search-bar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" placeholder="Search 10,000+ AI Video & Visual Templates..." />
+          <div className="header-search-container" ref={searchContainerRef}>
+            <div className={`header-search-bar ${isSearchFocused ? 'focused' : ''} ${searchQuery ? 'has-query' : ''}`}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="search-icon">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search 10,000+ AI Video & Visual Templates..."
+                value={searchQuery}
+                onFocus={() => setIsSearchFocused(true)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (sidebarTab !== 'template' && sidebarTab !== 'home') {
+                    setSidebarTab('template');
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setIsSearchFocused(false);
+                  }
+                  if (e.key === 'Enter') {
+                    setIsSearchFocused(false);
+                    if (sidebarTab !== 'template' && sidebarTab !== 'home') {
+                      setSidebarTab('template');
+                    }
+                  }
+                }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear-btn"
+                  onClick={() => setSearchQuery('')}
+                  title="Clear search"
+                  aria-label="Clear search"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Quick Suggestions & Instant Matches Dropdown */}
+            {isSearchFocused && (
+              <div className="search-dropdown-menu animate-slide-up">
+                {searchQuery.trim() ? (
+                  <div className="search-dropdown-section">
+                    <div className="search-dropdown-header">
+                      <span>Matching Templates ({filteredTemplates.length})</span>
+                      {filteredTemplates.length > 0 && (
+                        <span className="search-quick-hint">Press Enter to view all</span>
+                      )}
+                    </div>
+                    {filteredTemplates.length > 0 ? (
+                      <div className="search-quick-results">
+                        {filteredTemplates.slice(0, 4).map((tmpl) => (
+                          <div
+                            key={tmpl.id}
+                            className="search-result-row"
+                            onClick={() => {
+                              handleUseTemplate(tmpl);
+                              setIsSearchFocused(false);
+                              if (sidebarTab !== 'template' && sidebarTab !== 'home') {
+                                setSidebarTab('template');
+                              }
+                            }}
+                          >
+                            <img src={tmpl.image} alt={tmpl.title} className="result-thumb" />
+                            <div className="result-meta">
+                              <span className="result-title">{tmpl.title}</span>
+                              <span className="result-cat">{tmpl.category}</span>
+                            </div>
+                            <button
+                              type="button"
+                              className="result-use-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUseTemplate(tmpl);
+                                setIsSearchFocused(false);
+                              }}
+                            >
+                              Use ⚡
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="search-no-quick-results">
+                        <span>No templates match "{searchQuery}". Try a different keyword.</span>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="search-dropdown-section">
+                    <div className="search-dropdown-header">
+                      <span>🔥 Trending & Popular Searches</span>
+                    </div>
+                    <div className="search-trending-chips">
+                      {TRENDING_SEARCHES.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          className="search-chip-pill"
+                          onClick={() => {
+                            setSearchQuery(tag);
+                            setIsSearchFocused(false);
+                            if (sidebarTab !== 'template' && sidebarTab !== 'home') {
+                              setSidebarTab('template');
+                            }
+                          }}
+                        >
+                          🔍 {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="header-actions">
@@ -491,37 +682,102 @@ export function TemplateStudioPage({ setLandingPageNav }) {
               ))}
             </div>
 
-            {/* Template Cards Grid */}
-            <div className="templates-grid">
-              {filteredTemplates.map((tmpl) => (
-                <div
-                  key={tmpl.id}
-                  className="template-card glass-card"
-                  onClick={() => handleUseTemplate(tmpl)}
+            {/* Active Search Status Banner */}
+            {searchQuery && (
+              <div className="search-status-bar animate-fade-in">
+                <div className="search-status-text">
+                  <span>🔍 Showing <strong>{filteredTemplates.length}</strong> {filteredTemplates.length === 1 ? 'template' : 'templates'} matching "<strong>{searchQuery}</strong>"</span>
+                  {activeCategory !== 'All' && (
+                    <span className="search-category-tag">in {activeCategory}</span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="clear-search-link"
+                  onClick={() => setSearchQuery('')}
                 >
-                  <div className="card-image-wrapper">
-                    <img src={tmpl.image} alt={tmpl.title} />
-                    <span className="card-overlay-badge">{tmpl.badge}</span>
+                  Clear Search ✕
+                </button>
+              </div>
+            )}
+
+            {/* Template Cards Grid or Empty State */}
+            {filteredTemplates.length === 0 ? (
+              <div className="templates-empty-state glass-card animate-fade-in">
+                <div className="empty-state-icon">🔍</div>
+                <h3>No templates found matching "{searchQuery}"</h3>
+                {activeCategory !== 'All' ? (
+                  <p>
+                    No matches inside category <strong>"{activeCategory}"</strong>.
                     <button
-                      className="card-use-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleUseTemplate(tmpl);
+                      type="button"
+                      className="btn-link-action"
+                      onClick={() => setActiveCategory('All')}
+                    >
+                      Search across All Categories ↗
+                    </button>
+                  </p>
+                ) : (
+                  <p>Try searching with different keywords or click one of the popular topics:</p>
+                )}
+                <div className="empty-suggestions-tags">
+                  {['Figure Squishy', 'Cyberpunk', 'Dragon', 'Cute Pet', 'Vogue Portrait', 'Neon Dance', 'Solarpunk', 'Surf'].map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      className="category-tag-pill"
+                      onClick={() => {
+                        setActiveCategory('All');
+                        setSearchQuery(tag);
                       }}
                     >
-                      Use Template ⚡
+                      ✨ {tag}
                     </button>
-                  </div>
-                  <div className="card-details">
-                    <h4>{tmpl.title}</h4>
-                    <div className="card-stats">
-                      <span>👁️ {tmpl.views}</span>
-                      <span>❤️ {tmpl.likes}</span>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  className="empty-reset-btn"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategory('All');
+                  }}
+                >
+                  Reset All Filters ⚡
+                </button>
+              </div>
+            ) : (
+              <div className="templates-grid">
+                {filteredTemplates.map((tmpl) => (
+                  <div
+                    key={tmpl.id}
+                    className="template-card glass-card"
+                    onClick={() => handleUseTemplate(tmpl)}
+                  >
+                    <div className="card-image-wrapper">
+                      <img src={tmpl.image} alt={tmpl.title} />
+                      <span className="card-overlay-badge">{tmpl.badge}</span>
+                      <button
+                        className="card-use-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUseTemplate(tmpl);
+                        }}
+                      >
+                        Use Template ⚡
+                      </button>
+                    </div>
+                    <div className="card-details">
+                      <h4>{tmpl.title}</h4>
+                      <div className="card-stats">
+                        <span>👁️ {tmpl.views}</span>
+                        <span>❤️ {tmpl.likes}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* Floating Studio Creation Control Dock Overlay */}
             <div className="floating-creation-dock glass-card">

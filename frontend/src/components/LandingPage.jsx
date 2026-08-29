@@ -831,7 +831,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
               <a href="#research" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('research'); }}>Research</a>
               <a href="#tools" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('tools'); }}>Tools</a>
               <a href="#blog" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('blog'); }}>Blog</a>
-              <a href="#product" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('product'); }}>Product</a>
+              <a href="/#product" target="_blank" rel="noopener noreferrer">Product</a>
               <a href="#community" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('community'); }}>Community</a>
               <a href="#contact" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('contact'); }}>Contact</a>
             </div>

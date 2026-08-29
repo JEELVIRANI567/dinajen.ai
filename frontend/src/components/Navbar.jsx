@@ -68,9 +68,10 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 Blog
               </a>
               <a
-                href="#product"
+                href="/#product"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}
-                onClick={(e) => { e.preventDefault(); handleNavClick('product'); }}
               >
                 Product
               </a>
@@ -229,9 +230,11 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                   Blog
                 </a>
                 <a
-                  href="#product"
+                  href="/#product"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`mobile-nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}
-                  onClick={(e) => { e.preventDefault(); handleNavClick('product'); closeMenu(); }}
+                  onClick={closeMenu}
                 >
                   Product
                 </a>
