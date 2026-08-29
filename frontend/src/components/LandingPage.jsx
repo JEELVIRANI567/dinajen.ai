@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { navigateToApp } from '../utils/subdomainRouter';
+import { navigateToApp, getProductUrl } from '../utils/subdomainRouter';
 import { useAuth } from '../context/AuthContext';
 import { useContent } from '../context/ContentContext';
 
@@ -438,7 +438,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
             </h1>
 
             <p className="hero-main-subtitle">
-              Create breathtaking AI images and cinematic videos in seconds—no limits, just your creativity.
+              Create breathtaking AI posters, logos, and graphic designs in seconds—powered by the DiziPix D1 visual engine.
             </p>
 
             <form
@@ -644,37 +644,38 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
         <section id="tools" className="section container">
           <div className="section-header">
             <span className="badge badge-pink">All-In-One Studio</span>
-            <h2>Four Powerful AI Tools in One Platform</h2>
-            <p>Everything you need to produce stunning brand visuals, logos, flyers, and video content</p>
+            <h2>Specialized AI Design Studio</h2>
+            <p>High-resolution tools engineered for instant graphic, logo, and marketing asset creation</p>
           </div>
 
           <div className="features-grid">
             <div className="feature-card glass-card">
-              <div className="card-icon">🖼️</div>
+              <div className="card-icon">✦</div>
               <h3>AI Poster Generator</h3>
               <p>Design high-resolution event posters, movie graphics, and social promo art with custom lighting, typography, and theme controls.</p>
               <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Poster AI &rarr;</div>
             </div>
 
             <div className="feature-card glass-card">
-              <div className="card-icon">🏷️</div>
+              <div className="card-icon">✦</div>
               <h3>AI Logo & Brand Creator</h3>
               <p>Generate unique 3D emblems, minimal vector logos, and corporate brand marks with instant color palette variations.</p>
               <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Logo AI &rarr;</div>
             </div>
 
             <div className="feature-card glass-card">
-              <div className="card-icon">📄</div>
+              <div className="card-icon">✦</div>
               <h3>AI Flyer Builder</h3>
               <p>Create print-ready business flyers, party invitations, and promotional banners with customizable grid layouts.</p>
               <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Flyer AI &rarr;</div>
             </div>
 
-            <div className="feature-card glass-card">
-              <div className="card-icon">🎬</div>
+            <div className="feature-card glass-card" style={{ position: 'relative' }}>
+              <span className="coming-soon-badge-floating">Coming Soon</span>
+              <div className="card-icon">✦</div>
               <h3>AI Video Generator</h3>
-              <p>Transform text prompts or static posters into fluid 60fps cinematic video scenes with camera trajectory and motion controls.</p>
-              <div className="card-footer-link" onClick={() => navigateToApp('create')}>Try Video AI &rarr;</div>
+              <p>Transform prompts and static compositions into high-definition fluid motion scenes with camera trajectory controls.</p>
+              <div className="card-footer-link disabled-tool-btn" style={{ cursor: 'not-allowed', marginTop: '1rem' }}>In Development &bull; Coming Soon</div>
             </div>
           </div>
         </section>
@@ -831,7 +832,7 @@ export function LandingPage({ landingPageNav = 'home', setLandingPageNav }) {
               <a href="#research" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('research'); }}>Research</a>
               <a href="#tools" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('tools'); }}>Tools</a>
               <a href="#blog" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('blog'); }}>Blog</a>
-              <a href="/#product" target="_blank" rel="noopener noreferrer">Product</a>
+              <a href={getProductUrl()} target="_blank" rel="noopener noreferrer">Product</a>
               <a href="#community" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('community'); }}>Community</a>
               <a href="#contact" onClick={(e) => { e.preventDefault(); setLandingPageNav && setLandingPageNav('contact'); }}>Contact</a>
             </div>

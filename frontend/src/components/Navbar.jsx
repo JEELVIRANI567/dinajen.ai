@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { navigateToApp, navigateToLanding, navigateToAdmin } from '../utils/subdomainRouter';
+import { navigateToApp, navigateToLanding, navigateToAdmin, getProductUrl } from '../utils/subdomainRouter';
 import logo from '../assets/logo1.png';
 
 export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'home', setLandingPageNav }) {
@@ -55,10 +55,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 onClick={(e) => { e.preventDefault(); handleNavClick('tools'); }}
               >
                 <span className="vfx-sparkle sparkle-left">✦</span>
-                <span className="vfx-sparkle sparkle-top">✨</span>
-                <span className="vfx-sparkle sparkle-right">✧</span>
                 <span className="ai-text-vfx">AI Tools</span>
-                <span className="ai-scan-glow"></span>
               </a>
               <a
                 href="#blog"
@@ -68,7 +65,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 Blog
               </a>
               <a
-                href="/#product"
+                href={getProductUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}
@@ -97,25 +94,25 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 className={`app-tab-btn ${activeTab === 'feed' ? 'active' : ''}`}
                 onClick={() => setActiveTab('feed')}
               >
-                📰 Feed
+                Feed
               </button>
               <button
                 className={`app-tab-btn ${activeTab === 'create' ? 'active' : ''}`}
                 onClick={() => setActiveTab('create')}
               >
-                ✨ AI Studio
+                AI Studio
               </button>
               <button
                 className={`app-tab-btn ${activeTab === 'assets' ? 'active' : ''}`}
                 onClick={() => setActiveTab('assets')}
               >
-                📁 My Assets
+                My Assets
               </button>
               <button
                 className={`app-tab-btn ${activeTab === 'credits' ? 'active' : ''}`}
                 onClick={() => setActiveTab('credits')}
               >
-                ⚡ Buy Credits
+                Credits
               </button>
             </nav>
           )}
@@ -183,25 +180,25 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                   className={`mobile-tab-btn ${activeTab === 'feed' ? 'active' : ''}`}
                   onClick={() => { setActiveTab('feed'); closeMenu(); }}
                 >
-                  📰 Feed
+                  Feed
                 </button>
                 <button
                   className={`mobile-tab-btn ${activeTab === 'create' ? 'active' : ''}`}
                   onClick={() => { setActiveTab('create'); closeMenu(); }}
                 >
-                  ✨ AI Studio
+                  AI Studio
                 </button>
                 <button
                   className={`mobile-tab-btn ${activeTab === 'assets' ? 'active' : ''}`}
                   onClick={() => { setActiveTab('assets'); closeMenu(); }}
                 >
-                  📁 My Assets
+                  My Assets
                 </button>
                 <button
                   className={`mobile-tab-btn ${activeTab === 'credits' ? 'active' : ''}`}
                   onClick={() => { setActiveTab('credits'); closeMenu(); }}
                 >
-                  ⚡ Buy Credits
+                  Credits
                 </button>
               </div>
             )}
@@ -230,7 +227,7 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                   Blog
                 </a>
                 <a
-                  href="/#product"
+                  href={getProductUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`mobile-nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}

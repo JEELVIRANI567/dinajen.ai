@@ -16,7 +16,6 @@ export function AppDashboard({ activeTab, setActiveTab }) {
   const [logoStyle, setLogoStyle] = useState('3D Emblem');
   const [flyerTitle, setFlyerTitle] = useState('Summer Beats Beach Party');
   const [videoMotion, setVideoMotion] = useState('Camera Orbit 360');
-  const [videoSpeed, setVideoSpeed] = useState(5);
 
   // Generation state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -115,13 +114,13 @@ export function AppDashboard({ activeTab, setActiveTab }) {
               <p>Trending AI Posters, Logos, Flyers and Videos generated on app.dizipix.ai</p>
             </div>
             <div className="filter-chips">
-              {['all', 'poster', 'logo', 'flyer', 'video'].map((filter) => (
+              {['all', 'poster', 'logo', 'flyer'].map((filter) => (
                 <button
                   key={filter}
                   className={`filter-btn ${feedFilter === filter ? 'active' : ''}`}
                   onClick={() => setFeedFilter(filter)}
                 >
-                  {filter === 'all' ? '✨ All Creations' : filter.toUpperCase()}
+                  {filter === 'all' ? 'All Creations' : filter.toUpperCase()}
                 </button>
               ))}
             </div>
@@ -132,7 +131,6 @@ export function AppDashboard({ activeTab, setActiveTab }) {
               <div key={item.id} className="feed-card glass-card">
                 <div className="card-media">
                   <img src={item.imageUrl} alt={item.title} />
-                  {item.videoUrl && <span className="video-badge">▶ 60FPS Video</span>}
                   <span className="type-badge">{item.type.toUpperCase()}</span>
                 </div>
                 <div className="card-content">
@@ -141,7 +139,7 @@ export function AppDashboard({ activeTab, setActiveTab }) {
                   <div className="card-meta">
                     <span>by <strong>{item.creator}</strong></span>
                     <button className="remix-btn" onClick={() => handleRemix(item)}>
-                      ✦ Remix Prompt
+                      Use Prompt
                     </button>
                   </div>
                 </div>
@@ -162,26 +160,31 @@ export function AppDashboard({ activeTab, setActiveTab }) {
                   className={`tool-btn ${activeTool === 'poster' ? 'active' : ''}`}
                   onClick={() => setActiveTool('poster')}
                 >
-                  🖼️ Poster AI
+                  Poster Design
                 </button>
                 <button
                   className={`tool-btn ${activeTool === 'logo' ? 'active' : ''}`}
                   onClick={() => setActiveTool('logo')}
                 >
-                  🏷️ Logo AI
+                  Logo Creator
                 </button>
                 <button
                   className={`tool-btn ${activeTool === 'flyer' ? 'active' : ''}`}
                   onClick={() => setActiveTool('flyer')}
                 >
-                  📄 Flyer AI
+                  Flyer Maker
                 </button>
-                <button
-                  className={`tool-btn ${activeTool === 'video' ? 'active' : ''}`}
-                  onClick={() => setActiveTool('video')}
-                >
-                  🎬 AI Video
-                </button>
+                <div className="tool-btn-wrapper">
+                  <button
+                    className="tool-btn disabled-tool-btn"
+                    disabled
+                    type="button"
+                    title="AI Video Generation is currently in development — Coming Soon"
+                  >
+                    AI Video
+                    <span className="coming-soon-tag">Coming Soon</span>
+                  </button>
+                </div>
               </div>
 
               <div className="tool-form">
@@ -277,27 +280,15 @@ export function AppDashboard({ activeTab, setActiveTab }) {
 
                 {/* Video Motion Settings */}
                 {activeTool === 'video' && (
-                  <>
-                    <div className="form-field">
-                      <label>Camera Motion Control</label>
-                      <select value={videoMotion} onChange={(e) => setVideoMotion(e.target.value)}>
-                        <option value="Camera Orbit 360">Orbit 360 Camera</option>
-                        <option value="Pan Right Slow">Pan Right Cinematic</option>
-                        <option value="Zoom In Motion">Smooth Zoom In</option>
-                        <option value="Drone Flyover">Top-Down Drone View</option>
-                      </select>
-                    </div>
-                    <div className="form-field">
-                      <label>Motion Speed Intensity: {videoSpeed}</label>
-                      <input
-                        type="range"
-                        min="1"
-                        max="10"
-                        value={videoSpeed}
-                        onChange={(e) => setVideoSpeed(parseInt(e.target.value, 10))}
-                      />
-                    </div>
-                  </>
+                  <div className="form-field">
+                    <label>Camera Motion Control</label>
+                    <select value={videoMotion} onChange={(e) => setVideoMotion(e.target.value)}>
+                      <option value="Camera Orbit 360">Orbit 360 Camera</option>
+                      <option value="Pan Right Slow">Pan Right Cinematic</option>
+                      <option value="Zoom In Motion">Smooth Zoom In</option>
+                      <option value="Drone Flyover">Top-Down Drone View</option>
+                    </select>
+                  </div>
                 )}
 
                 {/* Submit Button with Credit Cost */}
@@ -309,7 +300,7 @@ export function AppDashboard({ activeTab, setActiveTab }) {
                   {isGenerating ? (
                     <span>Generating... ({progress}%)</span>
                   ) : (
-                    <span>Generate {activeTool.toUpperCase()} (⚡ {activeTool === 'video' ? '10' : '5'} Credits)</span>
+                    <span>Generate {activeTool.toUpperCase()} (5 Credits)</span>
                   )}
                 </button>
               </div>
@@ -320,8 +311,8 @@ export function AppDashboard({ activeTab, setActiveTab }) {
               {isGenerating ? (
                 <div className="canvas-loading">
                   <div className="spinner">✦</div>
-                  <h3>DiziPix Engine Processing...</h3>
-                  <p>Synthesizing pixels, lighting, and AI parameters</p>
+                  <h3>DiziPix D1 Engine Processing...</h3>
+                  <p>Synthesizing neural layers, composition, and high-fidelity textures</p>
                   <div className="progress-bar-track">
                     <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
                   </div>
@@ -329,32 +320,27 @@ export function AppDashboard({ activeTab, setActiveTab }) {
               ) : generatedMedia ? (
                 <div className="canvas-output animate-fade-in">
                   <div className="output-media-frame">
-                    {generatedMedia.videoUrl ? (
-                      <video controls autoPlay loop src={generatedMedia.videoUrl} />
-                    ) : (
-                      <img src={generatedMedia.imageUrl} alt="Generated output" />
-                    )}
+                    <img src={generatedMedia.imageUrl} alt="Generated output" />
                   </div>
                   <div className="output-controls">
                     <div className="output-info">
                       <h3>{generatedMedia.title}</h3>
-                      <p>Aspect Ratio: {generatedMedia.aspectRatio} | Style: {generatedMedia.stylePreset}</p>
+                      <p>Aspect Ratio: {generatedMedia.aspectRatio} | Style: {generatedMedia.stylePreset} | Model: DiziPix D1</p>
                     </div>
                     <div className="output-actions">
                       <a href={generatedMedia.imageUrl} download="dizipix_render.jpg" className="btn btn-secondary">
-                        📥 Download 4K
+                        Download Image
                       </a>
                       <button className="btn btn-primary" onClick={() => setActiveTab('assets')}>
-                        📁 View in My Assets
+                        View in My Assets
                       </button>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="canvas-placeholder">
-                  <div className="placeholder-icon">✨</div>
-                  <h3>Ready to Create</h3>
-                  <p>Configure your prompt and settings on the left sidebar, then click Generate to create your AI {activeTool}.</p>
+                  <h3>Studio Workspace Ready</h3>
+                  <p>Enter your prompt and configure your aesthetic options on the left, then click Generate to create high-resolution designs with DiziPix D1.</p>
                 </div>
               )}
             </div>
@@ -374,11 +360,10 @@ export function AppDashboard({ activeTab, setActiveTab }) {
 
           {userCreations.length === 0 ? (
             <div className="empty-assets glass-panel">
-              <div className="empty-icon">📁</div>
-              <h3>No Creations Yet</h3>
-              <p>You haven't generated any posters, logos, flyers or videos yet.</p>
+              <h3>No Saved Creations Yet</h3>
+              <p>You haven't generated any posters, logos, or flyers yet.</p>
               <button className="btn btn-primary" onClick={() => setActiveTab('create')}>
-                Create Your First Asset ✨
+                Create Your First Graphic
               </button>
             </div>
           ) : (
@@ -394,7 +379,7 @@ export function AppDashboard({ activeTab, setActiveTab }) {
                     <p className="prompt-text">"{item.prompt}"</p>
                     <div className="card-meta">
                       <a href={item.imageUrl} download className="btn btn-ghost btn-sm">
-                        📥 Download
+                        Download Image
                       </a>
                     </div>
                   </div>
@@ -410,7 +395,7 @@ export function AppDashboard({ activeTab, setActiveTab }) {
         <div className="tab-pane animate-fade-in">
           <div className="tab-header text-center">
             <h2>Top Up Your DiziPix Credits</h2>
-            <p>Current Balance: <strong style={{ color: '#fef08a' }}>⚡ {credits} Credits</strong></p>
+            <p>Current Balance: <strong style={{ color: '#fef08a' }}>{credits} Credits</strong></p>
           </div>
 
           <div className="pricing-grid" style={{ marginTop: '2rem' }}>

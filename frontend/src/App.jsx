@@ -8,12 +8,13 @@ import { AppDashboard } from './components/AppDashboard';
 import { AdminPanel } from './components/AdminPanel';
 import { TemplateStudioPage } from './components/TemplateStudioPage';
 import { AuthModal } from './components/AuthModal';
-import { isAppSubdomain, isAdminRoute } from './utils/subdomainRouter';
+import { isAppSubdomain, isAdminRoute, isProductRoute } from './utils/subdomainRouter';
 
 function MainAppContent() {
   const [isAppView, setIsAppView] = useState(() => isAppSubdomain());
   const [isAdminView, setIsAdminView] = useState(() => isAdminRoute());
   const [landingPageNav, setLandingPageNav] = useState(() => {
+    if (isProductRoute()) return 'product';
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.replace('#', '');
       return ['research', 'tools', 'blog', 'community', 'contact', 'admin', 'template', 'product'].includes(hash) ? (hash === 'template' ? 'product' : hash) : 'home';
@@ -32,6 +33,7 @@ function MainAppContent() {
     const handleUrlChange = () => {
       const appDetected = isAppSubdomain();
       const adminDetected = isAdminRoute();
+      const productDetected = isProductRoute();
       setIsAppView(appDetected);
       setIsAdminView(adminDetected);
 
@@ -41,13 +43,22 @@ function MainAppContent() {
         setActiveTab(tabParam);
       }
 
-      if (window.location.hash) {
+      if (productDetected) {
+        setLandingPageNav('product');
+        if (window.location.hash === '#product' || window.location.hash === '#products' || window.location.hash === '#template') {
+          window.history.replaceState({}, '', '/app/products');
+        }
+      } else if (window.location.hash) {
         const hash = window.location.hash.replace('#', '');
-        if (['research', 'tools', 'blog', 'community', 'contact', 'template', 'product'].includes(hash)) {
+        if (['research', 'tools', 'blog', 'community', 'contact', 'template', 'product', 'products'].includes(hash)) {
           setLandingPageNav(hash === 'template' ? 'product' : hash);
         }
       }
     };
+
+    if (typeof window !== 'undefined' && (window.location.hash === '#product' || window.location.hash === '#products' || window.location.hash === '#template')) {
+      window.history.replaceState({}, '', '/app/products');
+    }
 
     window.addEventListener('popstate', handleUrlChange);
     window.addEventListener('hashchange', handleUrlChange);
@@ -68,7 +79,19 @@ function MainAppContent() {
   const handleLandingNavChange = (navKey) => {
     setLandingPageNav(navKey);
     if (typeof window !== 'undefined') {
-      window.location.hash = navKey === 'home' ? '' : navKey;
+      if (navKey === 'product' || navKey === 'products' || navKey === 'template') {
+        const newUrl = new URL(window.location.href);
+        newUrl.pathname = '/app/products';
+        newUrl.hash = '';
+        window.history.pushState({}, '', newUrl.toString());
+      } else {
+        const newUrl = new URL(window.location.href);
+        if (newUrl.pathname.startsWith('/app/products') || newUrl.pathname.startsWith('/app/product') || newUrl.pathname.startsWith('/products') || newUrl.pathname.startsWith('/product') || newUrl.pathname.startsWith('/template')) {
+          newUrl.pathname = '/';
+        }
+        newUrl.hash = navKey === 'home' ? '' : navKey;
+        window.history.pushState({}, '', newUrl.toString());
+      }
     }
   };
 
@@ -80,8 +103,8 @@ function MainAppContent() {
     );
   }
 
-  // Product Studio View for #product and #template route
-  if (landingPageNav === 'product' || landingPageNav === 'template' || (typeof window !== 'undefined' && (window.location.hash === '#product' || window.location.hash === '#template'))) {
+  // Product Studio View for /app/product, #product, and #template route
+  if (isProductRoute() || landingPageNav === 'product' || landingPageNav === 'template') {
     return (
       <div className="dizipix-app-root">
         <TemplateStudioPage setLandingPageNav={handleLandingNavChange} />

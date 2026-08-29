@@ -165,38 +165,38 @@ export const INITIAL_BLOG_ARTICLES = [
     ]
   },
   {
-    id: 'architecture-60fps-video',
+    id: 'dizipix-d1-neural-architecture',
     isBlog: true,
-    title: 'Inside Dizi-Motion: The Architecture Behind 60fps Real-Time AI Video Synthesis',
+    title: 'Inside DiziPix D1: High-Fidelity Regional Graphic & Image Synthesis Engine',
     date: 'Jul 29, 2026',
-    tag: 'AI Video Engineering',
-    readTime: '🔥 5 Min Read',
-    views: '👁️ 38.6K Video Creators',
+    tag: 'AI Graphic Engineering',
+    readTime: '5 Min Read',
+    views: '38.6K Creators',
     likes: 3720,
-    trendingBadge: '🚀 Video Engine Tech',
-    ctaText: 'Read Video Deep Dive ↗',
+    trendingBadge: 'D1 Visual Engine',
+    ctaText: 'Read Deep Dive ↗',
     image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800&auto=format&fit=crop&q=80',
-    summary: 'An inside look at our temporal attention mechanisms, motion trajectory keyframes, and zero-flicker frame consistency algorithms powering 60fps video generation.',
+    summary: 'An inside look at our spatial attention mechanisms, regional typographic alignment, and sub-second generation passes powering DiziPix D1.',
     sections: [
       {
-        heading: '1. Temporal Attention & Frame Consistency',
-        content: 'Traditional AI video generators suffer from temporal flickering between frames. Dizi-Motion introduces cross-frame attention locks to guarantee character features and background lighting remain continuous.'
+        heading: '1. Neural Layering & Visual Cohesion',
+        content: 'DiziPix D1 ensures high dynamic range, crisp typography boundaries, and accurate ethnic color palettes for posters and brand assets.'
       },
       {
-        heading: '2. Camera Trajectory & Motion Controls',
-        content: 'Creators can specify dolly zoom, orbital pan, and crane motion controls in plain text, rendering 60fps cinematic scenes in sub-second generation passes.'
+        heading: '2. Multi-Resolution Rasterization',
+        content: 'Creators can render pristine 4K print-ready assets with balanced grain, crisp edges, and commercial-grade vector curve compatibility.'
       }
     ]
   }
 ];
 
 export const INITIAL_HERO_CONFIG = {
-  badgeText: '🇮🇳 India\'s Premier Generative AI Visual Platform',
-  mainHeadline: 'Create Stunning Indian AI Posters, Visuals & Videos',
+  badgeText: 'Next-Generation Generative AI Visual Platform',
+  mainHeadline: 'Create High-Resolution AI Posters, Logos & Graphics',
   highlightText: 'In Seconds',
-  subtitle: 'Engineered for Indian creators, filmmakers, graphic designers, and brand marketers. High-resolution Vernacular AI art with Devanagari support, festive presets, and cinema studio lighting.',
-  primaryCtaText: 'Start Creating Free ⚡',
-  secondaryCtaText: 'Explore Research Deep Dives ↗'
+  subtitle: 'Engineered for creators, graphic designers, studios, and brand marketers. High-resolution Vernacular AI art with Devanagari support, festive presets, and studio lighting.',
+  primaryCtaText: 'Start Creating Free',
+  secondaryCtaText: 'Explore AI Tools ↗'
 };
 
 const STORAGE_KEY = 'dizipix_dynamic_content_v1';

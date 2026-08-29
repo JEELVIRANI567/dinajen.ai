@@ -14,12 +14,44 @@ export function isAppSubdomain() {
   if (hostname.startsWith('app.')) return true;
 
   // Check 2: Subpath routing for local dev (http://localhost:5173/app)
-  if (pathname.startsWith('/app')) return true;
+  if (pathname.startsWith('/app') || pathname.startsWith('/products') || pathname.startsWith('/product') || pathname.startsWith('/template')) return true;
 
   // Check 3: Explicit query parameter (http://localhost:5173/?mode=app)
   if (searchParams.get('mode') === 'app' || searchParams.has('app')) return true;
 
   return false;
+}
+
+export function isProductRoute() {
+  if (typeof window === 'undefined') return false;
+
+  const pathname = window.location.pathname;
+  const hash = window.location.hash;
+
+  return (
+    pathname === '/app/products' ||
+    pathname === '/app/product' ||
+    pathname === '/app/template' ||
+    pathname === '/products' ||
+    pathname === '/product' ||
+    pathname === '/template' ||
+    pathname.startsWith('/app/products') ||
+    pathname.startsWith('/app/product') ||
+    pathname.startsWith('/products') ||
+    pathname.startsWith('/product') ||
+    pathname.startsWith('/template') ||
+    hash === '#products' ||
+    hash === '#product' ||
+    hash === '#template'
+  );
+}
+
+export function getProductUrl(tab) {
+  if (typeof window === 'undefined') return '/app/products';
+
+  const isProduction = window.location.hostname.includes('dizipix.ai');
+  const baseUrl = isProduction ? 'https://app.dizipix.ai/products' : '/app/products';
+  return tab ? `${baseUrl}?tab=${tab}` : baseUrl;
 }
 
 export function navigateToApp(tab = 'feed') {

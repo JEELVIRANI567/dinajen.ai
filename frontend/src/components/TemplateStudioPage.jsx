@@ -5,17 +5,59 @@ import logo from '../assets/logo1.png';
 
 export function TemplateStudioPage({ setLandingPageNav }) {
   const { user, setAuthModalOpen } = useAuth();
-  const [sidebarTab, setSidebarTab] = useState('template'); // 'home' | 'creation' | 'agent' | 'profile' | 'subscription' | 'setting' | 'help' | 'template'
+  
+  const getTabFromUrl = () => {
+    if (typeof window === 'undefined') return 'template';
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    const validTabs = ['template', 'home', 'creation', 'agent', 'profile', 'subscription', 'setting', 'help'];
+    if (tabParam && validTabs.includes(tabParam)) {
+      return tabParam === 'home' ? 'template' : tabParam;
+    }
+    const hash = window.location.hash.replace('#', '');
+    if (hash && validTabs.includes(hash)) {
+      return hash === 'home' ? 'template' : hash;
+    }
+    return 'template';
+  };
+
+  const [sidebarTab, setSidebarTabState] = useState(getTabFromUrl);
+
+  const setSidebarTab = (newTab) => {
+    const tabToUse = newTab === 'home' ? 'template' : newTab;
+    setSidebarTabState(tabToUse);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tabToUse);
+      url.hash = '';
+      window.history.pushState({}, '', url.toString());
+    }
+  };
+
+  useEffect(() => {
+    const syncTabFromUrl = () => {
+      const tab = getTabFromUrl();
+      setSidebarTabState(tab);
+    };
+
+    window.addEventListener('popstate', syncTabFromUrl);
+    window.addEventListener('hashchange', syncTabFromUrl);
+    return () => {
+      window.removeEventListener('popstate', syncTabFromUrl);
+      window.removeEventListener('hashchange', syncTabFromUrl);
+    };
+  }, []);
+
   const [activeCategory, setActiveCategory] = useState('All');
-  const [contentTab, setContentTab] = useState('Template'); // 'Video' | 'Template' | 'Challenge'
-  const [creationMode, setCreationMode] = useState('Video'); // 'Video' | 'Image' | 'Audio'
+  const [contentTab, setContentTab] = useState('Template'); // 'Template' | 'Showcase'
+  const [creationMode, setCreationMode] = useState('Image'); // 'Image'
   const [creationSubTool, setCreationSubTool] = useState('Image & Text');
   const [promptInput, setPromptInput] = useState('');
-  const [modelEngine, setModelEngine] = useState('DiziPix V6');
+  const [modelEngine, setModelEngine] = useState('DiziPix D1');
   const [resolution, setResolution] = useState('1080P');
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [duration, setDuration] = useState('5s');
-  const [audioToggle, setAudioToggle] = useState(true);
+  const [audioToggle, setAudioToggle] = useState(false);
   const [multiShotToggle, setMultiShotToggle] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
@@ -315,10 +357,10 @@ export function TemplateStudioPage({ setLandingPageNav }) {
 
         {/* Promo Upgrade Box */}
         <div className="sidebar-promo-card">
-          <div className="promo-tag">🔥 PRO PASS</div>
-          <p>Unlimited 60fps AI Video & Render Pipeline.</p>
+          <div className="promo-tag">PRO PASS</div>
+          <p>High-Resolution AI Graphic & Design Engine.</p>
           <button className="promo-btn" onClick={() => setSidebarTab('subscription')}>
-            Get Paid / Upgrade
+            Upgrade Plan
           </button>
         </div>
       </aside>
@@ -335,7 +377,7 @@ export function TemplateStudioPage({ setLandingPageNav }) {
               </svg>
               <input
                 type="text"
-                placeholder="Search 10,000+ AI Video & Visual Templates..."
+                placeholder="Search 10,000+ AI Generated Templates..."
                 value={searchQuery}
                 onFocus={() => setIsSearchFocused(true)}
                 onChange={(e) => {
@@ -449,17 +491,11 @@ export function TemplateStudioPage({ setLandingPageNav }) {
           </div>
 
           <div className="header-actions">
-            <button className="pill-btn highlight-pill" onClick={() => showToast('✨ DiziPix R1 Ultra Video Engine Active')}>
-              ✨ DiziPix R1
-            </button>
-            <button className="pill-btn" onClick={() => showToast('🔌 API Platform Documentation')}>
-              API Platform
-            </button>
-            <button className="pill-btn credit-pill" onClick={() => showToast('🎁 500 Free Daily Credits Refreshed')}>
-              🎁 Earn Credits
+            <button className="pill-btn highlight-pill" onClick={() => setSidebarTab('agent')}>
+              DiziPix D1
             </button>
             <button className="pill-btn subscribe-pill" onClick={() => setSidebarTab('subscription')}>
-              💎 Subscribe
+              Subscribe
             </button>
             <button className="account-login-btn" onClick={() => setAuthModalOpen(true)}>
               {user ? (user.name || 'Account') : 'Login'}
@@ -521,14 +557,14 @@ export function TemplateStudioPage({ setLandingPageNav }) {
           <div className="studio-content-view animate-fade-in">
             <div className="view-header">
               <h2>DiziPix Creation Studio</h2>
-              <p>Generate hyper-realistic video sequences and visual prompts</p>
+              <p>Generate high-resolution graphics, posters, and visual prompts with DiziPix D1</p>
             </div>
 
             <div className="creation-full-panel glass-card">
               <div className="creation-tabs">
-                <button className={`tab-item ${creationMode === 'Video' ? 'active' : ''}`} onClick={() => setCreationMode('Video')}>🎥 Video Generator</button>
-                <button className={`tab-item ${creationMode === 'Image' ? 'active' : ''}`} onClick={() => setCreationMode('Image')}>🖼️ Image Studio</button>
-                <button className={`tab-item ${creationMode === 'Audio' ? 'active' : ''}`} onClick={() => setCreationMode('Audio')}>🎵 Vernacular Audio</button>
+                <button className={`tab-item ${creationMode === 'Image' ? 'active' : ''}`} onClick={() => setCreationMode('Image')}>Image Studio</button>
+                <button className="tab-item disabled-tool-btn" disabled title="AI Video Generation is in development — Coming Soon">Video Generator <span className="coming-soon-tag">Coming Soon</span></button>
+                <button className="tab-item disabled-tool-btn" disabled title="Audio Synthesis is in development — Coming Soon">Audio Synthesis <span className="coming-soon-tag">Coming Soon</span></button>
               </div>
 
               <div className="creation-body">
@@ -538,16 +574,15 @@ export function TemplateStudioPage({ setLandingPageNav }) {
                   rows="4"
                   value={promptInput}
                   onChange={(e) => setPromptInput(e.target.value)}
-                  placeholder="Describe your scene in English, Hindi, Tamil, or Telugu... (e.g. Hero character in traditional period armor with volumetric fog, golden hour lighting, 60fps cinematic pan)"
+                  placeholder="Describe your visual concept (e.g. Hero character in traditional ethnic attire, cinematic studio lighting, sharp 8k textures)..."
                 />
 
                 <div className="creation-options-row">
                   <div className="option-group">
                     <label>Resolution</label>
                     <select value={resolution} onChange={(e) => setResolution(e.target.value)}>
-                      <option value="540P">540P Fast</option>
                       <option value="1080P">1080P HD</option>
-                      <option value="4K">4K Cinema</option>
+                      <option value="4K">4K Ultra</option>
                     </select>
                   </div>
 
@@ -555,21 +590,20 @@ export function TemplateStudioPage({ setLandingPageNav }) {
                     <label>Aspect Ratio</label>
                     <select value={aspectRatio} onChange={(e) => setAspectRatio(e.target.value)}>
                       <option value="16:9">16:9 Landscape</option>
-                      <option value="9:16">9:16 Mobile Reel</option>
+                      <option value="9:16">9:16 Portrait</option>
                       <option value="1:1">1:1 Square</option>
                     </select>
                   </div>
 
                   <div className="option-group">
-                    <label>Duration</label>
-                    <select value={duration} onChange={(e) => setDuration(e.target.value)}>
-                      <option value="5s">5 Seconds</option>
-                      <option value="10s">10 Seconds</option>
+                    <label>Model Engine</label>
+                    <select value={modelEngine} onChange={(e) => setModelEngine(e.target.value)}>
+                      <option value="DiziPix D1">DiziPix D1 Engine</option>
                     </select>
                   </div>
 
                   <button className="create-now-btn" onClick={handleCreateSubmit}>
-                    Generate Scene ⚡
+                    Generate Graphic (5 Credits)
                   </button>
                 </div>
               </div>
@@ -579,13 +613,13 @@ export function TemplateStudioPage({ setLandingPageNav }) {
           /* Autonomous Agent View */
           <div className="studio-content-view animate-fade-in">
             <div className="view-header">
-              <h2>Autonomous Prompt & Scene Agent</h2>
-              <p>Let AI auto-generate complete video shot lists, storyboard prompts, and character dialogues</p>
+              <h2>Autonomous Design & Prompt Agent</h2>
+              <p>Let DiziPix D1 auto-generate structured visual prompts, poster layout variations, and branding themes.</p>
             </div>
             <div className="glass-card" style={{ padding: '2rem' }}>
-              <h3>🤖 Agent Studio Active</h3>
-              <p>Type a movie theme or poster concept to let DiziPix Agent generate 10 complete scene variations.</p>
-              <button className="create-now-btn" style={{ marginTop: '1rem' }} onClick={() => showToast('🤖 Agent generated 5 new video prompt variations!')}>Launch Agent Workflow 🚀</button>
+              <h3>Agent Studio Active</h3>
+              <p>Type a theme or poster concept to let DiziPix D1 generate complete design variations instantly.</p>
+              <button className="create-now-btn" style={{ marginTop: '1rem' }} onClick={() => showToast('Agent generated 5 new graphic prompt variations!')}>Launch Agent Workflow</button>
             </div>
           </div>
         ) : sidebarTab === 'profile' ? (
@@ -596,9 +630,9 @@ export function TemplateStudioPage({ setLandingPageNav }) {
               <p>Manage your account settings, generated art, and saved templates</p>
             </div>
             <div className="glass-card" style={{ padding: '2rem' }}>
-              <h3>👤 {user ? user.name || user.email : 'Creator Account'}</h3>
-              <p>Account Type: ⚡ Dizi-Pro Member</p>
-              <p>Remaining Credits: 1,480 / 2,500</p>
+              <h3>{user ? user.name || user.email : 'Creator Account'}</h3>
+              <p>Account Type: Dizi-Pro Member</p>
+              <p>Model Access: DiziPix D1 Engine</p>
             </div>
           </div>
         ) : sidebarTab === 'setting' ? (
@@ -606,11 +640,11 @@ export function TemplateStudioPage({ setLandingPageNav }) {
           <div className="studio-content-view animate-fade-in">
             <div className="view-header">
               <h2>Studio & API Settings</h2>
-              <p>Configure model default render engines, API tokens, and vernacular font preferences</p>
+              <p>Configure model default render engines, API tokens, and font preferences</p>
             </div>
             <div className="glass-card" style={{ padding: '2rem' }}>
-              <h3>⚙️ Engine Preferences</h3>
-              <p>Default Model: DiziPix V6 Cinema Engine</p>
+              <h3>Engine Preferences</h3>
+              <p>Default Model: DiziPix D1 Visual Engine</p>
               <p>API Token: dizipix_live_sec_884920194857</p>
             </div>
           </div>
@@ -619,30 +653,30 @@ export function TemplateStudioPage({ setLandingPageNav }) {
           <div className="studio-content-view animate-fade-in">
             <div className="view-header">
               <h2>Help & Creator Support</h2>
-              <p>Guides, video tutorials, prompt cheat-sheets, and Discord community</p>
+              <p>Guides, tutorials, prompt cheat-sheets, and Discord community</p>
             </div>
             <div className="glass-card" style={{ padding: '2rem' }}>
-              <h3>❓ Need assistance with AI Video Prompts?</h3>
-              <p>Join our 40,000+ creator Discord server or read our documentation.</p>
-              <button className="pill-btn highlight-pill" style={{ marginTop: '1rem' }} onClick={() => showToast('🌐 Opening DiziPix Discord Server...')}>Join Discord Community 💬</button>
+              <h3>Need assistance with AI Graphic Prompts?</h3>
+              <p>Join our creator community or read our documentation.</p>
+              <button className="pill-btn highlight-pill" style={{ marginTop: '1rem' }} onClick={() => showToast('Opening DiziPix Community Support...')}>Join Community</button>
             </div>
           </div>
         ) : (
           /* Main Template Home Gallery View */
           <div className="studio-content-view animate-fade-in">
-            {/* Featured Contest Hero Banner */}
+            {/* Featured Showcase Hero Banner */}
             <section className="featured-banner-card">
               <div className="banner-content">
                 <div className="banner-top-pill">
-                  <span>DiziPix AI Film Contest</span>
+                  <span>DiziPix Design Showcase</span>
                 </div>
-                <h1>PIXLIGHT 2026</h1>
-                <p className="prize-tag">$300K PRIZE POOL • SUBMISSIONS OPEN</p>
+                <h1>CREATIVE TEMPLATES 2026</h1>
+                <p className="prize-tag">10,000+ AI GENERATED TEMPLATES • READY TO EDIT</p>
                 <button
                   className="banner-submit-btn"
-                  onClick={() => showToast('🏆 Opening PIXLIGHT 2026 Submission Portal...')}
+                  onClick={() => showToast('Exploring Template Collection')}
                 >
-                  SUBMIT NOW ↗
+                  EXPLORE TEMPLATES
                 </button>
               </div>
             </section>
@@ -650,22 +684,17 @@ export function TemplateStudioPage({ setLandingPageNav }) {
             {/* Sub Nav Tabs */}
             <div className="studio-nav-tabs">
               <button
-                className={`tab-btn ${contentTab === 'Video' ? 'active' : ''}`}
-                onClick={() => setContentTab('Video')}
-              >
-                Video
-              </button>
-              <button
                 className={`tab-btn ${contentTab === 'Template' ? 'active' : ''}`}
                 onClick={() => setContentTab('Template')}
               >
-                Template
+                Templates
               </button>
               <button
-                className={`tab-btn ${contentTab === 'Challenge' ? 'active' : ''}`}
-                onClick={() => setContentTab('Challenge')}
+                className="tab-btn disabled-tool-btn"
+                disabled
+                title="AI Video templates in development — Coming Soon"
               >
-                Challenge
+                Video <span className="coming-soon-tag">Coming Soon</span>
               </button>
             </div>
 
@@ -784,34 +813,25 @@ export function TemplateStudioPage({ setLandingPageNav }) {
               <div className="dock-top-row">
                 <div className="dock-mode-pills">
                   <button
-                    className={`dock-pill ${creationMode === 'Video' ? 'active' : ''}`}
-                    onClick={() => setCreationMode('Video')}
-                  >
-                    🎥 Video
-                  </button>
-                  <button
                     className={`dock-pill ${creationMode === 'Image' ? 'active' : ''}`}
                     onClick={() => setCreationMode('Image')}
                   >
-                    🖼️ Image
+                    Image Studio
                   </button>
                   <button
-                    className={`dock-pill ${creationMode === 'Audio' ? 'active' : ''}`}
-                    onClick={() => setCreationMode('Audio')}
+                    className="dock-pill disabled-tool-btn"
+                    disabled
+                    title="AI Video generation is in development — Coming Soon"
                   >
-                    🎵 Audio
+                    Video <span className="coming-soon-tag">Coming Soon</span>
                   </button>
-                </div>
-
-                <div className="dock-subtools">
-                  <span className="subtool-item active">🖼️ Image & Text</span>
-                  <span className="subtool-item">🎯 Reference</span>
-                  <span className="subtool-item">✨ Template</span>
-                  <span className="subtool-item">🔀 Transition</span>
-                  <span className="subtool-item">✏️ Modify</span>
-                  <span className="subtool-item">🎬 Motion Control</span>
-                  <span className="subtool-item">⏩ Extend</span>
-                  <span className="subtool-item">🗣️ Speech</span>
+                  <button
+                    className="dock-pill disabled-tool-btn"
+                    disabled
+                    title="Audio synthesis is in development — Coming Soon"
+                  >
+                    Audio <span className="coming-soon-tag">Coming Soon</span>
+                  </button>
                 </div>
               </div>
 
@@ -819,7 +839,7 @@ export function TemplateStudioPage({ setLandingPageNav }) {
                 <input
                   type="text"
                   className="dock-prompt-input"
-                  placeholder="Describe the content you want to create..."
+                  placeholder="Describe the graphic or poster you want to create..."
                   value={promptInput}
                   onChange={(e) => setPromptInput(e.target.value)}
                 />
@@ -830,7 +850,6 @@ export function TemplateStudioPage({ setLandingPageNav }) {
                     value={resolution}
                     onChange={(e) => setResolution(e.target.value)}
                   >
-                    <option value="540P">540P</option>
                     <option value="1080P">1080P</option>
                     <option value="4K">4K</option>
                   </select>
@@ -846,44 +865,15 @@ export function TemplateStudioPage({ setLandingPageNav }) {
                   </select>
 
                   <select
-                    className="dock-select-picker"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
-                  >
-                    <option value="5s">5s</option>
-                    <option value="10s">10s</option>
-                  </select>
-
-                  <div className="dock-toggle-item">
-                    <span>Audio</span>
-                    <input
-                      type="checkbox"
-                      checked={audioToggle}
-                      onChange={(e) => setAudioToggle(e.target.checked)}
-                    />
-                  </div>
-
-                  <div className="dock-toggle-item">
-                    <span>Multi-Shot</span>
-                    <input
-                      type="checkbox"
-                      checked={multiShotToggle}
-                      onChange={(e) => setMultiShotToggle(e.target.checked)}
-                    />
-                  </div>
-
-                  <select
                     className="dock-select-picker engine-picker"
                     value={modelEngine}
                     onChange={(e) => setModelEngine(e.target.value)}
                   >
-                    <option value="DiziPix V6">DiziPix V6</option>
-                    <option value="Dizi-Bharat 2.5">Dizi-Bharat 2.5</option>
-                    <option value="Dizi-Motion 60fps">Dizi-Motion 60fps</option>
+                    <option value="DiziPix D1">DiziPix D1</option>
                   </select>
 
                   <button className="dock-create-btn" onClick={handleCreateSubmit}>
-                    Create ⚡ 38
+                    Create (5 Credits)
                   </button>
                 </div>
               </div>

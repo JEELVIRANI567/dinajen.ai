@@ -2386,4 +2386,60 @@ h6 {
 @keyframes pv-gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-}
+}
+
+/* Coming Soon Tool Badges & Disabled State */
+.tool-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.disabled-tool-btn {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  position: relative;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-muted) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+}
+
+.disabled-tool-btn:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(236, 72, 153, 0.3) !important;
+  color: #d1d5db !important;
+  transform: none !important;
+}
+
+.coming-soon-tag {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  background: rgba(236, 72, 153, 0.18);
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  color: #f472b6;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-left: 0.3rem;
+  white-space: nowrap;
+}
+
+.coming-soon-badge-floating {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.4);
+  color: #f472b6;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(8px);
+}
+

@@ -5,6 +5,7 @@ import { navigateToApp } from '../utils/subdomainRouter';
 export function AuthModal() {
   const { isAuthModalOpen, setAuthModalOpen, login } = useAuth();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isSignUp, setIsSignUp] = useState(true);
 
@@ -12,8 +13,8 @@ export function AuthModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email) return;
-    login(email, name || (isSignUp ? 'Dhruvil Nakrani' : 'Member'));
+    if (!email || !password) return;
+    login(email, name || (isSignUp ? 'Creator User' : 'Member'));
     navigateToApp('create');
   };
 
@@ -39,7 +40,7 @@ export function AuthModal() {
               <label>Full Name</label>
               <input
                 type="text"
-                placeholder="Dhruvil Nakrani"
+                placeholder="Full Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
@@ -57,8 +58,20 @@ export function AuthModal() {
             />
           </div>
 
+          <div className="input-group">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
+
           <button type="submit" className="btn btn-primary btn-block">
-            {isSignUp ? 'Sign Up & Claim 50 Free Credits ✨' : 'Sign In to App'}
+            {isSignUp ? 'Sign Up & Claim 50 Free Credits' : 'Sign In to Account'}
           </button>
         </form>
 
