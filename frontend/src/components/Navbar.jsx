@@ -68,11 +68,11 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                 Blog
               </a>
               <a
-                href="#template"
-                className={`nav-item ${landingPageNav === 'template' ? 'active' : ''}`}
-                onClick={(e) => { e.preventDefault(); handleNavClick('template'); }}
+                href="#product"
+                className={`nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}
+                onClick={(e) => { e.preventDefault(); handleNavClick('product'); }}
               >
-                Template Studio
+                Product
               </a>
               <a
                 href="#community"
@@ -227,6 +227,13 @@ export function Navbar({ isAppView, activeTab, setActiveTab, landingPageNav = 'h
                   onClick={(e) => { e.preventDefault(); handleNavClick('blog'); closeMenu(); }}
                 >
                   Blog
+                </a>
+                <a
+                  href="#product"
+                  className={`mobile-nav-item ${landingPageNav === 'product' || landingPageNav === 'template' ? 'active' : ''}`}
+                  onClick={(e) => { e.preventDefault(); handleNavClick('product'); closeMenu(); }}
+                >
+                  Product
                 </a>
                 <a
                   href="#community"

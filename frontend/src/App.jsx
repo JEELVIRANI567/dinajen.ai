@@ -16,7 +16,7 @@ function MainAppContent() {
   const [landingPageNav, setLandingPageNav] = useState(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash.replace('#', '');
-      return ['research', 'tools', 'blog', 'community', 'contact', 'admin', 'template'].includes(hash) ? hash : 'home';
+      return ['research', 'tools', 'blog', 'community', 'contact', 'admin', 'template', 'product'].includes(hash) ? (hash === 'template' ? 'product' : hash) : 'home';
     }
     return 'home';
   });
@@ -43,8 +43,8 @@ function MainAppContent() {
 
       if (window.location.hash) {
         const hash = window.location.hash.replace('#', '');
-        if (['research', 'tools', 'blog', 'community', 'contact', 'template'].includes(hash)) {
-          setLandingPageNav(hash);
+        if (['research', 'tools', 'blog', 'community', 'contact', 'template', 'product'].includes(hash)) {
+          setLandingPageNav(hash === 'template' ? 'product' : hash);
         }
       }
     };
@@ -80,8 +80,8 @@ function MainAppContent() {
     );
   }
 
-  // Template Studio View for #template route
-  if (landingPageNav === 'template' || (typeof window !== 'undefined' && window.location.hash === '#template')) {
+  // Product Studio View for #product and #template route
+  if (landingPageNav === 'product' || landingPageNav === 'template' || (typeof window !== 'undefined' && (window.location.hash === '#product' || window.location.hash === '#template'))) {
     return (
       <div className="dizipix-app-root">
         <TemplateStudioPage setLandingPageNav={handleLandingNavChange} />
